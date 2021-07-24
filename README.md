@@ -3,7 +3,7 @@
 ## How to use the code
 
 ## To-do List:
-* [ ] Build GUI using QT library
+* [ ] Build GUI using QT library (https://www.techwithtim.net/tutorials/python-programming/sudoku-solver-backtracking/)
 * [ ] 
 * [ ] 
 
