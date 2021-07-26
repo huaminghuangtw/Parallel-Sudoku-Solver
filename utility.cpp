@@ -13,9 +13,9 @@ void print_board(int board[N][N])
 	for (int i = 0; i < N; i++)
 	{
 		if (i % box_size == 0 && i != 0) {
-			std::string s = "-- ";
-			size_t times = N + (box_size - 1) - 1;
-            std::cout << s * times << "--" << std::endl;
+			std::string s1 = "---";
+			std::string s2 = s1 * box_size + " + ";
+            std::cout << s2 * (box_size - 1) << s1 * box_size << std::endl;
 		}
 
         for (int j = 0; j < N; j++)
@@ -70,13 +70,10 @@ std::pair<int, int> find_empty(int board[N][N])
 
 bool isValid(int board[N][N], int num, std::pair<int, int> pos)
 {
-	int row = pos.first;
-	int col = pos.second;
-
 	// Checks if num already exists in the given row
     for (int i = 0; i < N; i++)
 	{
-        if (i != row && board[pos.first][i] == num) {
+        if (board[pos.first][i] == num) {
             return false;
 		}
 	}
@@ -84,18 +81,18 @@ bool isValid(int board[N][N], int num, std::pair<int, int> pos)
 	// Checks if num already exists in the given column
     for (int i = 0; i < N; i++)
 	{
-        if (i != col && board[i][pos.second] == num) {
+        if (board[i][pos.second] == num) {
             return false;
 		}
 	}
 
     // Checks if num already exists in the given box (subgrid)
-    int box_x = std::floor(pos.first / 3);
-    int box_y = std::floor(pos.second / 3);
+    int box_x = std::floor(pos.first / box_size);
+    int box_y = std::floor(pos.second / box_size);
 
     for (int i = box_x * box_size; i < box_x * box_size + 3; i++) {
         for (int j = box_y * box_size; j < box_y * box_size + 3; j++) {
-            if ( (i != row || j != col) && board[i][j] == num ) {
+            if (board[i][j] == num) {
                 return false;
 			}
         }

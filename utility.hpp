@@ -8,6 +8,7 @@
 // N is the size of the 2D matrix : N*N
 #define box_size 3
 #define N (box_size * box_size)
+#define SIZEOF_SUDOKU (N * N * sizeof(int))
 
 // Prints the Sudoku board
 void print_board(int board[N][N]);
@@ -19,4 +20,4 @@ bool checkIfAllFilled(int board[N][N]);
 std::pair<int, int> find_empty(int board[N][N]);
 
 // Checks if a given number can be inserted at a given cell position
-bool isValid(int board[N][N], int number, std::pair<int, int> position);
+bool isValid(int board[N][N], int num, std::pair<int, int> pos);
