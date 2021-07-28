@@ -56,19 +56,19 @@ int main(int argc, char** argv)
 {
 	// validate arguments
 	if (argc != 2){
-		std::cerr << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE>" << std::endl;
+		std::cerr << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE>" << "\n";
         exit(-1);
     }
 
     SudokuBoard board = readInput(argv[1]);
 
-	std::cout << "************************ INPUT GRID ************************" << std::endl;
+	std::cout << "************************ INPUT GRID ************************" << "\n";
 
     print_board(board);
 
-	std::cout << "************************************************************" << std::endl;
+	std::cout << "************************************************************" << "\n";
 
-	std::cout << "Sudoku solver starts, please wait..." << std::endl;
+	std::cout << "Sudoku solver starts, please wait..." << "\n";
 
 #if PRINT_TIME
     std::chrono::high_resolution_clock::time_point start, stop;
@@ -82,14 +82,14 @@ int main(int argc, char** argv)
 	int time_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
 #endif
 
-	std::cout << "************************ OUTPUT GRID ***********************" << std::endl;
+	std::cout << "************************ OUTPUT GRID ***********************" << "\n";
 
     print_board(answer);
 
-	std::cout << "************************************************************" << std::endl;
+	std::cout << "************************************************************" << "\n";
 
 #if PRINT_TIME
-    std::cout << std::dec << "Operations executed in " << (double)time_in_microseconds / 1000000 << " seconds" << std::endl;
+    std::cout << std::dec << "Operations executed in " << (double)time_in_microseconds / 1000000 << " seconds" << "\n";
 #endif
 
     // if (solveSudoku_backtracking(board)) {

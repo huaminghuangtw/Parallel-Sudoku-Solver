@@ -11,7 +11,7 @@ SudokuBoard readInput(const std::string& filename)
 
 	if (!infile)
 	{
-		std::cout << "Error opening file!" << std::endl;
+		std::cout << "Error opening file!" << "\n";
 		exit(1);
 	}
 	else
@@ -51,7 +51,7 @@ void print_board(SudokuBoard board)
 		if (i % BOX_SIZE == 0 && i != 0) {
 			std::string s1 = "---";
 			std::string s2 = s1 * BOX_SIZE + " + ";
-            std::cout << s2 * (BOX_SIZE - 1) << s1 * BOX_SIZE << std::endl;
+            std::cout << s2 * (BOX_SIZE - 1) << s1 * BOX_SIZE << "\n";
 		}
 
         for (int j = 0; j < SUDOKU_SIZE; ++j)
@@ -61,7 +61,7 @@ void print_board(SudokuBoard board)
 			}	
 
             if (j == SUDOKU_SIZE - 1) {
-                std::cout << std::setfill(' ') << std::setw(2) << board[i][j] << std::endl;
+                std::cout << std::setfill(' ') << std::setw(2) << board[i][j] << "\n";
 			} else if (j % BOX_SIZE == BOX_SIZE - 1) {
 				std::cout << std::setfill(' ') << std::setw(2) << board[i][j]; 
 			} else {
