@@ -1,47 +1,49 @@
 #include "utility.hpp"
 #include <omp.h>
+#include <algorithm>
 #include <chrono>
 #include <cstring>
+#include <iterator>
 
 
 #define PRINT_TIME 1
-#define NUM_THREADS 4
 
+int NUM_THREADS = 2;
 
 bool solved;
-int answer[N][N] = {0};
+SudokuBoard answer;
 
 
-void solveSudoku_backtracking(int board[N][N])
+void solveSudoku_backtracking(SudokuBoard board)
 {
 	if (solved) return;
 
     if (checkIfAllFilled(board))   // base case
     {
         solved = true;
-		std::memcpy(answer, board, SIZEOF_SUDOKU);
+		std::copy( board.begin(), board.end(), back_inserter(answer) );   // equivalent to: answer = board;
 		return;
     }
     else
     {
         std::pair<int, int> empty_cell = find_empty(board);
 
-        for (int num = 1; num <= N; num++)
+        for (int num = 1; num <= SUDOKU_SIZE; ++num)
         {
+			int row = empty_cell.first;
+			int col = empty_cell.second;
+
             if (isValid(board, num, empty_cell))
-            {	
-				int local_board[N][N] = {0};			
-				std::memcpy(local_board, board, SIZEOF_SUDOKU);
+            {
+				SudokuBoard local_board;
+				std::copy( board.begin(), board.end(), back_inserter(local_board) );
 
-				int row = empty_cell.first;
-				int col = empty_cell.second;
+                local_board[row][col] = num;
 
-				local_board[row][col] = num;
-				
 				// To reduce the number of tasks created (which also means the increase of the workload of a task), you can use either the final or if clause in #pragma omp task directive. 
 				// The workload of a single task is therefore too small and the overhead of task creation become significant compared to the workload of a task.
 				#pragma omp task default(none) firstprivate(local_board)
-				solveSudoku_backtracking(local_board);
+                solveSudoku_backtracking(local_board);
             }
         }
 		// Why no board[row][col] = 0;?
@@ -55,48 +57,33 @@ void solveSudoku_backtracking(int board[N][N])
 }
 
 
-int main(void)
+int main(int argc, char** argv)
 {
-    // 0 means empty cells
-    int board[N][N] = { { 3, 0, 6, 5, 0, 8, 4, 0, 0 },
-                        { 5, 2, 0, 0, 0, 0, 0, 0, 0 },
-                        { 0, 8, 7, 0, 0, 0, 0, 3, 1 },
-                        { 0, 0, 3, 0, 1, 0, 0, 8, 0 },
-                        { 9, 0, 0, 8, 6, 3, 0, 0, 5 },
-                        { 0, 5, 0, 0, 9, 0, 6, 0, 0 },
-                        { 1, 3, 0, 0, 0, 0, 2, 5, 0 },
-                        { 0, 0, 0, 0, 0, 0, 0, 7, 4 },
-                        { 0, 0, 5, 2, 0, 6, 3, 0, 0 } };
-    // int board[N][N] =
-    // { {0,1,2,0,0,4,0,0,0,0,5,0,0,0,0,0},
-    //   {0,0,0,0,0,2,0,0,0,0,0,0,0,14,0,0},
-    //   {0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0},
-    //   {11,0,0,0,0,0,0,0,0,0,0,16,0,0,0,0},
-    //   {0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    //   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    //   {0,0,0,16,0,0,0,0,0,0,2,0,0,0,0,0},
-    //   {0,0,0,0,0,0,0,0,11,0,0,0,0,0,0,0},
-    //   {0,0,14,0,0,0,0,0,0,4,0,0,0,0,0,0},
-    //   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    //   {0,0,0,0,0,1,16,0,0,0,0,0,0,0,0,0},
-    //   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    //   {0,0,0,0,0,0,0,0,0,0,14,0,0,13,0,0},
-    //   {0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    //   {0,0,11,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    //   {16,0,0,0,0,0,11,0,0,3,0,0,0,0,0,0} };
- 
+	// validate arguments
+	if (argc != 3){
+		std::cerr << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE> <NUM_THREADS>" << std::endl;
+        exit(-1);
+    }
+
+    SudokuBoard board = readInput(argv[1]);
+	NUM_THREADS = atoi(argv[2]);
+
+	std::cout << "************************ INPUT GRID ************************" << std::endl;
+
     print_board(board);
 
-	std::cout << "Sudoku solver starts, please wait..." << std::endl;
+	std::cout << "************************************************************" << std::endl;
 
-	omp_set_num_threads(NUM_THREADS);
+	std::cout << "Sudoku solver starts, please wait..." << std::endl;
 
 #if PRINT_TIME
     std::chrono::high_resolution_clock::time_point start, stop;
     start = std::chrono::high_resolution_clock::now();
 #endif
 
-    #pragma omp parallel
+	omp_set_num_threads(NUM_THREADS);
+
+	#pragma omp parallel
 	{
 		#pragma omp single
 		{
@@ -107,12 +94,17 @@ int main(void)
 #if PRINT_TIME
 	stop = std::chrono::high_resolution_clock::now();
 	int time_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
-    std::cout << std::dec << "Operations executed in " << (double)time_in_microseconds / 1000000 << " seconds" << std::endl;
 #endif
+
+	std::cout << "************************ OUTPUT GRID ***********************" << std::endl;
 
     print_board(answer);
 
-	std::cout << "Press any key to exit...";
-    std::getchar();
+	std::cout << "************************************************************" << std::endl;
+
+#if PRINT_TIME
+    std::cout << std::dec << "Operations executed in " << (double)time_in_microseconds / 1000000 << " seconds" << std::endl;
+#endif
+
     return 0;
 }

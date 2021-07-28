@@ -1,34 +1,37 @@
 #include "utility.hpp"
+#include <algorithm>
 #include <chrono>
 #include <cstring>
+#include <iterator>
 
-// TODO: class Sudoku
-// TODO: file reading
-// TODO: add recursive depth
-// TODO: solve 16 * 16
+
+// TODO: class Sudoku & Solver?
+// TODO: add recursive depth?
+// TODO: solve 16 * 16 (smarter algorithm)
+
 
 #define PRINT_TIME 1
 
 
 bool solved;
-int answer[N][N] = {0};
+SudokuBoard answer;
 
 
-void solveSudoku_backtracking(int board[N][N])
+void solveSudoku_backtracking(SudokuBoard board)
 {
 	if (solved) return;
 
     if (checkIfAllFilled(board))   // base case
     {
         solved = true;
-		std::memcpy(answer, board, SIZEOF_SUDOKU);
+		std::copy( board.begin(), board.end(), back_inserter(answer) );   // equivalent to: answer = board;
 		return;
     }
     else
     {
         std::pair<int, int> empty_cell = find_empty(board);
 
-        for (int num = 1; num <= N; num++)
+        for (int num = 1; num <= SUDOKU_SIZE; ++num)
         {
 			int row = empty_cell.first;
 			int col = empty_cell.second;
@@ -49,37 +52,21 @@ void solveSudoku_backtracking(int board[N][N])
 }
 
 
-int main(void)
+int main(int argc, char** argv)
 {
-    // 0 means empty cells
-    int board[N][N] = { { 3, 0, 6, 5, 0, 8, 4, 0, 0 },
-                        { 5, 2, 0, 0, 0, 0, 0, 0, 0 },
-                        { 0, 8, 7, 0, 0, 0, 0, 3, 1 },
-                        { 0, 0, 3, 0, 1, 0, 0, 8, 0 },
-                        { 9, 0, 0, 8, 6, 3, 0, 0, 5 },
-                        { 0, 5, 0, 0, 9, 0, 6, 0, 0 },
-                        { 1, 3, 0, 0, 0, 0, 2, 5, 0 },
-                        { 0, 0, 0, 0, 0, 0, 0, 7, 4 },
-                        { 0, 0, 5, 2, 0, 6, 3, 0, 0 } };
-    // int board[N][N] =
-    // { {0,1,2,0,0,4,0,0,0,0,5,0,0,0,0,0},
-    //   {0,0,0,0,0,2,0,0,0,0,0,0,0,14,0,0},
-    //   {0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0},
-    //   {11,0,0,0,0,0,0,0,0,0,0,16,0,0,0,0},
-    //   {0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    //   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    //   {0,0,0,16,0,0,0,0,0,0,2,0,0,0,0,0},
-    //   {0,0,0,0,0,0,0,0,11,0,0,0,0,0,0,0},
-    //   {0,0,14,0,0,0,0,0,0,4,0,0,0,0,0,0},
-    //   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    //   {0,0,0,0,0,1,16,0,0,0,0,0,0,0,0,0},
-    //   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    //   {0,0,0,0,0,0,0,0,0,0,14,0,0,13,0,0},
-    //   {0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    //   {0,0,11,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    //   {16,0,0,0,0,0,11,0,0,3,0,0,0,0,0,0} };
- 
+	// validate arguments
+	if (argc != 2){
+		std::cerr << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE>" << std::endl;
+        exit(-1);
+    }
+
+    SudokuBoard board = readInput(argv[1]);
+
+	std::cout << "************************ INPUT GRID ************************" << std::endl;
+
     print_board(board);
+
+	std::cout << "************************************************************" << std::endl;
 
 	std::cout << "Sudoku solver starts, please wait..." << std::endl;
 
@@ -91,11 +78,19 @@ int main(void)
 	solveSudoku_backtracking(board);
 
 #if PRINT_TIME
+	stop = std::chrono::high_resolution_clock::now();
 	int time_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
-    std::cout << std::dec << "Operations executed in " << (double)time_in_microseconds / 1000000 << " seconds" << std::endl;
 #endif
 
-    print_board(board);
+	std::cout << "************************ OUTPUT GRID ***********************" << std::endl;
+
+    print_board(answer);
+
+	std::cout << "************************************************************" << std::endl;
+
+#if PRINT_TIME
+    std::cout << std::dec << "Operations executed in " << (double)time_in_microseconds / 1000000 << " seconds" << std::endl;
+#endif
 
     // if (solveSudoku_backtracking(board)) {
     //     std::cout << "--------------------" << std::endl;
@@ -104,7 +99,5 @@ int main(void)
     //     std::cout << "No solution exists." << std::endl;
     // }
 
-	std::cout << "Press any key to exit...";
-    std::getchar();
     return 0;
 }
