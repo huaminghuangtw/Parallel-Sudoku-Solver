@@ -1,10 +1,12 @@
 #include "SudokuBoard.hpp"
+#include "TestableSudoku.hpp"
 #include "SudokuSolver_SequentialBacktracking.hpp"
 
 #include <iostream>
 #include <chrono>
 
 
+// TODO: checkIfAllFilled & find_empty move to SudokuSolver base class?
 // TODO: add recursive depth?
 // TODO: solve 16 * 16 (smarter algorithm)
 
@@ -20,11 +22,11 @@ int main(int argc, char** argv)
         exit(-1);
     }
 
-	std::cout << "************************ INPUT GRID ************************" << "\n\n";
-
     auto board = SudokuBoard(argv[1]);
-    print_board(board);
+	TestableSudoku::testBoard(board);
 
+	std::cout << "************************ INPUT GRID ************************" << "\n\n";
+    print_board(board);
 	std::cout << "\n" << "************************************************************" << "\n";
 
 	std::cout << "\n" << "Sudoku solver starts, please wait..." << "\n";

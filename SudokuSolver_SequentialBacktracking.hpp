@@ -29,18 +29,6 @@ public:
 
 	// Finds the first empty cell on the given Sudoku board
 	const std::pair<size_t, size_t> find_empty(SudokuBoard& board);
-
-	// Checks if num already exists in the given row
-	bool checkValidRow(SudokuBoard& board, int num, std::pair<size_t, size_t> pos) const;
-
-	// Checks if num already exists in the given column
-	bool checkValidColumn(SudokuBoard& board, int num, std::pair<size_t, size_t> pos) const;
-
-    // Checks if num already exists in the given box (subgrid)
-	bool checkValidBox(SudokuBoard& board, int num, std::pair<size_t, size_t> pos) const;
-
-	// Checks if a given number can be inserted at a given cell position
-	bool isValid(SudokuBoard& board, int num, std::pair<size_t, size_t> pos) const;
 };
 
 

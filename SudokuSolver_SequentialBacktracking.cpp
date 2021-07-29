@@ -1,5 +1,4 @@
 #include "SudokuSolver_SequentialBacktracking.hpp"
-#include <cmath>
 #include <iostream>
 
 
@@ -17,7 +16,7 @@ bool SudokuSolver_SequentialBacktracking::checkIfAllFilled(SudokuBoard& board) c
 {
     for (size_t i = 0; i < board.get_board_size(); ++i) {
         for (size_t j = 0; j < board.get_board_size(); ++j) {
-            if (board(i, j) == 0)
+            if (board.at(i, j) == 0)
                 return false;
 
         }
@@ -36,7 +35,7 @@ const std::pair<size_t, size_t> SudokuSolver_SequentialBacktracking::find_empty(
 		{
 			for (size_t j = 0; j < board.get_board_size(); ++j)
 			{
-				if (board(i, j) == 0) {
+				if (board.at(i, j) == 0) {
 					empty_cell = std::make_pair(i, j);
 					flag = false;
 				}
@@ -45,51 +44,6 @@ const std::pair<size_t, size_t> SudokuSolver_SequentialBacktracking::find_empty(
 	}
 	
 	return empty_cell;  // (row, col)
-}
-
-bool SudokuSolver_SequentialBacktracking::checkValidRow(SudokuBoard& board, int num, std::pair<size_t, size_t> pos) const
-{
-    for (size_t i = 0; i < board.get_board_size(); ++i)
-	{
-        if (board(pos.first, i) == num) {
-            return false;
-		}
-	}
-
-	return true;
-}
-
-bool SudokuSolver_SequentialBacktracking::checkValidColumn(SudokuBoard& board, int num, std::pair<size_t, size_t> pos) const
-{
-	for (size_t i = 0; i < board.get_board_size(); ++i)
-	{
-        if (board(i, pos.second) == num) {
-            return false;
-		}
-	}
-	
-	return true;
-}
-
-bool SudokuSolver_SequentialBacktracking::checkValidBox(SudokuBoard& board, int num, std::pair<size_t, size_t> pos) const
-{
-	int box_x = std::floor(pos.first / board.get_box_size());
-    int box_y = std::floor(pos.second / board.get_box_size());
-
-    for (size_t i = box_x * board.get_box_size(); i < box_x * board.get_box_size() + 3; ++i) {
-        for (size_t j = box_y * board.get_box_size(); j < box_y * board.get_box_size() + 3; ++j) {
-            if (board(i, j) == num) {
-                return false;
-			}
-        }
-    }
-
-	return true;
-}
-
-bool SudokuSolver_SequentialBacktracking::isValid(SudokuBoard& board, int num, std::pair<size_t, size_t> pos) const
-{
-    return checkValidRow(board, num, pos) && checkValidColumn(board, num, pos) && checkValidBox(board, num, pos);
 }
 
 void SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
@@ -116,7 +70,7 @@ void SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
 			size_t row = empty_cell.first;
 			size_t col = empty_cell.second;
 
-            if (isValid(board, num, empty_cell))
+            if (board.isValid(num, empty_cell))
             {
                 board.set_board_data(row, col, num);
                 solve(board);
