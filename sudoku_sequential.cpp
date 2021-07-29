@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <chrono>
+#include <vector>
 
 
 // TODO: checkIfAllFilled & find_empty move to SudokuSolver base class?
@@ -17,9 +18,11 @@
 int main(int argc, char** argv)
 {
 	// validate arguments
-	if (argc != 2){
-		std::cerr << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE>" << "\n";
-        exit(-1);
+	if ((argc < 2) || (argc > 3)){
+		std::cerr << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE> [<WRITE_TO_SOLUTION_TXT>]" << "\n";
+		std::cerr << "Specify 1 to <WRITE_TO_SOLUTION_TXT> if you want to write solution to a text file." << "\n";
+		std::cerr << "(By default it's set to 0, i.e., only write solution to the console.)" << "\n";
+		exit(-1);
     }
 	
 	std::cout <<
@@ -31,11 +34,19 @@ int main(int argc, char** argv)
 ███████║╚██████╔╝██████╔╝╚██████╔╝██║  ██╗╚██████╔╝    ███████║╚██████╔╝███████╗╚████╔╝ ███████╗██║  ██║
 ╚══════╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝ ╚═════╝     ╚══════╝ ╚═════╝ ╚══════╝ ╚═══╝  ╚══════╝╚═╝  ╚═╝
 	)"
-	<< "																	developed by Hua-Ming Huang"
+	<< "\n"
+	<< "developed by Hua-Ming Huang"
 	<< "\n\n\n";
-
-    auto board = SudokuBoard(argv[1]);
+	
+    auto board = SudokuBoard(std::string(argv[1]));
 	TestableSudoku::testBoard(board);
+
+	int WRITE_TO_SOLUTION_TXT;
+	if (argc == 2) {
+        WRITE_TO_SOLUTION_TXT = 0;
+    } else {
+        WRITE_TO_SOLUTION_TXT = std::stoi(argv[2]);
+    }
 
 	std::cout << "************************ INPUT GRID ************************" << "\n\n";
     print_board(board);
@@ -60,12 +71,15 @@ int main(int argc, char** argv)
 		case SOLVED:
 			std::cout << "Solution: " << "\n";
 			std::cout << "************************ OUTPUT GRID ***********************" << "\n\n";
-			print_board(solver.get_answer());
+			print_board(solver.get_solution());
+			if (WRITE_TO_SOLUTION_TXT) {
+				write_output(solver.get_solution());
+			}
 			std::cout << "\n" << "************************************************************" << "\n";
 			break;
 	
 		case UNSOLVABLE:
-			std::cout << "The given Sudoku board cannot be solved." << "\n";
+			std::cout << "The given Sudoku board cannot be solved. :(" << "\n";
 			break;
     }
 

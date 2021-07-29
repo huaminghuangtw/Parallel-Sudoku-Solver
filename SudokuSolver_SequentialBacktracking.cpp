@@ -7,11 +7,6 @@ SudokuSolver_SequentialBacktracking::SudokuSolver_SequentialBacktracking(SudokuB
 	solve(board);
 }
 
-SudokuBoard SudokuSolver_SequentialBacktracking::get_answer() const
-{
-	return _answer;
-}
-
 bool SudokuSolver_SequentialBacktracking::checkIfAllFilled(SudokuBoard& board) const
 {
     for (size_t i = 0; i < board.get_board_size(); ++i) {
@@ -58,7 +53,7 @@ void SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
     {
         _solved = true;
 		_status = SolverStatus::SOLVED;
-		_answer = board;
+		_solution = board;
 		return;
     }
     else

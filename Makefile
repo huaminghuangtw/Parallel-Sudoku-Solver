@@ -7,4 +7,4 @@ sudoku_sequential: sudoku_sequential.cpp SudokuBoard.cpp SudokuBoard.hpp SudokuS
 	$(CXX) $(CXX_FLAGS) -o sudoku_sequential sudoku_sequential.cpp SudokuBoard.cpp SudokuSolver.cpp SudokuSolver_SequentialBacktracking.cpp TestableSudoku.cpp
 
 clean:
-	rm -f sudoku_sequential *.o *.out
+	rm -f sudoku_sequential *.o *.out solution.txt

@@ -15,12 +15,17 @@ enum SolverStatus
 class SudokuSolver
 {
 protected:
-	virtual void solve(SudokuBoard& board) = 0;
+	bool _solved = false;
 	SolverStatus _status = UNSOLVABLE;
+	SudokuBoard _solution;
+	virtual void solve(SudokuBoard& board) = 0;
 
 public:
 	SudokuSolver() = default;
+
 	SolverStatus get_solver_status() const;
+	SudokuBoard get_solution() const;
+
 	virtual ~SudokuSolver() = default;
 };
 

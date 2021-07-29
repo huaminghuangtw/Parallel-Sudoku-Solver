@@ -16,9 +16,12 @@ private:
 	Board _board_data;
 
 public:
-	// Returns a 2D array reading from a file containing the initial Sudoku board in space separated format
+	// Returns a 2D vector reading from a file containing the initial Sudoku board in space separated format
 	// (empty cells are represented by 0s)
 	const Board read_input(const std::string& filename);
+
+	// Writes solution to a text file (solution.txt)
+	friend void write_output(const SudokuBoard& solutionBoard);
 
 	SudokuBoard() = default;
 	SudokuBoard(const std::string& filename);

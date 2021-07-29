@@ -7,15 +7,15 @@
 
 const Board SudokuBoard::read_input(const std::string& filename)
 {
-	std::ifstream infile(filename);   // open file
+	std::ifstream inputFile(filename);   // open file
 
-	if (!infile)
+	if (!inputFile)
 	{
-		std::cout << "Error opening file!" << "\n";
+		std::cout << "Error opening file! Please make sure the file specified exists." << "\n";
 		exit(1);
 	}
 	
-	infile >> _board_size;
+	inputFile >> _board_size;
 	_box_size = std::sqrt(_board_size);
 
 	Board sudokuBoard(_board_size, std::vector<int> (_board_size, 0));
@@ -25,14 +25,51 @@ const Board SudokuBoard::read_input(const std::string& filename)
 		for (size_t col = 0; col < _board_size; ++col)
 		{
 			int value;
-			infile >> value;
+			inputFile >> value;
 			sudokuBoard[row][col] = value;
 		}
 	}
 
-	infile.close();   // close file
+	inputFile.close();   // close file
 
 	return sudokuBoard;
+}
+
+void write_output(const SudokuBoard& solutionBoard)
+{
+	Board solution = solutionBoard.get_board_data();
+	size_t BOARD_SIZE = solutionBoard.get_board_size();
+	size_t BOX_SIZE = solutionBoard.get_box_size();
+
+	std::ofstream outputFile("solution.txt");
+
+    int digit = int(log10(BOARD_SIZE)) + 1;
+
+    for (size_t r = 0; r < BOARD_SIZE; r++) {
+        for (size_t c = 0; c < BOARD_SIZE; c++) {
+			outputFile << std::setw(digit) << solution[r][c];
+
+			if (c != BOARD_SIZE - 1) {
+				outputFile << " ";
+			}
+
+			if (c % BOX_SIZE == (BOX_SIZE - 1)) {
+				if (c != BOARD_SIZE - 1) {
+					outputFile << "  ";
+				}
+			}
+		}
+		
+		if (r != BOARD_SIZE - 1) {
+			outputFile << "\n";
+			if (r % BOX_SIZE == (BOX_SIZE - 1)) {
+				outputFile << "\n";
+			}
+		}
+    }
+
+	outputFile.close();
+	return;
 }
 
 SudokuBoard::SudokuBoard(const std::string& filename)
