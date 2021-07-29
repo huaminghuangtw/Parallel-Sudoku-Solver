@@ -45,8 +45,8 @@ int main(int argc, char** argv)
         WRITE_TO_SOLUTION_TXT = std::stoi(argv[3]);
     }
 
-	std::cout << "************************ INPUT GRID ************************" << "\n\n";
-    print_board(board);
+	std::cout << "\n" << "************************ INPUT GRID ************************" << "\n\n";
+	std::cout << board;
 	std::cout << "\n" << "************************************************************" << "\n";
 
 	std::cout << "\n" << "Sudoku solver starts, please wait..." << "\n";

@@ -69,7 +69,6 @@ void write_output(const SudokuBoard& solutionBoard)
     }
 
 	outputFile.close();
-	return;
 }
 
 SudokuBoard::SudokuBoard(const std::string& filename)
@@ -198,4 +197,35 @@ void print_board(const SudokuBoard& board)
 			}
 		}
 	}
+}
+
+std::ostream& operator<<(std::ostream &out, const SudokuBoard& board)
+{
+	Board grid = board._board_data;
+
+	for (size_t i = 0; i < board._board_size; ++i)
+	{
+		if (i % board._box_size == 0 && i != 0) {
+			std::string s1 = "---";
+			std::string s2 = s1 * board._box_size + " + ";
+            out << s2 * (board._box_size - 1) << s1 * board._box_size << "\n";
+		}
+
+        for (size_t j = 0; j < board._board_size; ++j)
+		{
+			if (j % board._box_size == 0 && j != 0) {
+                out << "  | ";
+			}	
+
+            if (j == board._board_size - 1) {
+                out << std::setfill(' ') << std::setw(2) << grid[i][j] << "\n";
+			} else if (j % board._box_size == board._box_size - 1) {
+				out << std::setfill(' ') << std::setw(2) << grid[i][j];
+			} else {
+                out << std::setfill(' ') << std::setw(2) << grid[i][j] << " ";
+			}
+		}
+	}
+
+    return out;
 }

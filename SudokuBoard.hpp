@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 
 
 using Board = std::vector<std::vector<int>>;
@@ -53,6 +54,7 @@ public:
 	
 	// Prints the Sudoku board
 	friend void print_board(const SudokuBoard& board);
+    friend std::ostream& operator<<(std::ostream &out, const SudokuBoard& board);
 };
 
 
