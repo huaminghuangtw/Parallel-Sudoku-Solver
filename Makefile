@@ -1,10 +1,13 @@
 CXX = g++
 CXX_FLAGS = --std=c++17 -Wall -Wextra -fopenmp -O3
 
-all: sudoku_sequential
+all: sudoku_sequential sudoku_parallel
 
-sudoku_sequential: sudoku_sequential.cpp SudokuBoard.cpp SudokuBoard.hpp SudokuSolver.cpp SudokuSolver.hpp SudokuSolver_SequentialBacktracking.cpp SudokuSolver_SequentialBacktracking.hpp TestableSudoku.cpp TestableSudoku.hpp
-	$(CXX) $(CXX_FLAGS) -o sudoku_sequential sudoku_sequential.cpp SudokuBoard.cpp SudokuSolver.cpp SudokuSolver_SequentialBacktracking.cpp TestableSudoku.cpp
+sudoku_sequential:
+	$(CXX) $(CXX_FLAGS) -o sudoku_sequential sudoku_sequential.cpp SudokuBoard.cpp SudokuSolver.cpp TestableSudoku.cpp SudokuSolver_SequentialBacktracking.cpp
+
+sudoku_parallel:
+	$(CXX) $(CXX_FLAGS) -o sudoku_parallel sudoku_parallel.cpp SudokuBoard.cpp SudokuSolver.cpp TestableSudoku.cpp SudokuSolver_SequentialBacktracking.cpp SudokuSolver_ParallelBacktracking.cpp
 
 clean:
-	rm -f sudoku_sequential *.o *.out solution.txt
+	rm -f sudoku_sequential sudoku_parallel *.o *.out solution.txt

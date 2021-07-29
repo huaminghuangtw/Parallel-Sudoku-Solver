@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <chrono>
-#include <vector>
 
 
 // TODO: checkIfAllFilled & find_empty move to SudokuSolver base class?
@@ -59,7 +58,8 @@ int main(int argc, char** argv)
     start = std::chrono::high_resolution_clock::now();
 #endif
 
-	auto solver = SudokuSolver_SequentialBacktracking(board);
+	SudokuSolver_SequentialBacktracking solver;
+	solver = SudokuSolver_SequentialBacktracking(board);
 
 #if PRINT_TIME
 	stop = std::chrono::high_resolution_clock::now();

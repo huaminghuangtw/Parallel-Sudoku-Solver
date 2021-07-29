@@ -1,6 +1,9 @@
 Project_Proposal/
 Final_Report/
+
 .vscode/
+
 sudoku_sequential
 sudoku_parallel
+
 solution.txt
