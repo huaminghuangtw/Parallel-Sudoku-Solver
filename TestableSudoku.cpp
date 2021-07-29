@@ -30,11 +30,11 @@ bool TestableSudoku::checkValidRows(SudokuBoard& board)
 // i.e., whether no columns contain any duplicate numbers.
 bool TestableSudoku::checkValidColumns(SudokuBoard& board)
 {
-	for (size_t row = 0; row < board.get_board_size(); ++row)
+	for (size_t col = 0; col < board.get_board_size(); ++col)
 	{
 		std::set<int> valuesInCol;
 
-		for (size_t col = 0; col < board.get_board_size(); ++col)
+		for (size_t row = 0; row < board.get_board_size(); ++row)
 		{
 			int val = board.get_board_data(row, col);
 
