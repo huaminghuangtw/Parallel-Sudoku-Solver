@@ -10,7 +10,7 @@ class SudokuSolver_ParallelBacktracking : public SudokuSolver_SequentialBacktrac
 {
 private:
 	// Solves the given Sudoku board using parallel backtracking algorithm
-	virtual void solve(SudokuBoard& board) override;
+	void solve(SudokuBoard& board);
 
 public:
 	SudokuSolver_ParallelBacktracking() = default;

@@ -45,8 +45,10 @@ void write_output(const SudokuBoard& solutionBoard)
 
     int digit = int(log10(BOARD_SIZE)) + 1;
 
-    for (size_t r = 0; r < BOARD_SIZE; r++) {
-        for (size_t c = 0; c < BOARD_SIZE; c++) {
+    for (size_t r = 0; r < BOARD_SIZE; ++r)
+	{
+        for (size_t c = 0; c < BOARD_SIZE; ++c)
+		{
 			outputFile << std::setw(digit) << solution[r][c];
 
 			if (c != BOARD_SIZE - 1) {
@@ -231,12 +233,7 @@ std::ostream& operator<<(std::ostream &out, const SudokuBoard& board)
                 out << "  | ";
 			}	
 
-			std::string forPrinting;
-			if (grid[i][j] == EMPTY_CELL_VALUE) {
-				forPrinting = EMPTY_CELL_CHARACTER;
-			} else {
-				forPrinting = std::to_string(grid[i][j]);
-			}
+			std::string forPrinting = (grid[i][j] == EMPTY_CELL_VALUE) ? EMPTY_CELL_CHARACTER : std::to_string(grid[i][j]);
 
             if (j == BOARD_SIZE - 1) {
                 out << std::setfill(' ') << std::setw(2) << forPrinting << "\n";

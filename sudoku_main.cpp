@@ -1,5 +1,7 @@
 #include "SudokuBoard.hpp"
 #include "TestableSudoku.hpp"
+#include "SudokuSolver.hpp"
+#include "SudokuSolver_SequentialBacktracking.hpp"
 #include "SudokuSolver_ParallelBacktracking.hpp"
 
 #include <iostream>
@@ -12,14 +14,6 @@
 
 int main(int argc, char** argv)
 {
-	// validate arguments
-	if ((argc < 3) || (argc > 4)){
-		std::cerr << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE> <NUM_THREADS> [<WRITE_TO_SOLUTION_TXT>]" << "\n";
-		std::cerr << "Specify 1 to <WRITE_TO_SOLUTION_TXT> if you want to write solution to a text file." << "\n";
-		std::cerr << "(By default it's set to 0, i.e., only write solution to the console.)" << "\n";
-		exit(-1);
-    }
-	
 	std::cout << "========================================================================================================"
 	<< "\n"
 	<< R"(
@@ -36,37 +30,53 @@ int main(int argc, char** argv)
 	<< "========================================================================================================"
 	<< "\n\n\n";
 	
+	// validate command-line arguments
+	if (argc < 2 || argc > 5) {
+		std::cerr << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE> [<MODE>] [<WRITE_TO_SOLUTION_TXT>] [<NUM_THREADS>] " << "\n";
+		std::cerr << "		1. <MODE>: 0 for sequential mode (default), 1 for OpenMP mode." << "\n";
+		std::cerr << "		2. <WRITE_TO_SOLUTION_TXT>: 0 - only write solution to the console (default), 1 - write solution to a text file." << "\n";
+		std::cerr << "		3. <NUM_THREADS>: if you set 1 for <MODE>, you need to also set value to <NUM_THREADS> (default: 2)" << "\n";
+		exit(-1);
+    }
+
     auto board = SudokuBoard(std::string(argv[1]));
 	TestableSudoku::testBoard(board);
 
-	int NUM_THREADS = std::stoi(argv[2]);
+	int MODE = (argc >= 3) ? atoi(argv[2]) : 0;
 
-	int WRITE_TO_SOLUTION_TXT;
-	if (argc == 3) {
-        WRITE_TO_SOLUTION_TXT = 0;
-    } else {
-        WRITE_TO_SOLUTION_TXT = std::stoi(argv[3]);
-    }
+	int WRITE_TO_SOLUTION_TXT = (argc >= 4) ? std::stoi(argv[3]) : 0;
 
 	std::cout << "\n" << "************************************* INPUT GRID *************************************" << "\n\n";
-	std::cout << board;
+    std::cout << board;
 	std::cout << "\n" << "**************************************************************************************" << "\n";
-
-	std::cout << "\n" << "Sudoku solver starts, please wait..." << "\n";
 
 #if PRINT_TIME
     std::chrono::high_resolution_clock::time_point start, stop;
     start = std::chrono::high_resolution_clock::now();
 #endif
 
-	omp_set_num_threads(NUM_THREADS);
-
-	SudokuSolver_ParallelBacktracking solver;
-	#pragma omp parallel
+	SudokuSolver solver;
+	if (MODE == 0)        // Sequential Mode
 	{
-		#pragma omp single
+		std::cout << "\n" << "Sequential Sudoku solver starts, please wait..." << "\n";
+		solver = SudokuSolver_SequentialBacktracking(board);
+	} 
+	else if (MODE == 1)   // OpenMP Mode
+	{
+		int NUM_THREADS = (argc >= 5) ? std::stoi(argv[4]) : 2;
+
+		omp_set_num_threads(NUM_THREADS);
+		int nthreads = omp_get_num_threads();
+
+		std::cout << "\n" << "Parallel Sudoku solver with OpenMP starts, please wait..." << "\n";
+		std::cout << "Using " << nthreads << " OMP threads" << "\n";
+
+		#pragma omp parallel
 		{
-			solver = SudokuSolver_ParallelBacktracking(board);
+			#pragma omp single
+			{
+				solver = SudokuSolver_ParallelBacktracking(board);
+			}
 		}
 	}
 
@@ -74,10 +84,10 @@ int main(int argc, char** argv)
 	stop = std::chrono::high_resolution_clock::now();
 	int time_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
 #endif
-
+	
 	switch (solver.get_solver_status())
 	{
-		case SOLVED:
+		case SolverStatus::SOLVED:
 			std::cout << "Solution: " << "\n";
 			std::cout << "************************************* OUTPUT GRID ************************************" << "\n\n";
 			print_board(solver.get_solution());
@@ -87,7 +97,7 @@ int main(int argc, char** argv)
 			std::cout << "\n" << "**************************************************************************************" << "\n";
 			break;
 	
-		case UNSOLVABLE:
+		case SolverStatus::UNSOLVABLE:
 			std::cout << "The given Sudoku board cannot be solved. :(" << "\n";
 			break;
     }

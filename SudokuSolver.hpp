@@ -5,7 +5,7 @@
 #include "SudokuBoard.hpp"
 
 
-enum SolverStatus
+enum class SolverStatus
 {
     SOLVED,
     UNSOLVABLE
@@ -16,9 +16,9 @@ class SudokuSolver
 {
 protected:
 	bool _solved = false;
-	SolverStatus _status = UNSOLVABLE;
+	SolverStatus _status = SolverStatus::UNSOLVABLE;
 	SudokuBoard _solution;
-	virtual void solve(SudokuBoard& board) = 0;
+	void solve(SudokuBoard& board);
 
 public:
 	SudokuSolver() = default;
@@ -26,7 +26,7 @@ public:
 	SolverStatus get_solver_status() const;
 	SudokuBoard get_solution() const;
 
-	virtual ~SudokuSolver() = default;
+	virtual ~SudokuSolver() { }
 };
 
 
