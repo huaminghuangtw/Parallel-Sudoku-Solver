@@ -13,10 +13,10 @@ if (!(condition)) { printf((message)); } \
 assert ((condition)); } while(false)
 
 
-const int ROWS_VALID = 1;
-const int COLUMNS_VALID = 2;
-const int BOXES_VALID = 3;
-const int BOARD_VALID = 4;
+const int SIZES_VALID = 1;
+const int ROWS_VALID = 2;
+const int COLUMNS_VALID = 3;
+const int BOXES_VALID = 4;
 
 
 class TestableSudoku
@@ -25,24 +25,25 @@ private:
 	TestableSudoku() { }
 
 public:
-	static bool checkValidRows(SudokuBoard& board);
-	static bool checkValidColumns(SudokuBoard& board);
-	static bool checkValidBoxes(SudokuBoard& board);
-	static bool checkValid(SudokuBoard& board);
+	static bool checkValidSizes(const SudokuBoard& board);
+	static bool checkValidRows(const SudokuBoard& board);
+	static bool checkValidColumns(const SudokuBoard& board);
+	static bool checkValidBoxes(const SudokuBoard& board);
 
 	static bool expect(int flags, int mask)
     {
         return flags && mask;
     }
 
-    static void testBoard(SudokuBoard& board, int flags = ROWS_VALID | COLUMNS_VALID | BOXES_VALID | BOARD_VALID)
+    static void testBoard(SudokuBoard& board, int flags = SIZES_VALID | ROWS_VALID | COLUMNS_VALID | BOXES_VALID)
     {
-		std::cout << "Check the validity of the given board..." << "\n";
+		std::cout << "Check the validity of the initial state of the given Sudoku board..." << "\n";
 
+		// A set of unit tests
+		ASSERT_WITH_MESSAGE(expect(flags, SIZES_VALID) == checkValidSizes(board), "+++ ERROR: The dimension of the Sudoku board is not valid! +++\n");
         ASSERT_WITH_MESSAGE(expect(flags, ROWS_VALID) == checkValidRows(board), "+++ ERROR: Some rows in Sudoku board contain duplicate numbers! +++\n");
         ASSERT_WITH_MESSAGE(expect(flags, COLUMNS_VALID) == checkValidColumns(board), "+++ ERROR: Some columns in Sudoku board contain duplicate numbers! +++\n");
         ASSERT_WITH_MESSAGE(expect(flags, BOXES_VALID) == checkValidBoxes(board), "+++ ERROR: Some boxes in Sudoku board contain duplicate numbers! +++\n");
-        ASSERT_WITH_MESSAGE(expect(flags, BOARD_VALID) == checkValid(board), "+++ ERROR: This is NOT a valid Sudoku board! +++\n");
 
 		std::cout << "This is a valid Sudoku board!" << "\n";
 		std::cout << "The size of the given Sudoku board: " << board.get_board_size() << " x " << board.get_board_size()  << "\n";

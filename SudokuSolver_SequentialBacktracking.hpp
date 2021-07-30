@@ -18,10 +18,10 @@ public:
 	SudokuSolver_SequentialBacktracking(SudokuBoard& board);
 
 	// Checks if the Sudoku board is ALL filled up
-	bool checkIfAllFilled(SudokuBoard& board) const;
+	bool checkIfAllFilled(const SudokuBoard& board) const;
 
 	// Finds the first empty cell on the given Sudoku board
-	const std::pair<size_t, size_t> find_empty(SudokuBoard& board);
+	const std::pair<size_t, size_t> find_empty(const SudokuBoard& board);
 };
 
 

@@ -7,7 +7,7 @@ SudokuSolver_SequentialBacktracking::SudokuSolver_SequentialBacktracking(SudokuB
 	solve(board);
 }
 
-bool SudokuSolver_SequentialBacktracking::checkIfAllFilled(SudokuBoard& board) const
+bool SudokuSolver_SequentialBacktracking::checkIfAllFilled(const SudokuBoard& board) const
 {
     for (size_t i = 0; i < board.get_board_size(); ++i) {
         for (size_t j = 0; j < board.get_board_size(); ++j) {
@@ -19,7 +19,7 @@ bool SudokuSolver_SequentialBacktracking::checkIfAllFilled(SudokuBoard& board) c
     return true;
 }
 
-const std::pair<size_t, size_t> SudokuSolver_SequentialBacktracking::find_empty(SudokuBoard& board)
+const std::pair<size_t, size_t> SudokuSolver_SequentialBacktracking::find_empty(const SudokuBoard& board)
 {
 	std::pair<size_t, size_t> empty_cell;
 	bool flag = true;

@@ -1,9 +1,23 @@
 #include "TestableSudoku.hpp"
 
 
+// Returns whether the dimensions of the given Sudoku board is valid.
+bool TestableSudoku::checkValidSizes(const SudokuBoard& board)
+{
+	size_t BOARD_SIZE = board.get_board_size();
+	size_t ROW_SIZE = board.get_board_data().size();
+	size_t COL_SIZE = board.get_board_data()[0].size(); 
+
+	if ( (ROW_SIZE != BOARD_SIZE) || (COL_SIZE != BOARD_SIZE)) {
+		return false;
+	}
+
+	return true;
+}
+
 // Returns whether all the rows are currently valid,
 // i.e., whether no rows contain any duplicate numbers.
-bool TestableSudoku::checkValidRows(SudokuBoard& board)
+bool TestableSudoku::checkValidRows(const SudokuBoard& board)
 {
 	for (size_t row = 0; row < board.get_board_size(); ++row)
 	{
@@ -28,7 +42,7 @@ bool TestableSudoku::checkValidRows(SudokuBoard& board)
 
 // Returns whether all the columns are currently valid, 
 // i.e., whether no columns contain any duplicate numbers.
-bool TestableSudoku::checkValidColumns(SudokuBoard& board)
+bool TestableSudoku::checkValidColumns(const SudokuBoard& board)
 {
 	for (size_t col = 0; col < board.get_board_size(); ++col)
 	{
@@ -53,7 +67,7 @@ bool TestableSudoku::checkValidColumns(SudokuBoard& board)
 
 // Returns whether all the boxes are currently valid, 
 // i.e., whether no boxes (subgrids) contain any duplicate numbers.
-bool TestableSudoku::checkValidBoxes(SudokuBoard& board)
+bool TestableSudoku::checkValidBoxes(const SudokuBoard& board)
 {
 	size_t BOX_SIZE = board.get_box_size();
 
@@ -83,11 +97,4 @@ bool TestableSudoku::checkValidBoxes(SudokuBoard& board)
 	}
 
 	return true;
-}
-
-// Returns whether the current cell is valid, i.e., whether its rows, columns,
-// and boxes are all valid and do not contain any duplicate numbers.
-bool TestableSudoku::checkValid(SudokuBoard& board)
-{
-	return checkValidRows(board) && checkValidColumns(board) && checkValidBoxes(board);
 }

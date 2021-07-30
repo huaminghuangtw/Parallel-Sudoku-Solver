@@ -74,7 +74,7 @@ void write_output(const SudokuBoard& solutionBoard)
 SudokuBoard::SudokuBoard(const std::string& filename)
 	: _board_data(read_input(filename))
 {
-	std::cout << "Load initial Sudoku board from " << filename << "..." << "\n";
+	std::cout << "Load the initial Sudoku board from " << filename << "..." << "\n";
 }
 
 SudokuBoard::SudokuBoard(const SudokuBoard& another_sudokuboard)
