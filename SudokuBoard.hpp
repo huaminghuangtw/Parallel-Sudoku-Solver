@@ -15,6 +15,8 @@ private:
 	size_t _box_size;
 	size_t _board_size;
 	Board _board_data;
+	const int _empty_cell_value = 0;
+	const std::string _empty_cell_character = ".";
 
 public:
 	// Returns a 2D vector reading from a file containing the initial Sudoku board in space separated format
@@ -34,6 +36,8 @@ public:
 	void set_board_data(size_t row, size_t col, int num);
 	int get_board_data(size_t row, size_t col) const;
 	Board get_board_data() const;
+	int get_empty_cell_value() const;
+	std::string get_empty_cell_character() const;
 
 	int at(size_t i, size_t j) const;
 

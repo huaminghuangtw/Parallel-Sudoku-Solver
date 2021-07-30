@@ -24,14 +24,14 @@ void SudokuSolver_ParallelBacktracking::solve(SudokuBoard& board)
     }
     else
     {
-        std::pair<int, int> empty_cell = find_empty(board);
+        std::pair<int, int> empty_cell_pos = find_empty(board);
 
         for (int num = 1; num <= int(board.get_board_size()); ++num)
         {
-			size_t row = empty_cell.first;
-			size_t col = empty_cell.second;
+			size_t row = empty_cell_pos.first;
+			size_t col = empty_cell_pos.second;
 
-            if (board.isValid(num, empty_cell))
+            if (board.isValid(num, empty_cell_pos))
             {
 				SudokuBoard local_board(board);
                 local_board.set_board_data(row, col, num);

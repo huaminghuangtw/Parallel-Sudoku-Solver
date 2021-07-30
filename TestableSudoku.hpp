@@ -39,10 +39,10 @@ public:
     {
 		std::cout << "Check the validity of the given board..." << "\n";
 
-        ASSERT_WITH_MESSAGE(expect(flags, ROWS_VALID) == checkValidRows(board), "+++ Some rows in Sudoku board contain duplicate numbers! +++\n");
-        ASSERT_WITH_MESSAGE(expect(flags, COLUMNS_VALID) == checkValidColumns(board), "+++ Some columns in Sudoku board contain duplicate numbers! +++\n");
-        ASSERT_WITH_MESSAGE(expect(flags, BOXES_VALID) == checkValidBoxes(board), "+++ Some boxes in Sudoku board contain duplicate numbers! +++\n");
-        ASSERT_WITH_MESSAGE(expect(flags, BOARD_VALID) == checkValid(board), "+++ This is NOT a valid Sudoku board! +++\n");
+        ASSERT_WITH_MESSAGE(expect(flags, ROWS_VALID) == checkValidRows(board), "+++ ERROR: Some rows in Sudoku board contain duplicate numbers! +++\n");
+        ASSERT_WITH_MESSAGE(expect(flags, COLUMNS_VALID) == checkValidColumns(board), "+++ ERROR: Some columns in Sudoku board contain duplicate numbers! +++\n");
+        ASSERT_WITH_MESSAGE(expect(flags, BOXES_VALID) == checkValidBoxes(board), "+++ ERROR: Some boxes in Sudoku board contain duplicate numbers! +++\n");
+        ASSERT_WITH_MESSAGE(expect(flags, BOARD_VALID) == checkValid(board), "+++ ERROR: This is NOT a valid Sudoku board! +++\n");
 
 		std::cout << "This is a valid Sudoku board!" << "\n";
 		std::cout << "The size of the given Sudoku board: " << board.get_board_size() << " x " << board.get_board_size()  << "\n";

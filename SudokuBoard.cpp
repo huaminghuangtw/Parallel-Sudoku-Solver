@@ -108,6 +108,16 @@ Board SudokuBoard::get_board_data() const
 	return _board_data;
 }
 
+int SudokuBoard::get_empty_cell_value() const
+{
+	return _empty_cell_value;
+}
+
+std::string SudokuBoard::get_empty_cell_character() const
+{
+	return _empty_cell_character;
+}
+
 int SudokuBoard::at(size_t i, size_t j) const
 {
 	return _board_data[i][j];
@@ -201,28 +211,39 @@ void print_board(const SudokuBoard& board)
 
 std::ostream& operator<<(std::ostream &out, const SudokuBoard& board)
 {
-	Board grid = board._board_data;
+	Board grid = board.get_board_data();
+	size_t BOARD_SIZE = board.get_board_size();
+	size_t BOX_SIZE = board.get_box_size();
+	int EMPTY_CELL_VALUE = board.get_empty_cell_value();
+	std::string EMPTY_CELL_CHARACTER = board.get_empty_cell_character();
 
-	for (size_t i = 0; i < board._board_size; ++i)
+	for (size_t i = 0; i < BOARD_SIZE; ++i)
 	{
-		if (i % board._box_size == 0 && i != 0) {
+		if (i % BOX_SIZE == 0 && i != 0) {
 			std::string s1 = "---";
-			std::string s2 = s1 * board._box_size + " + ";
-            out << s2 * (board._box_size - 1) << s1 * board._box_size << "\n";
+			std::string s2 = s1 * BOX_SIZE + " + ";
+            out << s2 * (BOX_SIZE - 1) << s1 * BOX_SIZE << "\n";
 		}
 
-        for (size_t j = 0; j < board._board_size; ++j)
+        for (size_t j = 0; j < BOARD_SIZE; ++j)
 		{
-			if (j % board._box_size == 0 && j != 0) {
+			if (j % BOX_SIZE == 0 && j != 0) {
                 out << "  | ";
 			}	
 
-            if (j == board._board_size - 1) {
-                out << std::setfill(' ') << std::setw(2) << grid[i][j] << "\n";
-			} else if (j % board._box_size == board._box_size - 1) {
-				out << std::setfill(' ') << std::setw(2) << grid[i][j];
+			std::string forPrinting;
+			if (grid[i][j] == EMPTY_CELL_VALUE) {
+				forPrinting = EMPTY_CELL_CHARACTER;
 			} else {
-                out << std::setfill(' ') << std::setw(2) << grid[i][j] << " ";
+				forPrinting = std::to_string(grid[i][j]);
+			}
+
+            if (j == BOARD_SIZE - 1) {
+                out << std::setfill(' ') << std::setw(2) << forPrinting << "\n";
+			} else if (j % BOX_SIZE == BOX_SIZE - 1) {
+				out << std::setfill(' ') << std::setw(2) << forPrinting;
+			} else {
+                out << std::setfill(' ') << std::setw(2) << forPrinting << " ";
 			}
 		}
 	}

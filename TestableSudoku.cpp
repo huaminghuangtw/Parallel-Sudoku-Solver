@@ -13,7 +13,7 @@ bool TestableSudoku::checkValidRows(SudokuBoard& board)
 		{
 			int val = board.get_board_data(row, col);
 
-			if (val == 0) continue;
+			if (val == board.get_empty_cell_value()) continue;
 
 			if (valuesInRow.find(val) != valuesInRow.end()) {
 				return false;
@@ -38,7 +38,7 @@ bool TestableSudoku::checkValidColumns(SudokuBoard& board)
 		{
 			int val = board.get_board_data(row, col);
 
-			if (val == 0) continue;
+			if (val == board.get_empty_cell_value()) continue;
 
 			if (valuesInCol.find(val) != valuesInCol.end()) {
 				return false;
@@ -69,7 +69,7 @@ bool TestableSudoku::checkValidBoxes(SudokuBoard& board)
 				{
 					int val = board.get_board_data(boxX * BOX_SIZE + m, boxY * BOX_SIZE + n);
 
-					if (val == 0) continue;
+					if (val == board.get_empty_cell_value()) continue;
 
 					if (valuesInBox.find(val) != valuesInBox.end()) {
 						return false;

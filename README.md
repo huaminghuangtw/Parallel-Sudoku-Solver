@@ -4,8 +4,7 @@
 
 ## To-do List:
 * [ ] Build GUI using QT library (https://www.techwithtim.net/tutorials/python-programming/sudoku-solver-backtracking/)
-* [ ] Write Unit Tests using common frameworks
-* [ ] 
+* [ ] Write Unit Tests using common frameworks, e.g., Google Test
 
 
 give each thread a puzzle
