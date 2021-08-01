@@ -1,6 +1,7 @@
 #ifndef SUDOKUBOARD_HPP
 #define SUDOKUBOARD_HPP
 
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -11,6 +12,9 @@ using Board = std::vector<std::vector<int>>;
 
 class SudokuBoard
 {
+	friend class SudokuSolver;
+	friend class TestableSudoku;
+
 private:
 	size_t _box_size;
 	size_t _board_size;
@@ -42,8 +46,6 @@ public:
 	int get_num_empty_cells() const;
 
 	int at(size_t i, size_t j) const;
-
-	bool isEmpty(size_t i, size_t j) const;
 
 	// copy-assignment operator
 	SudokuBoard& operator=(const SudokuBoard& another_sudokuboard);

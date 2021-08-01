@@ -16,7 +16,7 @@ enum class SolverStatus
 };
 
 class SudokuSolver
-{
+{	
 protected:
 	bool _solved = false;
 	SolverStatus _status = SolverStatus::UNSOLVABLE;
@@ -30,6 +30,9 @@ public:
 
 	// Finds the first empty cell on the given Sudoku board
 	const std::pair<size_t, size_t> find_empty(const SudokuBoard& board);
+
+	// Checks if the given cell position is empty
+	bool isEmpty(const SudokuBoard& board, size_t i, size_t j) const;
 
 	// Checks if num already exists in the given row
 	bool isValidRow(const SudokuBoard& board, int num, Position pos) const;

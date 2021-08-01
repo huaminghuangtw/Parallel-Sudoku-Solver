@@ -143,12 +143,6 @@ int SudokuBoard::at(size_t i, size_t j) const
 	return _board_data[i][j];
 }
 
-bool SudokuBoard::isEmpty(size_t i, size_t j) const
-{
-	if (_board_data[i][j] == 0) return true;
-	return true;
-}
-
 SudokuBoard& SudokuBoard::operator=(const SudokuBoard& another_sudokuboard)
 {
 	if (this != &another_sudokuboard)

@@ -6,7 +6,7 @@ bool SudokuSolver::checkIfAllFilled(const SudokuBoard& board) const
 {
     for (size_t i = 0; i < board.get_board_size(); ++i) {
         for (size_t j = 0; j < board.get_board_size(); ++j) {
-            if (board.at(i, j) == board.get_empty_cell_value())
+            if (isEmpty(board, i, j))
                 return false;
 
         }
@@ -25,7 +25,7 @@ const std::pair<size_t, size_t> SudokuSolver::find_empty(const SudokuBoard& boar
 		{
 			for (size_t j = 0; j < board.get_board_size(); ++j)
 			{
-				if (board.at(i, j) == board.get_empty_cell_value()) {
+				if (isEmpty(board, i, j)) {
 					empty_cell = std::make_pair(i, j);
 					flag = false;
 				}
@@ -34,6 +34,11 @@ const std::pair<size_t, size_t> SudokuSolver::find_empty(const SudokuBoard& boar
 	}
 	
 	return empty_cell;  // (row, col)
+}
+
+bool SudokuSolver::isEmpty(const SudokuBoard& board, size_t i, size_t j) const
+{
+	return (board.at(i, j) == board._empty_cell_value) ? true : false;
 }
 
 bool SudokuSolver::isValidRow(const SudokuBoard& board, int num, Position pos) const
