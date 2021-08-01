@@ -3,18 +3,16 @@
 
 
 #include "SudokuBoard.hpp"
-#include "SudokuSolver_SequentialBacktracking.hpp"
+#include "SudokuSolver.hpp"
 
 
-class SudokuSolver_ParallelBacktracking : public SudokuSolver_SequentialBacktracking
+class SudokuSolver_ParallelBacktracking : public SudokuSolver
 {
-private:
+public:
+	SudokuSolver_ParallelBacktracking();
+
 	// Solves the given Sudoku board using parallel backtracking algorithm
 	void solve(SudokuBoard& board);
-
-public:
-	SudokuSolver_ParallelBacktracking() = default;
-	SudokuSolver_ParallelBacktracking(SudokuBoard& board);
 };
 
 

@@ -2,43 +2,9 @@
 #include <iostream>
 
 
-SudokuSolver_SequentialBacktracking::SudokuSolver_SequentialBacktracking(SudokuBoard& board)
+SudokuSolver_SequentialBacktracking::SudokuSolver_SequentialBacktracking()
 {
-	solve(board);
-}
-
-bool SudokuSolver_SequentialBacktracking::checkIfAllFilled(const SudokuBoard& board) const
-{
-    for (size_t i = 0; i < board.get_board_size(); ++i) {
-        for (size_t j = 0; j < board.get_board_size(); ++j) {
-            if (board.at(i, j) == board.get_empty_cell_value())
-                return false;
-
-        }
-    }
-    return true;
-}
-
-const std::pair<size_t, size_t> SudokuSolver_SequentialBacktracking::find_empty(const SudokuBoard& board)
-{
-	std::pair<size_t, size_t> empty_cell;
-	bool flag = true;
-
-	while (flag)
-	{
-		for (size_t i = 0; i < board.get_board_size(); ++i)
-		{
-			for (size_t j = 0; j < board.get_board_size(); ++j)
-			{
-				if (board.at(i, j) == board.get_empty_cell_value()) {
-					empty_cell = std::make_pair(i, j);
-					flag = false;
-				}
-			}
-		}
-	}
-	
-	return empty_cell;  // (row, col)
+	std::cout << "\n" << "Sequential Sudoku solver using backtracking algorithm starts, please wait..." << "\n";
 }
 
 void SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
@@ -58,14 +24,14 @@ void SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
     }
     else
     {
-        std::pair<int, int> empty_cell_pos = find_empty(board);
+        Position empty_cell_pos = find_empty(board);
 
         for (int num = 1; num <= int(board.get_board_size()); ++num)
         {
 			size_t row = empty_cell_pos.first;
 			size_t col = empty_cell_pos.second;
 
-            if (board.isValid(num, empty_cell_pos))
+            if (isValid(board, num, empty_cell_pos))
             {
                 board.set_board_data(row, col, num);
                 solve(board);

@@ -11,7 +11,7 @@ const Board SudokuBoard::read_input(const std::string& filename)
 
 	if (!inputFile)
 	{
-		std::cout << "Error opening file! Please make sure the file specified exists." << "\n";
+		std::cerr << "Error opening file " << filename << "! Please make sure the file specified exists." << "\n";
 		exit(1);
 	}
 	
@@ -120,9 +120,33 @@ std::string SudokuBoard::get_empty_cell_character() const
 	return _empty_cell_character;
 }
 
+int SudokuBoard::get_num_total_cells() const
+{
+	return _board_size * _board_size;
+}
+
+int SudokuBoard::get_num_empty_cells() const
+{
+	int n = 0;
+    for (size_t i = 0; i < _board_size; ++i)
+	{
+		for (size_t j = 0; j < _board_size; ++j)
+		{
+			n += (this->at(i, j) == get_empty_cell_value());
+		}
+	}
+    return n;
+}
+
 int SudokuBoard::at(size_t i, size_t j) const
 {
 	return _board_data[i][j];
+}
+
+bool SudokuBoard::isEmpty(size_t i, size_t j) const
+{
+	if (_board_data[i][j] == 0) return true;
+	return true;
 }
 
 SudokuBoard& SudokuBoard::operator=(const SudokuBoard& another_sudokuboard)
@@ -135,51 +159,6 @@ SudokuBoard& SudokuBoard::operator=(const SudokuBoard& another_sudokuboard)
 	}
 
 	return *this;
-}
-
-bool SudokuBoard::isValidRow(int num, std::pair<size_t, size_t> pos) const
-{
-    for (size_t i = 0; i < _board_size; ++i)
-	{
-        if ( (i != pos.second) && (this->at(pos.first, i) == num) ) {
-            return false;
-		}
-	}
-
-	return true;
-}
-
-bool SudokuBoard::isValidColumn(int num, std::pair<size_t, size_t> pos) const
-{
-	for (size_t i = 0; i < _board_size; ++i)
-	{
-        if ( (i != pos.first) && this->at(i, pos.second) == num ) {
-            return false;
-		}
-	}
-	
-	return true;
-}
-
-bool SudokuBoard::isValidBox(int num, std::pair<size_t, size_t> pos) const
-{
-	int box_x = std::floor(pos.first / _box_size);
-    int box_y = std::floor(pos.second / _box_size);
-
-    for (size_t i = box_x * _box_size; i < box_x * _box_size + 3; ++i) {
-        for (size_t j = box_y * _box_size; j < box_y * _box_size + 3; ++j) {
-            if ( (i != pos.first && j != pos.second) && this->at(i, j) == num ) {
-                return false;
-			}
-        }
-    }
-
-	return true;
-}
-
-bool SudokuBoard::isValid(int num, std::pair<size_t, size_t> pos) const
-{
-    return isValidRow(num, pos) && isValidColumn(num, pos) && isValidBox(num, pos);
 }
 
 void print_board(const SudokuBoard& board)

@@ -1,20 +1,31 @@
+# the compiler: gcc for C program, g++ for C++ program
 CXX = g++
-CXX_FLAGS = --std=c++17 -Wall -Wextra -O3
+
+# compiler flags:
+#  -g      adds debugging information to the executable file
+#  -Wall   turns on most, but not all, compiler warnings
+#  -Wextra enables some extra warning flags that are not enabled by -Wall
+CXX_FLAGS = --std=c++17 -g -Wall -Wextra -O3
 OPENMP = -fopenmp
 
-executables = sudoku_main
+# All output target executables
+TARGETS = sudoku_main
 
-dependencies = \
+# All object files
+OBJECTS = *.o *.out
+
+DEPENDENCIES = \
 	SudokuBoard.cpp \
 	TestableSudoku.cpp \
 	SudokuSolver.cpp \
 	SudokuSolver_SequentialBacktracking.cpp \
 	SudokuSolver_ParallelBacktracking.cpp \
+	SudokuSolver_SequentialBruteForce.cpp \
 
-all: $(executables)
+all: $(TARGETS)
 
-sudoku_main: sudoku_main.cpp $(dependencies)
+sudoku_main: sudoku_main.cpp $(DEPENDENCIES)
 	$(CXX) $(CXX_FLAGS) $(OPENMP) -o $@ $^
 
 clean:
-	rm -f $(executables) *.o *.out solution.txt
+	rm -f $(TARGETS) $(OBJECTS) solution.txt

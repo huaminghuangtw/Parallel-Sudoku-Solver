@@ -3,13 +3,23 @@
 #include "SudokuSolver.hpp"
 #include "SudokuSolver_SequentialBacktracking.hpp"
 #include "SudokuSolver_ParallelBacktracking.hpp"
+#include "SudokuSolver_SequentialBruteForce.hpp"
 
 #include <iostream>
 #include <chrono>
+#include <memory>
 #include <omp.h>
 
 
 #define PRINT_TIME 1
+
+
+enum class MODES
+{
+	SEQUENTIAL_BACKTRACKING,   // Sequential Mode using backtracking algorithm
+	PARALLEL_BACKTRACKING,     // OpenMP Mode using backtracking algorithm
+	SEQUENTIAL_BRUTEFORCE,     // Sequential Mode using brute force algorithm
+};
 
 
 int main(int argc, char** argv)
@@ -31,18 +41,28 @@ int main(int argc, char** argv)
 	<< "\n\n\n";
 	
 	// validate command-line arguments
-	if (argc < 2 || argc > 5) {
-		std::cerr << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE> [<MODE>] [<WRITE_TO_SOLUTION_TXT>] [<NUM_THREADS>] " << "\n";
-		std::cerr << "		1. <MODE>: 0 for sequential mode (default), 1 for OpenMP mode." << "\n";
+	if (argc < 3 || argc > 5)
+	{
+		std::cerr << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE> <MODE> [<WRITE_TO_SOLUTION_TXT>] [<NUM_THREADS>] " << "\n";
+		std::cerr << "		1. <MODE>: 0 for sequential mode, 1 for OpenMP mode." << "\n";
 		std::cerr << "		2. <WRITE_TO_SOLUTION_TXT>: 0 - only write solution to the console (default), 1 - write solution to a text file." << "\n";
 		std::cerr << "		3. <NUM_THREADS>: if you set 1 for <MODE>, you need to also set value to <NUM_THREADS> (default: 2)" << "\n";
+		std::cerr << "Please try again." << "\n";
 		exit(-1);
     }
 
+	MODES mode = static_cast<MODES>(std::stoi(argv[2]));
+	if (mode != MODES::SEQUENTIAL_BACKTRACKING &&
+		mode != MODES::PARALLEL_BACKTRACKING &&
+		mode != MODES::SEQUENTIAL_BRUTEFORCE)
+	{
+		std::cerr << "Available options for <MODE>: " << "\n";
+		std::cerr << "Please try again." << "\n";
+		exit(-1);
+	}
+
     auto board = SudokuBoard(std::string(argv[1]));
 	TestableSudoku::testBoard(board);
-
-	int MODE = (argc >= 3) ? atoi(argv[2]) : 0;
 
 	int WRITE_TO_SOLUTION_TXT = (argc >= 4) ? std::stoi(argv[3]) : 0;
 
@@ -55,44 +75,48 @@ int main(int argc, char** argv)
     start = std::chrono::high_resolution_clock::now();
 #endif
 
-	SudokuSolver solver;
-	if (MODE == 0)        // Sequential Mode
+	std::unique_ptr<SudokuSolver> solver;
+	if (mode == MODES::SEQUENTIAL_BACKTRACKING) 
 	{
-		std::cout << "\n" << "Sequential Sudoku solver starts, please wait..." << "\n";
-		solver = SudokuSolver_SequentialBacktracking(board);
+		solver = std::make_unique<SudokuSolver_SequentialBacktracking>();
+		SudokuSolver_SequentialBacktracking* child_solver = dynamic_cast<SudokuSolver_SequentialBacktracking*>(solver.get());
+		child_solver->solve(board);
 	} 
-	else if (MODE == 1)   // OpenMP Mode
+	else if (mode == MODES::PARALLEL_BACKTRACKING) 
 	{
 		int NUM_THREADS = (argc >= 5) ? std::stoi(argv[4]) : 2;
-
 		omp_set_num_threads(NUM_THREADS);
-		int nthreads = omp_get_num_threads();
-
-		std::cout << "\n" << "Parallel Sudoku solver with OpenMP starts, please wait..." << "\n";
-		std::cout << "Using " << nthreads << " OMP threads" << "\n";
 
 		#pragma omp parallel
 		{
 			#pragma omp single
 			{
-				solver = SudokuSolver_ParallelBacktracking(board);
+				solver = std::make_unique<SudokuSolver_ParallelBacktracking>();
+				SudokuSolver_ParallelBacktracking* child_solver = dynamic_cast<SudokuSolver_ParallelBacktracking*>(solver.get());
+				child_solver->solve(board);
 			}
 		}
 	}
+	else if (mode == MODES::SEQUENTIAL_BRUTEFORCE)
+	{
+		solver = std::make_unique<SudokuSolver_SequentialBruteForce>();
+		SudokuSolver_SequentialBruteForce* child_solver = dynamic_cast<SudokuSolver_SequentialBruteForce*>(solver.get());
+		child_solver->solve(board);
+	}		
 
 #if PRINT_TIME
 	stop = std::chrono::high_resolution_clock::now();
 	int time_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
 #endif
 	
-	switch (solver.get_solver_status())
+	switch (solver->get_solver_status())
 	{
 		case SolverStatus::SOLVED:
 			std::cout << "Solution: " << "\n";
 			std::cout << "************************************* OUTPUT GRID ************************************" << "\n\n";
-			print_board(solver.get_solution());
+			print_board(solver->get_solution());
 			if (WRITE_TO_SOLUTION_TXT) {
-				write_output(solver.get_solution());
+				write_output(solver->get_solution());
 			}
 			std::cout << "\n" << "**************************************************************************************" << "\n";
 			break;

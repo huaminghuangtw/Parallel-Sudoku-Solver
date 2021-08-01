@@ -38,23 +38,15 @@ public:
 	Board get_board_data() const;
 	int get_empty_cell_value() const;
 	std::string get_empty_cell_character() const;
+	int get_num_total_cells() const;
+	int get_num_empty_cells() const;
 
 	int at(size_t i, size_t j) const;
 
+	bool isEmpty(size_t i, size_t j) const;
+
 	// copy-assignment operator
 	SudokuBoard& operator=(const SudokuBoard& another_sudokuboard);
-
-	// Checks if num already exists in the given row
-	bool isValidRow(int num, std::pair<size_t, size_t> pos) const;
-
-	// Checks if num already exists in the given column
-	bool isValidColumn(int num, std::pair<size_t, size_t> pos) const;
-
-    // Checks if num already exists in the given box (subgrid)
-	bool isValidBox(int num, std::pair<size_t, size_t> pos) const;
-
-	// Checks if a given number can be inserted at a given cell position
-	bool isValid(int num, std::pair<size_t, size_t> pos) const;
 	
 	// Prints the Sudoku board
 	friend void print_board(const SudokuBoard& board);
