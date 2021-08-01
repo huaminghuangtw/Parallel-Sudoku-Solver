@@ -26,10 +26,10 @@ void SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
     {
         Position empty_cell_pos = find_empty(board);
 
-        for (int num = 1; num <= int(board.get_board_size()); ++num)
+        for (int num = 1; num <= board.get_board_size(); ++num)
         {
-			size_t row = empty_cell_pos.first;
-			size_t col = empty_cell_pos.second;
+			int row = empty_cell_pos.first;
+			int col = empty_cell_pos.second;
 
             if (isValid(board, num, empty_cell_pos))
             {

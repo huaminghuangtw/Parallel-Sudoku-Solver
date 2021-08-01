@@ -7,9 +7,9 @@ SudokuSolver_SequentialBruteForce::SudokuSolver_SequentialBruteForce()
 	std::cout << "\n" << "Sequential Sudoku solver using brute force algorithm starts, please wait..." << "\n";
 }
 
-void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, size_t row, size_t col)
+void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, int row, int col)
 {
-	size_t BOARD_SIZE = board.get_board_size();
+	int BOARD_SIZE = board.get_board_size();
 
 	if (_solved)
 	{
@@ -17,9 +17,9 @@ void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, size_t row, si
 		return;
 	}
 
-	size_t abs_index = row * BOARD_SIZE + col;
+	int abs_index = row * BOARD_SIZE + col;
 
-    if (int(abs_index) >= board.get_num_total_cells())
+    if (abs_index >= board.get_num_total_cells())
 	{
 		_solved = true;
 		_status = SolverStatus::SOLVED;
@@ -27,8 +27,8 @@ void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, size_t row, si
 		return;
     }
     
-	size_t row_next = (abs_index + 1) / BOARD_SIZE;
-	size_t col_next = (abs_index + 1) % BOARD_SIZE;
+	int row_next = (abs_index + 1) / BOARD_SIZE;
+	int col_next = (abs_index + 1) % BOARD_SIZE;
 
 	if (!isEmpty(board, row, col))
 	{   
@@ -39,7 +39,7 @@ void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, size_t row, si
 		Position pos = std::make_pair(row, col);
 
 		// Fill in all possible numbers
-        for (int num = 1; num <= int(BOARD_SIZE); ++num)
+        for (int num = 1; num <= BOARD_SIZE; ++num)
 		{
             if (isValid(board, num, pos))
 			{

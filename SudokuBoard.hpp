@@ -16,8 +16,8 @@ class SudokuBoard
 	friend class TestableSudoku;
 
 private:
-	size_t _box_size;
-	size_t _board_size;
+	int _box_size;
+	int _board_size;
 	Board _board_data;
 	const int _empty_cell_value = 0;
 	const std::string _empty_cell_character = ".";
@@ -35,17 +35,17 @@ public:
 	// copy constructor
 	SudokuBoard(const SudokuBoard& another_sudokuboard);
 
-	size_t get_box_size() const;
-	size_t get_board_size() const;
-	void set_board_data(size_t row, size_t col, int num);
-	int get_board_data(size_t row, size_t col) const;
+	int get_box_size() const;
+	int get_board_size() const;
+	void set_board_data(int row, int col, int num);
+	int get_board_data(int row, int col) const;
 	Board get_board_data() const;
 	int get_empty_cell_value() const;
 	std::string get_empty_cell_character() const;
 	int get_num_total_cells() const;
 	int get_num_empty_cells() const;
 
-	int at(size_t i, size_t j) const;
+	int at(int i, int j) const;
 
 	// copy-assignment operator
 	SudokuBoard& operator=(const SudokuBoard& another_sudokuboard);

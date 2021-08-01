@@ -6,7 +6,7 @@
 #include <utility>
 
 
-using Position = std::pair<size_t, size_t>;
+using Position = std::pair<int, int>;
 
 
 enum class SolverStatus
@@ -29,10 +29,10 @@ public:
 	bool checkIfAllFilled(const SudokuBoard& board) const;
 
 	// Finds the first empty cell on the given Sudoku board
-	const std::pair<size_t, size_t> find_empty(const SudokuBoard& board);
+	const std::pair<int, int> find_empty(const SudokuBoard& board);
 
 	// Checks if the given cell position is empty
-	bool isEmpty(const SudokuBoard& board, size_t i, size_t j) const;
+	bool isEmpty(const SudokuBoard& board, int i, int j) const;
 
 	// Checks if num already exists in the given row
 	bool isValidRow(const SudokuBoard& board, int num, Position pos) const;

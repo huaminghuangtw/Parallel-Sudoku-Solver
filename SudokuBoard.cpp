@@ -20,9 +20,9 @@ const Board SudokuBoard::read_input(const std::string& filename)
 
 	Board sudokuBoard(_board_size, std::vector<int> (_board_size, 0));
 
-	for (size_t row = 0; row < _board_size; ++row)
+	for (int row = 0; row < _board_size; ++row)
 	{
-		for (size_t col = 0; col < _board_size; ++col)
+		for (int col = 0; col < _board_size; ++col)
 		{
 			int value;
 			inputFile >> value;
@@ -38,16 +38,16 @@ const Board SudokuBoard::read_input(const std::string& filename)
 void write_output(const SudokuBoard& solutionBoard)
 {
 	Board solution = solutionBoard.get_board_data();
-	size_t BOARD_SIZE = solutionBoard.get_board_size();
-	size_t BOX_SIZE = solutionBoard.get_box_size();
+	int BOARD_SIZE = solutionBoard.get_board_size();
+	int BOX_SIZE = solutionBoard.get_box_size();
 
 	std::ofstream outputFile("solution.txt");
 
-    int digit = int(log10(BOARD_SIZE)) + 1;
+    int digit = log10(BOARD_SIZE) + 1;
 
-    for (size_t r = 0; r < BOARD_SIZE; ++r)
+    for (int r = 0; r < BOARD_SIZE; ++r)
 	{
-        for (size_t c = 0; c < BOARD_SIZE; ++c)
+        for (int c = 0; c < BOARD_SIZE; ++c)
 		{
 			outputFile << std::setw(digit) << solution[r][c];
 
@@ -85,22 +85,22 @@ SudokuBoard::SudokuBoard(const SudokuBoard& another_sudokuboard)
 	  _board_data(another_sudokuboard._board_data)
 { }
 
-size_t SudokuBoard::get_box_size() const
+int SudokuBoard::get_box_size() const
 {
 	return _box_size;
 }
 
-size_t SudokuBoard::get_board_size() const
+int SudokuBoard::get_board_size() const
 {
 	return _board_size;
 }
 
-void SudokuBoard::set_board_data(size_t row, size_t col, int num)
+void SudokuBoard::set_board_data(int row, int col, int num)
 {
 	_board_data[row][col] = num;
 }
 
-int SudokuBoard::get_board_data(size_t row, size_t col) const
+int SudokuBoard::get_board_data(int row, int col) const
 {
 	return _board_data[row][col];
 }
@@ -128,9 +128,9 @@ int SudokuBoard::get_num_total_cells() const
 int SudokuBoard::get_num_empty_cells() const
 {
 	int n = 0;
-    for (size_t i = 0; i < _board_size; ++i)
+    for (int i = 0; i < _board_size; ++i)
 	{
-		for (size_t j = 0; j < _board_size; ++j)
+		for (int j = 0; j < _board_size; ++j)
 		{
 			n += (this->at(i, j) == get_empty_cell_value());
 		}
@@ -138,7 +138,7 @@ int SudokuBoard::get_num_empty_cells() const
     return n;
 }
 
-int SudokuBoard::at(size_t i, size_t j) const
+int SudokuBoard::at(int i, int j) const
 {
 	return _board_data[i][j];
 }
@@ -159,7 +159,7 @@ void print_board(const SudokuBoard& board)
 {
 	Board grid = board._board_data;
 
-	for (size_t i = 0; i < board._board_size; ++i)
+	for (int i = 0; i < board._board_size; ++i)
 	{
 		if (i % board._box_size == 0 && i != 0) {
 			std::string s1 = "---";
@@ -167,7 +167,7 @@ void print_board(const SudokuBoard& board)
             std::cout << s2 * (board._box_size - 1) << s1 * board._box_size << "\n";
 		}
 
-        for (size_t j = 0; j < board._board_size; ++j)
+        for (int j = 0; j < board._board_size; ++j)
 		{
 			if (j % board._box_size == 0 && j != 0) {
                 std::cout << "  | ";
@@ -187,12 +187,12 @@ void print_board(const SudokuBoard& board)
 std::ostream& operator<<(std::ostream &out, const SudokuBoard& board)
 {
 	Board grid = board.get_board_data();
-	size_t BOARD_SIZE = board.get_board_size();
-	size_t BOX_SIZE = board.get_box_size();
+	int BOARD_SIZE = board.get_board_size();
+	int BOX_SIZE = board.get_box_size();
 	int EMPTY_CELL_VALUE = board.get_empty_cell_value();
 	std::string EMPTY_CELL_CHARACTER = board.get_empty_cell_character();
 
-	for (size_t i = 0; i < BOARD_SIZE; ++i)
+	for (int i = 0; i < BOARD_SIZE; ++i)
 	{
 		if (i % BOX_SIZE == 0 && i != 0) {
 			std::string s1 = "---";
@@ -200,7 +200,7 @@ std::ostream& operator<<(std::ostream &out, const SudokuBoard& board)
             out << s2 * (BOX_SIZE - 1) << s1 * BOX_SIZE << "\n";
 		}
 
-        for (size_t j = 0; j < BOARD_SIZE; ++j)
+        for (int j = 0; j < BOARD_SIZE; ++j)
 		{
 			if (j % BOX_SIZE == 0 && j != 0) {
                 out << "  | ";

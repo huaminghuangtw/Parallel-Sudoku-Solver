@@ -6,8 +6,13 @@
 #include "SudokuSolver.hpp"
 
 
+
+
 class SudokuSolver_ParallelBacktracking : public SudokuSolver
 {
+private:
+	int _recursionDepth = 0;
+
 public:
 	SudokuSolver_ParallelBacktracking();
 
