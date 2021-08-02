@@ -7,6 +7,11 @@
 * [ ] Write Unit Tests using common frameworks, e.g., Google Test (for successful messages in green, unsuccessful messages in red)
 * [ ] Develop a Sudoku App for Android and Apple ios
 
+A stack is perfectly suited to backtracking, since all you’re doing is either adding the most
+recent moves (i.e., pushing moves) or removing moves starting from the most recent (i.e.,
+5popping moves). In other words, your access pattern is exactly Last-In-First-Out (LIFO),
+which is precisely what a stack provides.
+
 give each thread a puzzle
 
 print_board

@@ -19,10 +19,10 @@ const int COLUMNS_VALID = 3;
 const int BOXES_VALID = 4;
 
 
-class TestableSudoku
+class SudokuTest
 {
 private:
-	TestableSudoku() { }
+	SudokuTest() { }
 
 public:
 	static bool checkValidSizes(const SudokuBoard& board);
@@ -35,9 +35,9 @@ public:
         return flags && mask;
     }
 
-    static void testBoard(SudokuBoard& board, int flags = SIZES_VALID | ROWS_VALID | COLUMNS_VALID | BOXES_VALID)
+    static void testBoard(SudokuBoard& board, int flags=SIZES_VALID | ROWS_VALID | COLUMNS_VALID | BOXES_VALID)
     {
-		std::cout << "Check the validity of the initial state of the given Sudoku board..." << "\n";
+		std::cout << "Check the validity of Sudoku board..." << "\n";
 
 		// A set of unit tests
 		ASSERT_WITH_MESSAGE(expect(flags, SIZES_VALID) == checkValidSizes(board), "+++ ERROR: The dimension of the Sudoku board is not valid! +++\n");

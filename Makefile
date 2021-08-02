@@ -16,7 +16,7 @@ OBJECTS = *.o *.out
 
 DEPENDENCIES = \
 	SudokuBoard.cpp \
-	TestableSudoku.cpp \
+	SudokuTest.cpp \
 	SudokuSolver.cpp \
 	SudokuSolver_SequentialBacktracking.cpp \
 	SudokuSolver_ParallelBacktracking.cpp \

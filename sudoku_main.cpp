@@ -1,5 +1,5 @@
 #include "SudokuBoard.hpp"
-#include "TestableSudoku.hpp"
+#include "SudokuTest.hpp"
 #include "SudokuSolver.hpp"
 #include "SudokuSolver_SequentialBacktracking.hpp"
 #include "SudokuSolver_ParallelBacktracking.hpp"
@@ -62,7 +62,7 @@ int main(int argc, char** argv)
 	}
 
     auto board = SudokuBoard(std::string(argv[1]));
-	TestableSudoku::testBoard(board);
+	SudokuTest::testBoard(board);
 
 	int WRITE_TO_SOLUTION_TXT = (argc >= 4) ? std::stoi(argv[3]) : 0;
 

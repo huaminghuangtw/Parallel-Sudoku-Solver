@@ -1,4 +1,5 @@
 #include "SudokuSolver_SequentialBacktracking.hpp"
+#include "SudokuTest.hpp"
 #include <iostream>
 
 
@@ -9,17 +10,13 @@ SudokuSolver_SequentialBacktracking::SudokuSolver_SequentialBacktracking()
 
 void SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
 {
-	if (_solved)
-	{
-		_status = SolverStatus::SOLVED;
-		return;
-	}
-
     if (checkIfAllFilled(board))   // base case
     {
+		std::cout << "Solved!" << "\n";
         _solved = true;
 		_status = SolverStatus::SOLVED;
 		_solution = board;
+		SudokuTest::testBoard(_solution);
 		return;
     }
     else
@@ -34,10 +31,12 @@ void SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
             if (isValid(board, num, empty_cell_pos))
             {
                 board.set_board_data(row, col, num);
+				// Try the next cell recursively
                 solve(board);
             }
-
-			board.set_board_data(row, col, 0);   // backtrack to the most recently filled cell
+			
+			// Backtrack to the most recently filled cell
+			board.set_board_data(row, col, board.get_empty_cell_value());
         }
 
         // None of the values solved the Sudoku

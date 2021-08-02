@@ -13,7 +13,7 @@ using Board = std::vector<std::vector<int>>;
 class SudokuBoard
 {
 	friend class SudokuSolver;
-	friend class TestableSudoku;
+	friend class SudokuTest;
 
 private:
 	int _box_size;
