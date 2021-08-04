@@ -13,50 +13,38 @@ SudokuSolver_ParallelBacktracking::SudokuSolver_ParallelBacktracking(bool print_
 
 void SudokuSolver_ParallelBacktracking::solve(SudokuBoard& board)
 {
-	if (_solved)
-	{
-		_status = SolverStatus::SOLVED;
-		return;
-	}
+	if (_solved) return;
 
     if (checkIfAllFilled(board))   // base case
     {
         _solved = true;
-		_status = SolverStatus::SOLVED;
 		_solution = board;
 		return;
     }
-    else
-    {
-        Position empty_cell_pos = find_empty(board);
 
-        for (int num = 1; num <= board.get_board_size(); ++num)
-        {
-			int row = empty_cell_pos.first;
-			int col = empty_cell_pos.second;
+	Position empty_cell_pos = find_empty(board);
 
-            if (isValid(board, num, empty_cell_pos))
-            {
-				// Needs to work on the new copy of the Sudoku board
-				SudokuBoard local_board(board);
-                local_board.set_board_data(row, col, num);
+	for (int num = 1; num <= board.get_board_size(); ++num)
+	{
+		int row = empty_cell_pos.first;
+		int col = empty_cell_pos.second;
 
-				// Use the final clause in #pragma omp task directive to reduce the overhead of tasks creation, for better scalability
-				// If we don't set such a threshold, the workload of a single task is therefore too small and the overhead of task creation
-				// become significant compared to the workload of a task
-				#pragma omp task default(none) firstprivate(local_board) final(_recursionDepth > board.get_board_size())
-                solve(local_board);
-            }
+		if (isValid(board, num, empty_cell_pos))
+		{
+			// Needs to work on the new copy of the Sudoku board
+			SudokuBoard local_board(board);
+			local_board.set_board_data(row, col, num);
 
-			_recursionDepth++;
-        }
-		// board.set_board_data(row, col, 0);   // backtrack to the most recently filled cell
-		// TODO: Why no board[row][col] = 0;?
+			// Use the final clause in #pragma omp task directive to reduce the overhead of tasks creation, for better scalability
+			// If we don't set such a threshold, the workload of a single task is therefore too small and the overhead of task creation
+			// become significant compared to the workload of a task
+			#pragma omp task default(none) firstprivate(local_board) final(_recursionDepth > board.get_board_size())
+			solve(local_board);
+		}
 
-        // None of the values solved the Sudoku
-		// TODO: Instead of the wait for each task, put a "taskgroup" before the loop, so that the iterations become spawned in parallel and finish as a group.
-		#pragma omp taskwait
-		_solved = false;
-        return;
-    }
+		// board.set_board_data(row, col, board.get_empty_cell_value());   // backtrack to the most recently filled cell
+		// Why don't we need this line? Because we don't modify anything in the original board.
+		
+		_recursionDepth++;
+	}
 }

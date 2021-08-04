@@ -7,37 +7,9 @@
 * [ ] Write Unit Tests using common frameworks, e.g., Google Test (for successful messages in green, unsuccessful messages in red)
 * [ ] Develop a Sudoku App for Android and Apple ios
 
-A stack is perfectly suited to backtracking, since all you’re doing is either adding the most
-recent moves (i.e., pushing moves) or removing moves starting from the most recent (i.e.,
-5popping moves). In other words, your access pattern is exactly Last-In-First-Out (LIFO),
-which is precisely what a stack provides.
+Assume all input boards are solvable, therefore return type of solve function is void
 
 give each thread a puzzle
-
-print_board
-find_empty
-is_valid do not check the same position that we just added in. duplicate
-sudoku_solver
-
-At the i-th empty cell on the board:
-	for all possible fill-ins:
-		fill the number
-		if this is the last empty cell:
-			return the solution
-		else:
-			search the (i+1)-th empty cell
-	return with no solution
-
-recursive_backtrack():
-    if board is valid:
-        index = index of first empty spot in board
-        for value = 1 to 9:
-            set board[index] = value
-            if recursive_backtrack():
-                return true;  // solved!
-            set board[index] = 0
-    // if we tried all values, or the board is invalid, backtrack
-    return false;
 
 $ ./sudoku <thread_count> <grid_file_path>
 

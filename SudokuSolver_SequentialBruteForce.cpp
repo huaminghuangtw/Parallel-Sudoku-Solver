@@ -11,11 +11,7 @@ SudokuSolver_SequentialBruteForce::SudokuSolver_SequentialBruteForce(bool print_
 
 void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, int row /*=0*/, int col /*=0*/)
 {	
-	if (_solved)
-	{
-		_status = SolverStatus::SOLVED;
-		return;
-	}
+	if (_solved) return;
 
 	int BOARD_SIZE = board.get_board_size();
 
@@ -24,7 +20,6 @@ void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, int row /*=0*/
     if (abs_index >= board.get_num_total_cells())
 	{
 		_solved = true;
-		_status = SolverStatus::SOLVED;
 		_solution = board;
 		return;
     }

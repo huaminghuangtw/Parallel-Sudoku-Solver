@@ -1,5 +1,5 @@
-#ifndef SUDOKUBOARDDEQUE_H
-#define SUDOKUBOARDDEQUE_H
+#ifndef SUDOKUBOARDDEQUE_HPP
+#define SUDOKUBOARDDEQUE_HPP
 
 
 #include <iostream>
@@ -47,4 +47,4 @@ public:
 };
 
 
-#endif   // SUDOKUBOARDDEQUE_H
+#endif   // SUDOKUBOARDDEQUE_HPP

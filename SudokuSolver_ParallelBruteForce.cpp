@@ -48,9 +48,7 @@ void SudokuSolver_ParallelBruteForce::bootstrap()
 void SudokuSolver_ParallelBruteForce::bootstrap(SudokuBoardDeque& boardDeque, int indexOfRows)
 {
 	// if no start boards in the board deque, then return
-    if (boardDeque.size() == 0) {
-        return;
-    }
+    if (boardDeque.size() == 0) return;
 
 	while (!checkIfRowFilled(boardDeque.front(), indexOfRows))
 	{
@@ -108,8 +106,9 @@ void SudokuSolver_ParallelBruteForce::solve(SudokuBoard& board)
 	/********************/
 
 	int numberOfBoards = _board_deque.size();
-    // std::cout << "Number of Suodku boards on the board deque: " << numberOfBoards << "\n";
-
+    
+	// For debugging
+	// std::cout << "Number of Suodku boards on the board deque: " << numberOfBoards << "\n";
 	// for (int i = 0; i < numberOfBoards; ++i)
 	// {
 	// 	std::cout << "BOARD-" << i << "\n";
@@ -126,10 +125,9 @@ void SudokuSolver_ParallelBruteForce::solve(SudokuBoard& board)
 
         solvers[indexOfBoard].solve(_board_deque[indexOfBoard]);
 
-		if (solvers[indexOfBoard].get_solver_status() == SolverStatus::SOLVED)
+		if (solvers[indexOfBoard].get_status() == true)
 		{
 			_solved = true;
-			_status = SolverStatus::SOLVED;
 			_solution = solvers[indexOfBoard].get_solution();
 		}
 	}

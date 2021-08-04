@@ -92,7 +92,7 @@ int main(int argc, char** argv)
 
 		#pragma omp parallel
 		{
-			#pragma omp single
+			#pragma omp single nowait
 			{
 				solver = std::make_unique<SudokuSolver_ParallelBacktracking>();
 				SudokuSolver_ParallelBacktracking* child_solver = dynamic_cast<SudokuSolver_ParallelBacktracking*>(solver.get());
@@ -113,7 +113,7 @@ int main(int argc, char** argv)
 		
 		#pragma omp parallel
 		{
-			#pragma omp single
+			#pragma omp single nowait
 			{
 				solver = std::make_unique<SudokuSolver_ParallelBruteForce>();
 				SudokuSolver_ParallelBruteForce* child_solver = dynamic_cast<SudokuSolver_ParallelBruteForce*>(solver.get());
@@ -129,22 +129,14 @@ int main(int argc, char** argv)
 #endif
 
 
-	switch (solver->get_solver_status())
-	{
-		case SolverStatus::SOLVED:
-			std::cout << "\n" << "Solved!" << "\n";
-			std::cout << "************************************* OUTPUT GRID ************************************" << "\n\n";
-			print_board(solver->get_solution());
-			if (WRITE_TO_SOLUTION_TXT) {
-				write_output(solver->get_solution());
-			}
-			std::cout << "\n" << "**************************************************************************************" << "\n";
-			break;
-	
-		case SolverStatus::UNSOLVABLE:
-			std::cout << "The given Sudoku board cannot be solved. :(" << "\n";
-			break;
-    }
+	std::cout << "\n" << "Solved!" << "\n";
+	std::cout << "************************************* OUTPUT GRID ************************************" << "\n\n";
+	print_board(solver->get_solution());
+	if (WRITE_TO_SOLUTION_TXT) {
+		write_output(solver->get_solution());
+	}
+	std::cout << "\n" << "**************************************************************************************" << "\n";
+
 
 #if PRINT_TIME
     std::cout << std::dec << "Operations executed in " << (double)time_in_microseconds / 1000000 << " seconds." << "\n";

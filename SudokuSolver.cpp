@@ -118,9 +118,9 @@ bool SudokuSolver::isValid(const SudokuBoard& board, int num, Position pos) cons
     return isValidRow(board, num, pos) && isValidColumn(board, num, pos) && isValidBox(board, num, pos);
 }
 
-SolverStatus SudokuSolver::get_solver_status() const
+bool SudokuSolver::get_status() const
 {
-	return _status;
+	return _solved;
 }
 
 SudokuBoard SudokuSolver::get_solution() const

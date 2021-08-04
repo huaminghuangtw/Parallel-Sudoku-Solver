@@ -9,17 +9,10 @@
 using Position = std::pair<int, int>;
 
 
-enum class SolverStatus
-{
-    SOLVED,
-    UNSOLVABLE
-};
-
 class SudokuSolver
 {	
 protected:
 	bool _solved = false;
-	SolverStatus _status = SolverStatus::UNSOLVABLE;
 	SudokuBoard _solution;
 
 public:
@@ -48,7 +41,7 @@ public:
 	// Checks if a given number can be inserted at a given cell position
 	bool isValid(const SudokuBoard& board, int num, Position pos) const;
 
-	SolverStatus get_solver_status() const;
+	bool get_status() const;
 	SudokuBoard get_solution() const;
 
 	virtual ~SudokuSolver() = default;

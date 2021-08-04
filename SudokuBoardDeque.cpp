@@ -1,5 +1,5 @@
 /*
- * Define a queue of boards to help the implementation of the OpenMP version of the solver.
+ * Define a deque of boards to help the implementation of the OpenMP version of the Sudoku solver.
  */
 
 #include <vector>
@@ -15,7 +15,8 @@ SudokuBoardDeque::SudokuBoardDeque(const SudokuBoard& board)
 
 SudokuBoardDeque::~SudokuBoardDeque()
 {
-    while (boardDeque.size() > 0) {
+    while (boardDeque.size() > 0)
+	{
         boardDeque.pop_front();
     }
 }
