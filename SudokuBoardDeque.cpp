@@ -53,31 +53,3 @@ void SudokuBoardDeque::push_back(SudokuBoard& board)
 	SudokuBoard* new_board = new SudokuBoard(board);
     boardDeque.push_back(new_board);
 }
-
-// pushes the first board of this SudokuBoardDeque object to the end of another SudokuBoardDeque object
-void SudokuBoardDeque::passFB(SudokuBoardDeque& bq)
-{
-    bq.boardDeque.push_back(boardDeque.front());
-    boardDeque.pop_front();
-}
-
-// pushes the first board of this SudokuBoardDeque object to the front of another SudokuBoardDeque object
-void SudokuBoardDeque::passFF(SudokuBoardDeque& bq)
-{
-    bq.boardDeque.push_front(boardDeque.front());
-    boardDeque.pop_front();
-}
-
-// pushes the last board of this SudokuBoardDeque object to the front of another SudokuBoardDeque object
-void SudokuBoardDeque::passBF(SudokuBoardDeque& bq)
-{
-    bq.boardDeque.push_front(boardDeque.back());
-    boardDeque.pop_back();
-}
-
-// pushes the last board of this SudokuBoardDeque object to the end of another SudokuBoardDeque object
-void SudokuBoardDeque::passBB(SudokuBoardDeque& bq)
-{
-    bq.boardDeque.push_back(boardDeque.back());
-    boardDeque.pop_back();
-}

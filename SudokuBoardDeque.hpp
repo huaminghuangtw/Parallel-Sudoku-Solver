@@ -40,16 +40,6 @@ public:
 
     // pushes a board to the end of the deque
     void push_back(SudokuBoard& board);
-
-    // passes the ownership of one board to another container without copying it
-    void passFB(SudokuBoardDeque& bq);   // pop_front to push_back
-    void passFF(SudokuBoardDeque& bq);   // pop_front to push_front
-    void passBF(SudokuBoardDeque& bq);   // pop_back to push front
-    void passBB(SudokuBoardDeque& bq);   // pop_back to push back
-	
-    // shortcut functions
-    virtual void pass(SudokuBoardDeque& bq) { passFB(bq); }
-    virtual void dump(SudokuBoardDeque& bq, int len=-1) { while (len-- != 0 && size() > 0) passFB(bq); } 
     
     // destructor of class SudokuBoardDeque: delete the board inside the deque one by one
     virtual ~SudokuBoardDeque();
