@@ -47,7 +47,7 @@ public:
 
 		std::cout << "This is a valid Sudoku board!" << "\n";
 		std::cout << "Size of Sudoku board: " << board.get_board_size() << " x " << board.get_board_size()  << "\n";
-    }
+	}
 };
 
 

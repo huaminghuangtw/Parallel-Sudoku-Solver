@@ -27,9 +27,11 @@ public:
 
 	// Checks if the Sudoku board is ALL filled up
 	bool checkIfAllFilled(const SudokuBoard& board) const;
+	bool checkIfRowFilled(const SudokuBoard& board, int indexOfRows) const;
 
 	// Finds the first empty cell on the given Sudoku board
 	const std::pair<int, int> find_empty(const SudokuBoard& board);
+	int find_empty_from_row(const SudokuBoard& board, int indexOfRows) const;
 
 	// Checks if the given cell position is empty
 	bool isEmpty(const SudokuBoard& board, int i, int j) const;

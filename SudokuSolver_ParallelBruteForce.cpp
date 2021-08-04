@@ -45,25 +45,81 @@ void SudokuSolver_ParallelBruteForce::bootstrap()
 	_board_deque.pop_front();
 }
 
+void SudokuSolver_ParallelBruteForce::bootstrap(SudokuBoardDeque& boardDeque, int indexOfRows)
+{
+	// if no start boards in the board deque, then return
+    if (boardDeque.size() == 0) {
+        return;
+    }
+
+	while (!checkIfRowFilled(boardDeque.front(), indexOfRows))
+	{
+		SudokuBoard board = boardDeque.front();
+
+		int empty_cell_col_index = find_empty_from_row(board, indexOfRows);
+
+		// fill in all possible numbers to the empty cell and then
+		// add the corresponding possible board of solution to the end of board deque
+		for (int num = 1; num <= board.get_board_size(); ++num)
+		{
+			Position empty_cell_pos = std::make_pair(indexOfRows, empty_cell_col_index);
+
+			if (isValid(board, num, empty_cell_pos))
+			{
+				board.set_board_data(indexOfRows, empty_cell_col_index, num);
+				boardDeque.push_back(board);
+			}
+		}
+
+		boardDeque.pop_front();
+	}
+}
+
 void SudokuSolver_ParallelBruteForce::solve(SudokuBoard& board)
 {
+	/***** Method 1 *****/
 	// push the board onto the board deque as the first element
 	_board_deque.push_back(board);
 
 	// ensure some level of bootstrapping
-	int num_bootstraps = omp_get_num_threads() * omp_get_num_threads();
+	int num_bootstraps = omp_get_num_threads();
+	#pragma omp parallel for schedule(static) default(none) shared(num_bootstraps)
 	for (int i = 0; i < num_bootstraps; ++i)
 	{
 		bootstrap();
 	}
+	/********************/
 
-    int numberOfBoards = _board_deque.size();
-    //std::cout << "Number of Suodku boards on the board deque: " << numberOfBoards << "\n";
+	/***** Method 2 *****/
+	// std::vector<SudokuBoardDeque> groupOfBoardDeques(board.get_board_size(), SudokuBoardDeque(board));
+	// #pragma omp parallel default(none) shared(groupOfBoardDeques)
+	// {	
+	// 	int SIZE = groupOfBoardDeques.size();
+
+	// 	#pragma omp for nowait schedule(static)
+	// 	for (int i = 0; i < SIZE; ++i)
+	// 	{
+	// 		bootstrap(groupOfBoardDeques[i], i);
+	// 		_board_deque.boardDeque.insert(_board_deque.boardDeque.end(),
+	// 									   groupOfBoardDeques[i].boardDeque.begin(),
+	// 									   groupOfBoardDeques[i].boardDeque.end());
+	// 	}
+	// }
+	/********************/
+
+	int numberOfBoards = _board_deque.size();
+    // std::cout << "Number of Suodku boards on the board deque: " << numberOfBoards << "\n";
+
+	// for (int i = 0; i < numberOfBoards; ++i)
+	// {
+	// 	std::cout << "BOARD-" << i << "\n";
+	// 	print_board(_board_deque[i]);
+	// 	std::cout << "*****" << "\n";
+	// }
 
 	std::vector<SudokuSolver_SequentialBruteForce> solvers(numberOfBoards, SudokuSolver_SequentialBruteForce(false));
 
-	#pragma omp parallel for schedule(dynamic, 1) default(none) \
-	shared(numberOfBoards, solvers, _solved, _status, _solution)
+	#pragma omp parallel for schedule(static) default(none) shared(numberOfBoards, solvers)
     for (int indexOfBoard = 0; indexOfBoard < numberOfBoards; ++indexOfBoard)
 	{
 		if (_solved) continue;
