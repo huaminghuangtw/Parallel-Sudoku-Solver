@@ -1,22 +1,27 @@
 #include "SudokuSolver_SequentialBacktracking.hpp"
-#include "SudokuTest.hpp"
 #include <iostream>
 
 
-SudokuSolver_SequentialBacktracking::SudokuSolver_SequentialBacktracking()
+SudokuSolver_SequentialBacktracking::SudokuSolver_SequentialBacktracking(bool print_message /*=true*/)
 {
-	std::cout << "\n" << "Sequential Sudoku solver using backtracking algorithm starts, please wait..." << "\n";
+	if (print_message) {
+		std::cout << "\n" << "Sequential Sudoku solver using backtracking algorithm starts, please wait..." << "\n";
+	}
 }
 
 void SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
 {
-    if (checkIfAllFilled(board))   // base case
+	if (_solved)
+	{
+		_status = SolverStatus::SOLVED;
+		return;
+	}
+
+	if (checkIfAllFilled(board))   // base case
     {
-		std::cout << "Solved!" << "\n";
         _solved = true;
 		_status = SolverStatus::SOLVED;
 		_solution = board;
-		SudokuTest::testBoard(_solution);
 		return;
     }
     else

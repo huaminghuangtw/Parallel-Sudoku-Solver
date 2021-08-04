@@ -9,7 +9,7 @@
 class SudokuSolver_SequentialBruteForce : public SudokuSolver
 {
 public:
-	SudokuSolver_SequentialBruteForce();
+	SudokuSolver_SequentialBruteForce(bool print_message=true);
 
 	// Solves the given Sudoku board using sequential brute force algorithm
 	void solve(SudokuBoard& board, int row=0, int col=0);

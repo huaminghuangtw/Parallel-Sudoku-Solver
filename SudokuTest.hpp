@@ -35,7 +35,7 @@ public:
         return flags && mask;
     }
 
-    static void testBoard(SudokuBoard& board, int flags=SIZES_VALID | ROWS_VALID | COLUMNS_VALID | BOXES_VALID)
+    static void testBoard(const SudokuBoard& board, int flags=SIZES_VALID | ROWS_VALID | COLUMNS_VALID | BOXES_VALID)
     {
 		std::cout << "Check the validity of Sudoku board..." << "\n";
 
@@ -51,4 +51,4 @@ public:
 };
 
 
-#endif   // TESTABLESUDOKU_HPP
+#endif   // SUDOKUTEST_HPP

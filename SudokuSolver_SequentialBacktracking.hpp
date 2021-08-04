@@ -9,7 +9,7 @@
 class SudokuSolver_SequentialBacktracking : public SudokuSolver
 {
 public:
-	SudokuSolver_SequentialBacktracking();
+	SudokuSolver_SequentialBacktracking(bool print_message=true);
 
 	// Solves the given Sudoku board using sequential backtracking algorithm
 	void solve(SudokuBoard& board);

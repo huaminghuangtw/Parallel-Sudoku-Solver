@@ -19,20 +19,19 @@ bool SudokuSolver::checkIfAllFilled(const SudokuBoard& board) const
 const std::pair<int, int> SudokuSolver::find_empty(const SudokuBoard& board)
 {
 	Position empty_cell;
-	bool flag = true;
+	bool stop = false;
 
-	while (flag)
+	for (int i = 0; i < board.get_board_size(); ++i)
 	{
-		for (int i = 0; i < board.get_board_size(); ++i)
+		for (int j = 0; j < board.get_board_size(); ++j)
 		{
-			for (int j = 0; j < board.get_board_size(); ++j)
-			{
-				if (isEmpty(board, i, j)) {
-					empty_cell = std::make_pair(i, j);
-					flag = false;
-				}
+			if (isEmpty(board, i, j)) {
+				empty_cell = std::make_pair(i, j);
+				stop = true;
+				break;
 			}
 		}
+		if (stop) break;
 	}
 	
 	return empty_cell;  // (row, col)

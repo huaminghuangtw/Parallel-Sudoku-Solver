@@ -4,6 +4,7 @@
 #include "SudokuSolver_SequentialBacktracking.hpp"
 #include "SudokuSolver_ParallelBacktracking.hpp"
 #include "SudokuSolver_SequentialBruteForce.hpp"
+#include "SudokuSolver_ParallelBruteForce.hpp"
 
 #include <iostream>
 #include <chrono>
@@ -16,15 +17,16 @@
 
 enum class MODES
 {
-	SEQUENTIAL_BACKTRACKING,   // Sequential Mode using backtracking algorithm
-	PARALLEL_BACKTRACKING,     // OpenMP Mode using backtracking algorithm
-	SEQUENTIAL_BRUTEFORCE,     // Sequential Mode using brute force algorithm
+	SEQUENTIAL_BACKTRACKING,   // Sequential mode using backtracking algorithm
+	PARALLEL_BACKTRACKING,     // OpenMP mode using backtracking algorithm
+	SEQUENTIAL_BRUTEFORCE,     // Sequential mode using brute force algorithm
+	PARALLEL_BRUTEFORCE        // OpenMP mode using brute force algorithm
 };
 
 
 int main(int argc, char** argv)
-{
-	std::cout << "========================================================================================================"
+{	
+	std::cout
 	<< "\n"
 	<< R"(
 ███████╗██╗   ██╗██████╗  ██████╗ ██╗  ██╗██╗   ██╗    ███████╗ ██████╗ ██╗    ██╗   ██╗███████╗██████╗ 
@@ -36,8 +38,6 @@ int main(int argc, char** argv)
 	)"
 	<< "\n"
 	<< "developed by Hua-Ming Huang"
-	<< "\n\n"
-	<< "========================================================================================================"
 	<< "\n\n\n";
 	
 	// validate command-line arguments
@@ -54,7 +54,8 @@ int main(int argc, char** argv)
 	MODES mode = static_cast<MODES>(std::stoi(argv[2]));
 	if (mode != MODES::SEQUENTIAL_BACKTRACKING &&
 		mode != MODES::PARALLEL_BACKTRACKING &&
-		mode != MODES::SEQUENTIAL_BRUTEFORCE)
+		mode != MODES::SEQUENTIAL_BRUTEFORCE &&
+		mode != MODES::PARALLEL_BRUTEFORCE)
 	{
 		std::cerr << "Available options for <MODE>: " << "\n";
 		std::cerr << "Please try again." << "\n";
@@ -70,10 +71,12 @@ int main(int argc, char** argv)
     std::cout << board;
 	std::cout << "\n" << "**************************************************************************************" << "\n";
 
+
 #if PRINT_TIME
     std::chrono::high_resolution_clock::time_point start, stop;
     start = std::chrono::high_resolution_clock::now();
 #endif
+
 
 	std::unique_ptr<SudokuSolver> solver;
 	if (mode == MODES::SEQUENTIAL_BACKTRACKING) 
@@ -102,17 +105,34 @@ int main(int argc, char** argv)
 		solver = std::make_unique<SudokuSolver_SequentialBruteForce>();
 		SudokuSolver_SequentialBruteForce* child_solver = dynamic_cast<SudokuSolver_SequentialBruteForce*>(solver.get());
 		child_solver->solve(board);
-	}		
+	}	
+	else if (mode == MODES::PARALLEL_BRUTEFORCE)
+	{
+		int NUM_THREADS = (argc >= 5) ? std::stoi(argv[4]) : 2;
+		omp_set_num_threads(NUM_THREADS);
+		
+		#pragma omp parallel
+		{
+			#pragma omp single
+			{
+				solver = std::make_unique<SudokuSolver_ParallelBruteForce>();
+				SudokuSolver_ParallelBruteForce* child_solver = dynamic_cast<SudokuSolver_ParallelBruteForce*>(solver.get());
+				child_solver->solve(board);
+			}
+		}
+	}
+
 
 #if PRINT_TIME
 	stop = std::chrono::high_resolution_clock::now();
 	int time_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
 #endif
-	
+
+
 	switch (solver->get_solver_status())
 	{
 		case SolverStatus::SOLVED:
-			std::cout << "Solution: " << "\n";
+			std::cout << "\n" << "Solved!" << "\n";
 			std::cout << "************************************* OUTPUT GRID ************************************" << "\n\n";
 			print_board(solver->get_solution());
 			if (WRITE_TO_SOLUTION_TXT) {

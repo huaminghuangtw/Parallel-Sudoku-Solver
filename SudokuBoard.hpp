@@ -48,11 +48,11 @@ public:
 	int at(int i, int j) const;
 
 	// copy-assignment operator
-	SudokuBoard& operator=(const SudokuBoard& another_sudokuboard);
+	SudokuBoard& operator= (const SudokuBoard& another_sudokuboard);
 	
 	// Prints the Sudoku board
 	friend void print_board(const SudokuBoard& board);
-    friend std::ostream& operator<<(std::ostream &out, const SudokuBoard& board);
+    friend std::ostream& operator<< (std::ostream &out, const SudokuBoard& board);
 };
 
 

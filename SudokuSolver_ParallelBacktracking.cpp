@@ -1,24 +1,29 @@
 #include "SudokuSolver_ParallelBacktracking.hpp"
-#include "SudokuTest.hpp"
 #include <iostream>
 #include <omp.h>
 
 
-SudokuSolver_ParallelBacktracking::SudokuSolver_ParallelBacktracking()
+SudokuSolver_ParallelBacktracking::SudokuSolver_ParallelBacktracking(bool print_message /*=true*/)
 {
-	std::cout << "\n" << "Parallel Sudoku solver using backtracking algorithm starts, please wait..." << "\n";
-	std::cout << "Using " << omp_get_num_threads() << " OMP threads" << "\n";
+	if (print_message) {
+		std::cout << "\n" << "Parallel Sudoku solver using backtracking algorithm starts, please wait..." << "\n";
+		std::cout << "Using " << omp_get_num_threads() << " OMP threads" << "\n";
+	}
 }
 
 void SudokuSolver_ParallelBacktracking::solve(SudokuBoard& board)
 {
+	if (_solved)
+	{
+		_status = SolverStatus::SOLVED;
+		return;
+	}
+
     if (checkIfAllFilled(board))   // base case
     {
-		std::cout << "Solved!" << "\n";
         _solved = true;
 		_status = SolverStatus::SOLVED;
 		_solution = board;
-		SudokuTest::testBoard(_solution);
 		return;
     }
     else

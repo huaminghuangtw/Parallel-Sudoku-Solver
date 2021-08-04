@@ -143,7 +143,7 @@ int SudokuBoard::at(int i, int j) const
 	return _board_data[i][j];
 }
 
-SudokuBoard& SudokuBoard::operator=(const SudokuBoard& another_sudokuboard)
+SudokuBoard& SudokuBoard::operator= (const SudokuBoard& another_sudokuboard)
 {
 	if (this != &another_sudokuboard)
 	{
@@ -184,7 +184,7 @@ void print_board(const SudokuBoard& board)
 	}
 }
 
-std::ostream& operator<<(std::ostream &out, const SudokuBoard& board)
+std::ostream& operator<< (std::ostream &out, const SudokuBoard& board)
 {
 	Board grid = board.get_board_data();
 	int BOARD_SIZE = board.get_board_size();
