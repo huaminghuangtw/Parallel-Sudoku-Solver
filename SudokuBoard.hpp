@@ -49,6 +49,9 @@ public:
 
 	int at(int i, int j) const;
 
+	std::vector<int> getNumbersInRow(int indexOfRows) const;
+	std::vector<int> getNumbersInCol(int indexOfColumns) const;
+
 	// copy-assignment operator
 	SudokuBoard& operator= (const SudokuBoard& another_sudokuboard);
 	

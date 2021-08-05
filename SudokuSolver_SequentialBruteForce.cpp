@@ -62,8 +62,12 @@ void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, bool print_pro
             if (isValid(board, num, pos))
 			{
                 board.set_board_data(row, col, num);
+
+				if (isUnique(board, num, pos)) num = BOARD_SIZE + 1;
+
 				// Try the next cell recursively
                 solve(board, print_progress, row_next, col_next);
+
 				board.set_board_data(row, col, board.get_empty_cell_value());
             }
         }

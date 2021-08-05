@@ -1,5 +1,7 @@
 #include "SudokuSolver.hpp"
+#include <algorithm>
 #include <cmath>
+#include <vector>
 
 
 bool SudokuSolver::checkIfAllFilled(const SudokuBoard& board) const
@@ -116,6 +118,35 @@ bool SudokuSolver::isValidBox(const SudokuBoard& board, int num, Position pos) c
 bool SudokuSolver::isValid(const SudokuBoard& board, int num, Position pos) const
 {
     return isValidRow(board, num, pos) && isValidColumn(board, num, pos) && isValidBox(board, num, pos);
+}
+
+bool SudokuSolver::isUnique(const SudokuBoard& board, int num, Position pos) const
+{
+	int local_row = pos.first % board.get_box_size();
+	int local_col = pos.second % board.get_box_size();
+
+	int box_x = std::floor(pos.first / board.get_box_size());
+    int box_y = std::floor(pos.second / board.get_box_size());
+
+	for (int i = ( (local_row == 0) ? 1 : 0 ); i < board.get_box_size(); ++i)
+	{
+		if (i == local_row) continue;
+		std::vector<int> numbersInRow = board.getNumbersInRow(box_x * board.get_box_size() + i);
+		if (std::find(numbersInRow.begin(), numbersInRow.end(), num) == numbersInRow.end()) {
+			return false;
+		}
+	}
+
+	for (int j = ( (local_col == 0) ? 1 : 0 ); j < board.get_box_size(); ++j)
+	{
+		if (j == local_col) continue;
+		std::vector<int> numbersInCol = board.getNumbersInCol(box_y * board.get_box_size() + j);
+		if (std::find(numbersInCol.begin(), numbersInCol.end(), num) == numbersInCol.end()) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 bool SudokuSolver::get_status() const

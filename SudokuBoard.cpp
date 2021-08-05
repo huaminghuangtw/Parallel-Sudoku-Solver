@@ -153,6 +153,34 @@ int SudokuBoard::at(int i, int j) const
 	return _board_data[i][j];
 }
 
+std::vector<int> SudokuBoard::getNumbersInRow(int indexOfRows) const
+{
+	std::vector<int> numbersInRow;
+
+	for (int col = 0; col < _board_size; ++col)
+	{
+		int num = _board_data[indexOfRows][col];
+		if (num == _empty_cell_value) continue;
+		numbersInRow.push_back(num);
+	}
+
+	return numbersInRow;
+}
+
+std::vector<int> SudokuBoard::getNumbersInCol(int indexOfColumns) const
+{
+	std::vector<int> numbersInCol;
+
+	for (int row = 0; row < _board_size; ++row)
+	{
+		int num = _board_data[row][indexOfColumns];
+		if (num == _empty_cell_value) continue;
+		numbersInCol.push_back(num);
+	}
+
+	return numbersInCol;
+}
+
 SudokuBoard& SudokuBoard::operator= (const SudokuBoard& another_sudokuboard)
 {
 	if (this != &another_sudokuboard)

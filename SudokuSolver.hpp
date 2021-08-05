@@ -43,6 +43,10 @@ public:
 	// Checks if a given number can be inserted at a given cell position
 	bool isValid(const SudokuBoard& board, int num, Position pos) const;
 
+	// Checks the uniqueness of a given valid number by seeing the occurrence of pairs of that number
+	// within the neighboring rows and columns in the same box
+	bool isUnique(const SudokuBoard& board, int num, Position pos) const;
+
 	bool get_status() const;
 	SudokuBoard get_solution() const;
 
