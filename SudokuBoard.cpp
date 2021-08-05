@@ -1,5 +1,6 @@
 #include "SudokuBoard.hpp"
 #include "helper.hpp"
+#include "termcolor.hpp"
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -79,7 +80,8 @@ void write_output(const SudokuBoard& solutionBoard)
 SudokuBoard::SudokuBoard(const std::string& filename)
 	: _board_data(read_input(filename))
 {
-	std::cout << "Load the initial Sudoku board from " << filename << "..." << "\n";
+	std::cout << "Load the initial Sudoku board from "
+	        << termcolor::yellow << filename << termcolor::reset << "..." << "\n";
 }
 
 SudokuBoard::SudokuBoard(const SudokuBoard& another_sudokuboard)

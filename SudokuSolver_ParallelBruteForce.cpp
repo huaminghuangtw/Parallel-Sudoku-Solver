@@ -1,5 +1,6 @@
 #include "SudokuSolver_ParallelBruteForce.hpp"
 #include "SudokuSolver_SequentialBruteForce.hpp"
+#include "termcolor.hpp"
 #include <iostream>
 #include <vector>
 #include <omp.h>
@@ -9,7 +10,8 @@ SudokuSolver_ParallelBruteForce::SudokuSolver_ParallelBruteForce(bool print_mess
 {
 	if (print_message) {
 		std::cout << "\n" << "Parallel Sudoku solver using brute force algorithm starts, please wait..." << "\n";
-		std::cout << "Using " << omp_get_num_threads() << " OMP threads" << "\n";
+		std::cout << "Using " << termcolor::bright_red << omp_get_num_threads() << termcolor::reset
+		          << " OMP threads" << "\n";
 	}
 }
 

@@ -5,6 +5,7 @@
 #include "SudokuSolver_ParallelBacktracking.hpp"
 #include "SudokuSolver_SequentialBruteForce.hpp"
 #include "SudokuSolver_ParallelBruteForce.hpp"
+#include "termcolor.hpp"
 
 #include <iostream>
 #include <chrono>
@@ -43,11 +44,11 @@ int main(int argc, char** argv)
 	// validate command-line arguments
 	if (argc < 3 || argc > 5)
 	{
-		std::cerr << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE> <MODE> [<WRITE_TO_SOLUTION_TXT>] [<NUM_THREADS>] " << "\n";
+		std::cerr << termcolor::red << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE> <MODE> [<WRITE_TO_SOLUTION_TXT>] [<NUM_THREADS>] " << "\n";
 		std::cerr << "		1. <MODE>: 0 for sequential mode, 1 for OpenMP mode." << "\n";
 		std::cerr << "		2. <WRITE_TO_SOLUTION_TXT>: 0 - only write solution to the console (default), 1 - write solution to a text file." << "\n";
 		std::cerr << "		3. <NUM_THREADS>: if you set 1 for <MODE>, you need to also set value to <NUM_THREADS> (default: 2)" << "\n";
-		std::cerr << "Please try again." << "\n";
+		std::cerr << "Please try again." << termcolor::reset << "\n";
 		exit(-1);
     }
 
@@ -57,8 +58,8 @@ int main(int argc, char** argv)
 		mode != MODES::SEQUENTIAL_BRUTEFORCE &&
 		mode != MODES::PARALLEL_BRUTEFORCE)
 	{
-		std::cerr << "Available options for <MODE>: " << "\n";
-		std::cerr << "Please try again." << "\n";
+		std::cerr << termcolor::red << "Available options for <MODE>: " << "\n";
+		std::cerr << "Please try again." << termcolor::reset << "\n";
 		exit(-1);
 	}
 
@@ -67,9 +68,9 @@ int main(int argc, char** argv)
 
 	int WRITE_TO_SOLUTION_TXT = (argc >= 4) ? std::stoi(argv[3]) : 0;
 
-	std::cout << "\n" << "************************************* INPUT GRID *************************************" << "\n\n";
+	std::cout << "\n" << termcolor::magenta << "************************************* INPUT GRID *************************************" << termcolor::reset << "\n\n";
     std::cout << board;
-	std::cout << "\n" << "**************************************************************************************" << "\n";
+	std::cout << "\n" << termcolor::magenta << "**************************************************************************************" << termcolor::reset << "\n";
 
 
 #if PRINT_TIME
@@ -129,13 +130,13 @@ int main(int argc, char** argv)
 #endif
 
 
-	std::cout << "\n" << "Solved!" << "\n";
-	std::cout << "************************************* OUTPUT GRID ************************************" << "\n\n";
+	std::cout << "\n" << termcolor::green << "SOLVED!" << termcolor::reset << "\n";
+	std::cout << termcolor::magenta << "************************************* OUTPUT GRID ************************************" << termcolor::reset << "\n\n";
 	print_board(solver->get_solution());
 	if (WRITE_TO_SOLUTION_TXT) {
 		write_output(solver->get_solution());
 	}
-	std::cout << "\n" << "**************************************************************************************" << "\n";
+	std::cout << "\n" << termcolor::magenta << "**************************************************************************************" << termcolor::reset << "\n";
 
 
 #if PRINT_TIME

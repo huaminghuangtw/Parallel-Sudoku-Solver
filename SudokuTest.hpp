@@ -3,13 +3,14 @@
 
 
 #include "SudokuBoard.hpp"
+#include "termcolor.hpp"
 #include <iostream>
 #include <cassert>
 #include <set>
 
 
 #define ASSERT_WITH_MESSAGE(condition, message) do { \
-if (!(condition)) { printf((message)); } \
+if (!(condition)) { std::cout << termcolor::red << message << termcolor::reset << "\n"; } \
 assert ((condition)); } while(false)
 
 
@@ -45,8 +46,10 @@ public:
         ASSERT_WITH_MESSAGE(expect(flags, COLUMNS_VALID) == checkValidColumns(board), "+++ ERROR: Some columns in Sudoku board contain duplicate numbers! +++\n");
         ASSERT_WITH_MESSAGE(expect(flags, BOXES_VALID) == checkValidBoxes(board), "+++ ERROR: Some boxes in Sudoku board contain duplicate numbers! +++\n");
 
-		std::cout << "This is a valid Sudoku board!" << "\n";
-		std::cout << "Size of Sudoku board: " << board.get_board_size() << " x " << board.get_board_size()  << "\n";
+		std::cout << termcolor::bright_cyan << "This is a valid Sudoku board!" << termcolor::reset << "\n";
+		std::cout << "Size of Sudoku board: " << termcolor::bright_blue
+		          << board.get_board_size() << " x " << board.get_board_size()
+				  << termcolor::reset << "\n";
 	}
 };
 

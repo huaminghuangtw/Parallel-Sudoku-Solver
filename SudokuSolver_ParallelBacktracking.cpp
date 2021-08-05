@@ -1,4 +1,5 @@
 #include "SudokuSolver_ParallelBacktracking.hpp"
+#include "termcolor.hpp"
 #include <iostream>
 #include <omp.h>
 
@@ -7,7 +8,8 @@ SudokuSolver_ParallelBacktracking::SudokuSolver_ParallelBacktracking(bool print_
 {
 	if (print_message) {
 		std::cout << "\n" << "Parallel Sudoku solver using backtracking algorithm starts, please wait..." << "\n";
-		std::cout << "Using " << omp_get_num_threads() << " OMP threads" << "\n";
+		std::cout << "Using " << termcolor::bright_red << omp_get_num_threads() << termcolor::reset
+		          << " OMP threads" << "\n";
 	}
 }
 
