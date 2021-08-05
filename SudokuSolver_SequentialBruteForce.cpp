@@ -1,5 +1,8 @@
 #include "SudokuSolver_SequentialBruteForce.hpp"
+#include "helper.hpp"
 #include <iostream>
+#include <thread>
+#include <chrono>
 
 
 SudokuSolver_SequentialBruteForce::SudokuSolver_SequentialBruteForce(bool print_message /*=true*/)
@@ -9,9 +12,27 @@ SudokuSolver_SequentialBruteForce::SudokuSolver_SequentialBruteForce(bool print_
 	}
 }
 
-void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, int row /*=0*/, int col /*=0*/)
+void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, bool print_progress /*=true*/, int row /*=0*/, int col /*=0*/)
 {	
 	if (_solved) return;
+	
+	if (print_progress)
+	{
+		if (_recursionDepth == 0) {
+			_current_num_empty_cells = board.get_init_num_empty_cells();
+			printProgressBar2(double(board.get_init_num_empty_cells() - _current_num_empty_cells) / board.get_init_num_empty_cells());
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		} else {
+			if (board.get_num_empty_cells() < _current_num_empty_cells)
+			{
+				_current_num_empty_cells = board.get_num_empty_cells();
+				printProgressBar2(double(board.get_init_num_empty_cells() - _current_num_empty_cells) / board.get_init_num_empty_cells());
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			}
+		}
+
+		_recursionDepth++;
+	}
 
 	int BOARD_SIZE = board.get_board_size();
 
@@ -29,7 +50,7 @@ void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, int row /*=0*/
 
 	if (!isEmpty(board, row, col))
 	{   
-		solve(board, row_next, col_next);
+		solve(board, print_progress, row_next, col_next);
     }
 	else
 	{
@@ -42,7 +63,7 @@ void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, int row /*=0*/
 			{
                 board.set_board_data(row, col, num);
 				// Try the next cell recursively
-                solve(board, row_next, col_next);
+                solve(board, print_progress, row_next, col_next);
 				board.set_board_data(row, col, board.get_empty_cell_value());
             }
         }

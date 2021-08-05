@@ -14,6 +14,8 @@ class SudokuSolver
 protected:
 	bool _solved = false;
 	SudokuBoard _solution;
+	int _recursionDepth = 0;
+	int _current_num_empty_cells;
 
 public:
 	SudokuSolver() = default;

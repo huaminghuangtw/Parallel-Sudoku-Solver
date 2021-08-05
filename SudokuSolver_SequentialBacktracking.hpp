@@ -4,6 +4,8 @@
 
 #include "SudokuBoard.hpp"
 #include "SudokuSolver.hpp"
+#include <thread>
+#include <chrono>
 
 
 class SudokuSolver_SequentialBacktracking : public SudokuSolver

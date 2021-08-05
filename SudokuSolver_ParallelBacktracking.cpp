@@ -43,8 +43,8 @@ void SudokuSolver_ParallelBacktracking::solve(SudokuBoard& board)
 		}
 
 		// board.set_board_data(row, col, board.get_empty_cell_value());   // backtrack to the most recently filled cell
-		// Why don't we need this line? Because we don't modify anything in the original board.
-		
-		_recursionDepth++;
+		// Why don't we need this line? Because we don't modify anything in the original board.		
 	}
+
+	_recursionDepth++;
 }

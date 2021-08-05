@@ -12,7 +12,7 @@ public:
 	SudokuSolver_SequentialBruteForce(bool print_message=true);
 
 	// Solves the given Sudoku board using sequential brute force algorithm
-	void solve(SudokuBoard& board, int row=0, int col=0);
+	void solve(SudokuBoard& board, bool print_progress=true, int row=0, int col=0);
 };
 
 

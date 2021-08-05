@@ -20,6 +20,7 @@ const Board SudokuBoard::read_input(const std::string& filename)
 
 	Board sudokuBoard(_board_size, std::vector<int> (_board_size, 0));
 
+	int num_empty_cells = 0;
 	for (int row = 0; row < _board_size; ++row)
 	{
 		for (int col = 0; col < _board_size; ++col)
@@ -27,9 +28,11 @@ const Board SudokuBoard::read_input(const std::string& filename)
 			int value;
 			inputFile >> value;
 			sudokuBoard[row][col] = value;
+			num_empty_cells += (value == 0);
 		}
 	}
-
+	_init_num_empty_cells = num_empty_cells;
+	
 	inputFile.close();   // close file
 
 	return sudokuBoard;
@@ -136,6 +139,11 @@ int SudokuBoard::get_num_empty_cells() const
 		}
 	}
     return n;
+}
+
+int SudokuBoard::get_init_num_empty_cells() const
+{
+	return _init_num_empty_cells;
 }
 
 int SudokuBoard::at(int i, int j) const

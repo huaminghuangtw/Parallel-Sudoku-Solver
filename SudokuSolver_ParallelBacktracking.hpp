@@ -8,9 +8,6 @@
 
 class SudokuSolver_ParallelBacktracking : public SudokuSolver
 {
-private:
-	int _recursionDepth = 0;
-
 public:
 	SudokuSolver_ParallelBacktracking(bool print_message=true);
 

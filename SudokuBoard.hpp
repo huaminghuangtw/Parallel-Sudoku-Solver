@@ -19,6 +19,7 @@ private:
 	int _box_size;
 	int _board_size;
 	Board _board_data;
+	int _init_num_empty_cells;
 	const int _empty_cell_value = 0;
 	const std::string _empty_cell_character = ".";
 
@@ -44,6 +45,7 @@ public:
 	std::string get_empty_cell_character() const;
 	int get_num_total_cells() const;
 	int get_num_empty_cells() const;
+	int get_init_num_empty_cells() const;
 
 	int at(int i, int j) const;
 

@@ -123,7 +123,7 @@ void SudokuSolver_ParallelBruteForce::solve(SudokuBoard& board)
 	{
 		if (_solved) continue;
 
-        solvers[indexOfBoard].solve(_board_deque[indexOfBoard]);
+        solvers[indexOfBoard].solve(_board_deque[indexOfBoard], false);
 
 		if (solvers[indexOfBoard].get_status() == true)
 		{
