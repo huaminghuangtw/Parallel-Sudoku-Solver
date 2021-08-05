@@ -12,9 +12,9 @@ SudokuSolver_SequentialBacktracking::SudokuSolver_SequentialBacktracking(bool pr
 	}
 }
 
-void SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
+bool SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
 {
-	if (_solved) return;
+	if (_solved) { return _solved; }
 
 	if (_recursionDepth == 0) {
 		_current_num_empty_cells = board.get_init_num_empty_cells();
@@ -33,29 +33,32 @@ void SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
     {
         _solved = true;
 		_solution = board;
-		return;
+		return _solved;
     }
     
 	Position empty_cell_pos = find_empty(board);
+	int row = empty_cell_pos.first;
+	int col = empty_cell_pos.second;
 
 	for (int num = 1; num <= board.get_board_size(); ++num)
 	{
-		int row = empty_cell_pos.first;
-		int col = empty_cell_pos.second;
-
 		if (isValid(board, num, empty_cell_pos))
 		{
 			board.set_board_data(row, col, num);
 
-			// Try the next cell recursively
-			solve(board);
+			if (isUnique(board, num, empty_cell_pos)) num = board.get_board_size() + 1;
 
-			// Backtrack to the most recently filled cell
-			board.set_board_data(row, col, board.get_empty_cell_value());
+			// Try the next cell recursively
+			if (solve(board)) { _solved = true; return _solved; }
 		}
 	}
-
+    
 	_recursionDepth++;
+
+	// If none of the values solved the Sudoku, backtrack to the most recently filled cell
+    board.set_board_data(row, col, board.get_empty_cell_value());
+	_solved = false;
+	return _solved;
 }
 
 /*

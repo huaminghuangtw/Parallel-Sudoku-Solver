@@ -20,7 +20,6 @@ DEPENDENCIES = \
 	SudokuTest.cpp \
 	SudokuSolver.cpp \
 	SudokuSolver_SequentialBacktracking.cpp \
-	SudokuSolver_ParallelBacktracking.cpp \
 	SudokuSolver_SequentialBruteForce.cpp \
 	SudokuSolver_ParallelBruteForce.cpp
 

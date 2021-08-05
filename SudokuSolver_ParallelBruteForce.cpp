@@ -77,7 +77,6 @@ void SudokuSolver_ParallelBruteForce::bootstrap(SudokuBoardDeque& boardDeque, in
 
 void SudokuSolver_ParallelBruteForce::solve(SudokuBoard& board)
 {
-	/***** Method 1 *****/
 	// push the board onto the board deque as the first element
 	_board_deque.push_back(board);
 
@@ -88,24 +87,6 @@ void SudokuSolver_ParallelBruteForce::solve(SudokuBoard& board)
 	{
 		bootstrap();
 	}
-	/********************/
-
-	/***** Method 2 *****/
-	// std::vector<SudokuBoardDeque> groupOfBoardDeques(board.get_board_size(), SudokuBoardDeque(board));
-	// #pragma omp parallel default(none) shared(groupOfBoardDeques)
-	// {	
-	// 	int SIZE = groupOfBoardDeques.size();
-
-	// 	#pragma omp for nowait schedule(static)
-	// 	for (int i = 0; i < SIZE; ++i)
-	// 	{
-	// 		bootstrap(groupOfBoardDeques[i], i);
-	// 		_board_deque.boardDeque.insert(_board_deque.boardDeque.end(),
-	// 									   groupOfBoardDeques[i].boardDeque.begin(),
-	// 									   groupOfBoardDeques[i].boardDeque.end());
-	// 	}
-	// }
-	/********************/
 
 	int numberOfBoards = _board_deque.size();
     
@@ -133,4 +114,102 @@ void SudokuSolver_ParallelBruteForce::solve(SudokuBoard& board)
 			_solution = solvers[indexOfBoard].get_solution();
 		}
 	}
+}
+
+void SudokuSolver_ParallelBruteForce::solve2(SudokuBoard& board)
+{
+	std::vector<SudokuBoardDeque> groupOfBoardDeques(board.get_board_size(), SudokuBoardDeque(board));
+	#pragma omp parallel default(none) shared(groupOfBoardDeques)
+	{	
+		int SIZE = groupOfBoardDeques.size();
+
+		#pragma omp for nowait schedule(static)
+		for (int i = 0; i < SIZE; ++i)
+		{
+			bootstrap(groupOfBoardDeques[i], i);
+			_board_deque.boardDeque.insert(_board_deque.boardDeque.end(),
+										   groupOfBoardDeques[i].boardDeque.begin(),
+										   groupOfBoardDeques[i].boardDeque.end());
+		}
+	}
+
+	int numberOfBoards = _board_deque.size();
+    
+	// For debugging
+	// std::cout << "Number of Suodku boards on the board deque: " << numberOfBoards << "\n";
+	// for (int i = 0; i < numberOfBoards; ++i)
+	// {
+	// 	std::cout << "BOARD-" << i << "\n";
+	// 	print_board(_board_deque[i]);
+	// 	std::cout << "*****" << "\n";
+	// }
+
+	std::vector<SudokuSolver_SequentialBruteForce> solvers(numberOfBoards, SudokuSolver_SequentialBruteForce(false));
+
+	#pragma omp parallel for schedule(static) default(none) shared(numberOfBoards, solvers)
+    for (int indexOfBoard = 0; indexOfBoard < numberOfBoards; ++indexOfBoard)
+	{
+		if (_solved) continue;
+
+        solvers[indexOfBoard].solve(_board_deque[indexOfBoard], false);
+
+		if (solvers[indexOfBoard].get_status() == true)
+		{
+			_solved = true;
+			_solution = solvers[indexOfBoard].get_solution();
+		}
+	}
+}
+
+void SudokuSolver_ParallelBruteForce::solve3(SudokuBoard& board, int row /*=0*/, int col /*=0*/)
+{	
+	if (_solved) return;
+
+	int BOARD_SIZE = board.get_board_size();
+
+	int abs_index = row * BOARD_SIZE + col;
+
+    if (abs_index >= board.get_num_total_cells())
+	{
+		_solved = true;
+		_solution = board;
+		return;
+    }
+    
+	int row_next = (abs_index + 1) / BOARD_SIZE;
+	int col_next = (abs_index + 1) % BOARD_SIZE;
+
+	if (!isEmpty(board, row, col))
+	{   
+		solve3(board, row_next, col_next);
+    }
+	else
+	{
+		// Fill in all possible numbers
+        for (int num = 1; num <= BOARD_SIZE; ++num)
+		{
+			Position pos = std::make_pair(row, col);
+
+            if (isValid(board, num, pos))
+			{
+				// Needs to work on the new copy of the Sudoku board
+				SudokuBoard local_board(board);
+				local_board.set_board_data(row, col, num);
+
+				if (isUnique(local_board, num, pos)) num = BOARD_SIZE + 1;
+
+				// Use the final clause in #pragma omp task directive to reduce the overhead of tasks creation, for better scalability
+				// If we don't set such a threshold, the workload of a single task is therefore too small and the overhead of task creation
+				// become significant compared to the workload of a task
+				#pragma omp task default(none) firstprivate(local_board, row_next, col_next) \
+				                               final(_recursionDepth > board.get_board_size())
+				solve3(local_board, row_next, col_next);
+
+				// board.set_board_data(row, col, board.get_empty_cell_value());
+				// Why don't we need this line? Because we don't modify anything in the original board.
+            }
+        }
+    }
+
+	_recursionDepth++;
 }

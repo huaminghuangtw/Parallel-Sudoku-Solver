@@ -7,8 +7,6 @@
 * [ ] Write Unit Tests using common frameworks, e.g., Google Test (for successful messages in green, unsuccessful messages in red)
 * [ ] Develop a Sudoku App for Android and Apple ios
 
-Assume all input boards are solvable, therefore return type of solve function is void
-
 give each thread a puzzle
 
 $ ./sudoku <thread_count> <grid_file_path>

@@ -23,6 +23,8 @@ public:
 
 	// Solves the given Sudoku board using parallel brute force algorithm
 	void solve(SudokuBoard& board);
+	void solve2(SudokuBoard& board);
+	void solve3(SudokuBoard& board, int row=0, int col=0);
 };
 
 

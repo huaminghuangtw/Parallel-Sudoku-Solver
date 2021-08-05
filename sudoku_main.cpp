@@ -2,7 +2,6 @@
 #include "SudokuTest.hpp"
 #include "SudokuSolver.hpp"
 #include "SudokuSolver_SequentialBacktracking.hpp"
-#include "SudokuSolver_ParallelBacktracking.hpp"
 #include "SudokuSolver_SequentialBruteForce.hpp"
 #include "SudokuSolver_ParallelBruteForce.hpp"
 #include "termcolor.hpp"
@@ -19,7 +18,6 @@
 enum class MODES
 {
 	SEQUENTIAL_BACKTRACKING,   // Sequential mode using backtracking algorithm
-	PARALLEL_BACKTRACKING,     // OpenMP mode using backtracking algorithm
 	SEQUENTIAL_BRUTEFORCE,     // Sequential mode using brute force algorithm
 	PARALLEL_BRUTEFORCE        // OpenMP mode using brute force algorithm
 };
@@ -54,7 +52,6 @@ int main(int argc, char** argv)
 
 	MODES mode = static_cast<MODES>(std::stoi(argv[2]));
 	if (mode != MODES::SEQUENTIAL_BACKTRACKING &&
-		mode != MODES::PARALLEL_BACKTRACKING &&
 		mode != MODES::SEQUENTIAL_BRUTEFORCE &&
 		mode != MODES::PARALLEL_BRUTEFORCE)
 	{
@@ -86,21 +83,6 @@ int main(int argc, char** argv)
 		SudokuSolver_SequentialBacktracking* child_solver = dynamic_cast<SudokuSolver_SequentialBacktracking*>(solver.get());
 		child_solver->solve(board);
 	} 
-	else if (mode == MODES::PARALLEL_BACKTRACKING) 
-	{
-		int NUM_THREADS = (argc >= 5) ? std::stoi(argv[4]) : 2;
-		omp_set_num_threads(NUM_THREADS);
-
-		#pragma omp parallel
-		{
-			#pragma omp single nowait
-			{
-				solver = std::make_unique<SudokuSolver_ParallelBacktracking>();
-				SudokuSolver_ParallelBacktracking* child_solver = dynamic_cast<SudokuSolver_ParallelBacktracking*>(solver.get());
-				child_solver->solve(board);
-			}
-		}
-	}
 	else if (mode == MODES::SEQUENTIAL_BRUTEFORCE)
 	{
 		solver = std::make_unique<SudokuSolver_SequentialBruteForce>();
@@ -129,7 +111,7 @@ int main(int argc, char** argv)
 	int time_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
 #endif
 
-
+	// Assume all input Sudoku boards are solvable
 	std::cout << "\n" << termcolor::green << "SOLVED!" << termcolor::reset << "\n";
 	std::cout << termcolor::magenta << "************************************* OUTPUT GRID ************************************" << termcolor::reset << "\n\n";
 	print_board(solver->get_solution());

@@ -14,7 +14,7 @@ public:
 	SudokuSolver_SequentialBacktracking(bool print_message=true);
 
 	// Solves the given Sudoku board using sequential backtracking algorithm
-	void solve(SudokuBoard& board);
+	bool solve(SudokuBoard& board);
 };
 
 
