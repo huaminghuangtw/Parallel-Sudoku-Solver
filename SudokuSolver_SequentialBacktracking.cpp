@@ -50,13 +50,13 @@ bool SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
 
 			// Try the next cell recursively
 			if (solve(board)) { _solved = true; return _solved; }
+			else { board.set_board_data(row, col, board.get_empty_cell_value()); }   // Backtrack to the most recently filled cell
 		}
 	}
     
 	_recursionDepth++;
 
-	// If none of the values solved the Sudoku, backtrack to the most recently filled cell
-    board.set_board_data(row, col, board.get_empty_cell_value());
+	// None of the values solved the Sudoku
 	_solved = false;
 	return _solved;
 }
