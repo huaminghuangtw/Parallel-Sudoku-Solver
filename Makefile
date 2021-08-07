@@ -23,7 +23,8 @@ DEPENDENCIES = \
 	./src/SudokuSolver_SequentialBruteForce.cpp \
 	./src/SudokuSolver_ParallelBruteForce.cpp \
 	./src/Node.cpp \
-	./src/SudokuSolver_SequentialDancingLinks.cpp
+	./src/SudokuSolver_SequentialDancingLinks.cpp \
+	./src/SudokuSolver_ParallelDancingLinks.cpp
 
 all: $(TARGETS)
 

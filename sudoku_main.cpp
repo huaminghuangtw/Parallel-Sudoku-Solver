@@ -5,6 +5,7 @@
 #include "SudokuSolver_SequentialBruteForce.hpp"
 #include "SudokuSolver_ParallelBruteForce.hpp"
 #include "SudokuSolver_SequentialDancingLinks.hpp"
+#include "SudokuSolver_ParallelDancingLinks.hpp"
 #include "termcolor.hpp"
 
 #include <iostream>
@@ -18,10 +19,11 @@
 
 enum class MODES
 {
-	SEQUENTIAL_BACKTRACKING,    // Sequential mode using backtracking algorithm
-	SEQUENTIAL_BRUTEFORCE,      // Sequential mode using brute force algorithm
-	PARALLEL_BRUTEFORCE,        // OpenMP mode using brute force algorithm
-	SEQUENTIAL_DANCINGLINKS     // Sequential mode using dancing links algorithm
+	SEQUENTIAL_BACKTRACKING,     // Sequential mode using backtracking algorithm
+	SEQUENTIAL_BRUTEFORCE,       // Sequential mode using brute force algorithm
+	PARALLEL_BRUTEFORCE,         // OpenMP mode using brute force algorithm
+	SEQUENTIAL_DANCINGLINKS,     // Sequential mode using dancing links algorithm
+	PARALLEL_DANCINGLINKS        // OpenMP mode using dancing links algorithm
 };
 
 
@@ -56,7 +58,8 @@ int main(int argc, char** argv)
 	if (mode != MODES::SEQUENTIAL_BACKTRACKING &&
 		mode != MODES::SEQUENTIAL_BRUTEFORCE &&
 		mode != MODES::PARALLEL_BRUTEFORCE &&
-		mode != MODES::SEQUENTIAL_DANCINGLINKS)
+		mode != MODES::SEQUENTIAL_DANCINGLINKS &&
+		mode != MODES::PARALLEL_DANCINGLINKS)
 	{
 		std::cerr << termcolor::red << "Available options for <MODE>: " << "\n";
 		std::cerr << "Please try again." << termcolor::reset << "\n";
@@ -114,6 +117,21 @@ int main(int argc, char** argv)
 		solver = std::make_unique<SudokuSolver_SequentialDancingLinks>(board);
 		SudokuSolver_SequentialDancingLinks* child_solver = dynamic_cast<SudokuSolver_SequentialDancingLinks*>(solver.get());
 		child_solver->solve();
+	}
+	else if (mode == MODES::PARALLEL_DANCINGLINKS)
+	{
+		int NUM_THREADS = (argc >= 5) ? std::stoi(argv[4]) : 2;
+		omp_set_num_threads(NUM_THREADS);
+
+		#pragma omp parallel
+		{
+			#pragma omp single
+			{
+				solver = std::make_unique<SudokuSolver_ParallelDancingLinks>(board);
+				SudokuSolver_ParallelDancingLinks* child_solver = dynamic_cast<SudokuSolver_ParallelDancingLinks*>(solver.get());
+				child_solver->solve();
+			}
+		}
 	}
 
 

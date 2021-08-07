@@ -6,6 +6,7 @@
 * [ ] Build GUI using QT library (https://www.techwithtim.net/tutorials/python-programming/sudoku-solver-backtracking/)
 * [ ] Write Unit Tests using common frameworks, e.g., Google Test (for successful messages in green, unsuccessful messages in red)
 * [ ] Develop a Sudoku App for Android and Apple ios
+* [ ] Sudoku Generator (for test cases)
 
 give each thread a puzzle
 

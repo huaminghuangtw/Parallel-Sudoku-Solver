@@ -1,5 +1,5 @@
-#ifndef SUDOKUSOLVER_SEQUENTIALDANCINGLINKS_HPP
-#define SUDOKUSOLVER_SEQUENTIALDANCINGLINKS_HPP
+#ifndef SUDOKUSOLVER_PARALLELDANCINGLINKS_HPP
+#define SUDOKUSOLVER_PARALLELDANCINGLINKS_HPP
 
 
 #include "SudokuBoard.hpp"
@@ -8,7 +8,7 @@
 #include <vector>
 
 
-class SudokuSolver_SequentialDancingLinks : public SudokuSolver
+class SudokuSolver_ParallelDancingLinks : public SudokuSolver
 {
 private:
 	SudokuBoard _originalBoard;
@@ -19,13 +19,13 @@ private:
 	int _numberOfRows;      // _BOARD_SIZE * _BOARD_SIZE * _NUM_CONSTRAINTS
 
 public:
-    SudokuSolver_SequentialDancingLinks(SudokuBoard& board, bool print_message=true);
+    SudokuSolver_ParallelDancingLinks(SudokuBoard& board, bool print_message=true);
 
 	ColumnNode* createDLXList(CoverMatrix& coverMatrix);
 
 	SudokuBoard convertToSudokuGrid(std::vector<DancingNode*> answer);
 
-	// Solves the given Sudoku board using sequential dancing links algorithm
+	// Solves the given Sudoku board using parallel dancing links algorithm
     void solve();
 
     void process(int k);
@@ -34,4 +34,4 @@ public:
 };
 
 
-#endif   // SUDOKUSOLVER_SEQUENTIALDANCINGLINKS_HPP
+#endif   // SUDOKUSOLVER_PARALLELDANCINGLINKS_HPP
