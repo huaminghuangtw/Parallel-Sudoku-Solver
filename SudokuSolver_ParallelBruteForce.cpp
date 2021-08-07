@@ -22,7 +22,7 @@ void SudokuSolver_ParallelBruteForce::bootstrap()
         return;
     }
 
-	SudokuBoard& board = _board_deque.front();
+	SudokuBoard board = _board_deque.front();
 
 	if (checkIfAllFilled(board)) {
 		return;
@@ -35,7 +35,7 @@ void SudokuSolver_ParallelBruteForce::bootstrap()
 
 	// fill in all possible numbers to the empty cell and then
 	// add the corresponding possible board of solution to the end of board deque
-	for (int num = 1; num <= board.get_board_size(); ++num)
+	for (int num = board.get_min_value(); num <= board.get_max_value(); ++num)
 	{
 		if (isValid(board, num, empty_cell_pos))
 		{
@@ -60,7 +60,7 @@ void SudokuSolver_ParallelBruteForce::bootstrap(SudokuBoardDeque& boardDeque, in
 
 		// fill in all possible numbers to the empty cell and then
 		// add the corresponding possible board of solution to the end of board deque
-		for (int num = 1; num <= board.get_board_size(); ++num)
+		for (int num = board.get_min_value(); num <= board.get_max_value(); ++num)
 		{
 			Position empty_cell_pos = std::make_pair(indexOfRows, empty_cell_col_index);
 
@@ -186,7 +186,7 @@ void SudokuSolver_ParallelBruteForce::solve3(SudokuBoard& board, int row /*=0*/,
 	else
 	{
 		// Fill in all possible numbers
-        for (int num = 1; num <= BOARD_SIZE; ++num)
+		for (int num = board.get_min_value(); num <= board.get_max_value(); ++num)
 		{
 			Position pos = std::make_pair(row, col);
 

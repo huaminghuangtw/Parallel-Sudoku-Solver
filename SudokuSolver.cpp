@@ -1,7 +1,10 @@
 #include "SudokuSolver.hpp"
+#include "helper.hpp"
 #include <algorithm>
 #include <cmath>
 #include <vector>
+#include <thread>
+#include <chrono>
 
 
 bool SudokuSolver::checkIfAllFilled(const SudokuBoard& board) const
@@ -68,7 +71,7 @@ int SudokuSolver::find_empty_from_row(const SudokuBoard& board, int indexOfRows)
 
 bool SudokuSolver::isEmpty(const SudokuBoard& board, int i, int j) const
 {
-	return (board.at(i, j) == board._empty_cell_value) ? true : false;
+	return (board.at(i, j) == board._EMPTY_CELL_VALUE) ? true : false;
 }
 
 bool SudokuSolver::isValidRow(const SudokuBoard& board, int num, Position pos) const
@@ -149,12 +152,21 @@ bool SudokuSolver::isUnique(const SudokuBoard& board, int num, Position pos) con
 	return true;
 }
 
-bool SudokuSolver::get_status() const
+void SudokuSolver::show_progress_bar(SudokuBoard& board, int _recursionDepth, int interval /*=5*/)
 {
-	return _solved;
-}
-
-SudokuBoard SudokuSolver::get_solution() const
-{
-	return _solution;
+	if (_recursionDepth == 0)
+	{
+		_current_num_empty_cells = board.get_init_num_empty_cells();
+		printProgressBar2(double(board.get_init_num_empty_cells() - _current_num_empty_cells) / board.get_init_num_empty_cells());
+		std::this_thread::sleep_for(std::chrono::milliseconds(interval));
+	} 
+	else
+	{
+		if (board.get_num_empty_cells() < _current_num_empty_cells)
+		{
+			_current_num_empty_cells = board.get_num_empty_cells();
+			printProgressBar2(double(board.get_init_num_empty_cells() - _current_num_empty_cells) / board.get_init_num_empty_cells());
+			std::this_thread::sleep_for(std::chrono::milliseconds(interval));
+		}
+	}
 }

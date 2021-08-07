@@ -1,8 +1,5 @@
 #include "SudokuSolver_SequentialBruteForce.hpp"
-#include "helper.hpp"
 #include <iostream>
-#include <thread>
-#include <chrono>
 
 
 SudokuSolver_SequentialBruteForce::SudokuSolver_SequentialBruteForce(bool print_message /*=true*/)
@@ -16,23 +13,7 @@ void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, bool print_pro
 {	
 	if (_solved) return;
 	
-	if (print_progress)
-	{
-		if (_recursionDepth == 0) {
-			_current_num_empty_cells = board.get_init_num_empty_cells();
-			printProgressBar2(double(board.get_init_num_empty_cells() - _current_num_empty_cells) / board.get_init_num_empty_cells());
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
-		} else {
-			if (board.get_num_empty_cells() < _current_num_empty_cells)
-			{
-				_current_num_empty_cells = board.get_num_empty_cells();
-				printProgressBar2(double(board.get_init_num_empty_cells() - _current_num_empty_cells) / board.get_init_num_empty_cells());
-				std::this_thread::sleep_for(std::chrono::milliseconds(10));
-			}
-		}
-
-		_recursionDepth++;
-	}
+	if (print_progress) show_progress_bar(board, _recursionDepth);
 
 	int BOARD_SIZE = board.get_board_size();
 
@@ -55,7 +36,7 @@ void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, bool print_pro
 	else
 	{
 		// Fill in all possible numbers
-        for (int num = 1; num <= BOARD_SIZE; ++num)
+        for (int num = board.get_min_value(); num <= board.get_max_value(); ++num)
 		{
 			Position pos = std::make_pair(row, col);
 
@@ -72,4 +53,6 @@ void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, bool print_pro
             }
         }
     }
+
+	_recursionDepth++;
 }

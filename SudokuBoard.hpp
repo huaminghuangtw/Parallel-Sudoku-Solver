@@ -7,7 +7,11 @@
 #include <iostream>
 
 
+using CoverMatrix = std::vector<std::vector<int>>;
+// Size: (_BOARD_SIZE * _BOARD_SIZE * _MAX_VALUE) * (_BOARD_SIZE * _BOARD_SIZE * _NUM_CONSTRAINTS)
+
 using Board = std::vector<std::vector<int>>;
+// Size: _BOARD_SIZE * _BOARD_SIZE
 
 
 class SudokuBoard
@@ -16,13 +20,17 @@ class SudokuBoard
 	friend class SudokuTest;
 
 private:
-	int _box_size;
-	int _board_size;
 	Board _board_data;
-	int _init_num_empty_cells;
-	const int _empty_cell_value = 0;
-	const std::string _empty_cell_character = ".";
-
+	int _BOX_SIZE;
+	int _BOARD_SIZE;
+	int _MIN_VALUE = 1;
+	int _MAX_VALUE = _BOARD_SIZE;
+	int _NUM_CONSTRAINTS = 4;   // 4 constraints : cell, row, column, box
+	int _INIT_NUM_EMPTY_CELLS;
+	int _EMPTY_CELL_VALUE = 0;
+	std::string _EMPTY_CELL_CHARACTER = ".";
+	int _COVER_MATRIX_START_INDEX = 1;
+	
 public:
 	// Returns a 2D vector reading from a file containing the initial Sudoku board in space separated format
 	// (empty cells are represented by 0s)
@@ -34,20 +42,23 @@ public:
 	SudokuBoard() = default;
 	SudokuBoard(const std::string& filename);
 	// copy constructor
-	SudokuBoard(const SudokuBoard& another_sudokuboard);
+	SudokuBoard(const SudokuBoard& anotherSudokuBoard);
 
-	int get_box_size() const;
-	int get_board_size() const;
-	void set_board_data(int row, int col, int num);
-	int get_board_data(int row, int col) const;
-	Board get_board_data() const;
-	int get_empty_cell_value() const;
-	std::string get_empty_cell_character() const;
+	void set_board_data(int row, int col, int num) { _board_data[row][col] = num; }
+	int get_board_data(int row, int col) const { return _board_data[row][col]; }
+	Board get_board_data() const { return _board_data; }
+	int at(int row, int col) const { return _board_data[row][col]; }
+
+	int get_box_size() const { return _BOX_SIZE; }
+	int get_board_size() const { return _BOARD_SIZE; }
+	int get_min_value() const { return _MIN_VALUE; }
+	int get_max_value() const { return _MAX_VALUE; }
+	int get_init_num_empty_cells() const { return _INIT_NUM_EMPTY_CELLS; }
+	int get_empty_cell_value() const { return _EMPTY_CELL_VALUE; }
+	std::string get_empty_cell_character() const { return _EMPTY_CELL_CHARACTER; }
+
 	int get_num_total_cells() const;
 	int get_num_empty_cells() const;
-	int get_init_num_empty_cells() const;
-
-	int at(int i, int j) const;
 
 	std::vector<int> getNumbersInRow(int indexOfRows) const;
 	std::vector<int> getNumbersInCol(int indexOfColumns) const;
@@ -58,6 +69,14 @@ public:
 	// Prints the Sudoku board
 	friend void print_board(const SudokuBoard& board);
     friend std::ostream& operator<< (std::ostream &out, const SudokuBoard& board);
+
+	int indexInCoverMatrix(int row, int col, int num);
+	int createBoxConstraints(CoverMatrix& coverMatrix, int header);
+	int createColumnConstraints(CoverMatrix& coverMatrix, int header);
+	int createRowConstraints(CoverMatrix& coverMatrix, int header);
+	int createCellConstraints(CoverMatrix& coverMatrix, int header);
+	void createCoverMatrix(CoverMatrix& coverMatrix);
+	void convertToCoverMatrix(CoverMatrix& coverMatrix);
 };
 
 

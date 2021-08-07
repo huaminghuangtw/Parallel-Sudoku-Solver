@@ -3,6 +3,7 @@
 #include "termcolor.hpp"
 #include <cmath>
 #include <fstream>
+#include <vector>
 #include <iostream>
 
 
@@ -16,15 +17,15 @@ const Board SudokuBoard::read_input(const std::string& filename)
 		exit(1);
 	}
 	
-	inputFile >> _board_size;
-	_box_size = std::sqrt(_board_size);
+	inputFile >> _BOARD_SIZE;
+	_BOX_SIZE = std::sqrt(_BOARD_SIZE);
 
-	Board sudokuBoard(_board_size, std::vector<int> (_board_size, 0));
+	Board sudokuBoard(_BOARD_SIZE, std::vector<int>(_BOARD_SIZE, 0));
 
 	int num_empty_cells = 0;
-	for (int row = 0; row < _board_size; ++row)
+	for (int row = 0; row < _BOARD_SIZE; ++row)
 	{
-		for (int col = 0; col < _board_size; ++col)
+		for (int col = 0; col < _BOARD_SIZE; ++col)
 		{
 			int value;
 			inputFile >> value;
@@ -32,7 +33,7 @@ const Board SudokuBoard::read_input(const std::string& filename)
 			num_empty_cells += (value == 0);
 		}
 	}
-	_init_num_empty_cells = num_empty_cells;
+	_INIT_NUM_EMPTY_CELLS = num_empty_cells;
 	
 	inputFile.close();   // close file
 
@@ -81,61 +82,33 @@ SudokuBoard::SudokuBoard(const std::string& filename)
 	: _board_data(read_input(filename))
 {
 	std::cout << "Load the initial Sudoku board from "
-	        << termcolor::yellow << filename << termcolor::reset << "..." << "\n";
+	          << termcolor::yellow << filename << termcolor::reset << "..." << "\n";
 }
 
-SudokuBoard::SudokuBoard(const SudokuBoard& another_sudokuboard)
-	: _box_size(another_sudokuboard._box_size),
-	  _board_size(another_sudokuboard._board_size),
-	  _board_data(another_sudokuboard._board_data)
+SudokuBoard::SudokuBoard(const SudokuBoard& anotherSudokuBoard)
+	: _board_data(anotherSudokuBoard._board_data),
+	  _BOX_SIZE(anotherSudokuBoard._BOX_SIZE),
+	  _BOARD_SIZE(anotherSudokuBoard._BOARD_SIZE),
+	  _MIN_VALUE(anotherSudokuBoard._MIN_VALUE),
+	  _MAX_VALUE(anotherSudokuBoard._MAX_VALUE),
+	  _NUM_CONSTRAINTS(anotherSudokuBoard._NUM_CONSTRAINTS),
+	  _INIT_NUM_EMPTY_CELLS(anotherSudokuBoard._INIT_NUM_EMPTY_CELLS),
+	  _EMPTY_CELL_VALUE(anotherSudokuBoard._EMPTY_CELL_VALUE),
+	  _EMPTY_CELL_CHARACTER(anotherSudokuBoard._EMPTY_CELL_CHARACTER),
+	  _COVER_MATRIX_START_INDEX(anotherSudokuBoard._COVER_MATRIX_START_INDEX)
 { }
-
-int SudokuBoard::get_box_size() const
-{
-	return _box_size;
-}
-
-int SudokuBoard::get_board_size() const
-{
-	return _board_size;
-}
-
-void SudokuBoard::set_board_data(int row, int col, int num)
-{
-	_board_data[row][col] = num;
-}
-
-int SudokuBoard::get_board_data(int row, int col) const
-{
-	return _board_data[row][col];
-}
-
-Board SudokuBoard::get_board_data() const
-{
-	return _board_data;
-}
-
-int SudokuBoard::get_empty_cell_value() const
-{
-	return _empty_cell_value;
-}
-
-std::string SudokuBoard::get_empty_cell_character() const
-{
-	return _empty_cell_character;
-}
 
 int SudokuBoard::get_num_total_cells() const
 {
-	return _board_size * _board_size;
+	return _BOARD_SIZE * _BOARD_SIZE;
 }
 
 int SudokuBoard::get_num_empty_cells() const
 {
 	int n = 0;
-    for (int i = 0; i < _board_size; ++i)
+    for (int i = 0; i < _BOARD_SIZE; ++i)
 	{
-		for (int j = 0; j < _board_size; ++j)
+		for (int j = 0; j < _BOARD_SIZE; ++j)
 		{
 			n += (this->at(i, j) == get_empty_cell_value());
 		}
@@ -143,24 +116,14 @@ int SudokuBoard::get_num_empty_cells() const
     return n;
 }
 
-int SudokuBoard::get_init_num_empty_cells() const
-{
-	return _init_num_empty_cells;
-}
-
-int SudokuBoard::at(int i, int j) const
-{
-	return _board_data[i][j];
-}
-
 std::vector<int> SudokuBoard::getNumbersInRow(int indexOfRows) const
 {
 	std::vector<int> numbersInRow;
 
-	for (int col = 0; col < _board_size; ++col)
+	for (int col = 0; col < _BOARD_SIZE; ++col)
 	{
 		int num = _board_data[indexOfRows][col];
-		if (num == _empty_cell_value) continue;
+		if (num == _EMPTY_CELL_VALUE) continue;
 		numbersInRow.push_back(num);
 	}
 
@@ -171,23 +134,30 @@ std::vector<int> SudokuBoard::getNumbersInCol(int indexOfColumns) const
 {
 	std::vector<int> numbersInCol;
 
-	for (int row = 0; row < _board_size; ++row)
+	for (int row = 0; row < _BOARD_SIZE; ++row)
 	{
 		int num = _board_data[row][indexOfColumns];
-		if (num == _empty_cell_value) continue;
+		if (num == _EMPTY_CELL_VALUE) continue;
 		numbersInCol.push_back(num);
 	}
 
 	return numbersInCol;
 }
 
-SudokuBoard& SudokuBoard::operator= (const SudokuBoard& another_sudokuboard)
+SudokuBoard& SudokuBoard::operator= (const SudokuBoard& anotherSudokuBoard)
 {
-	if (this != &another_sudokuboard)
+	if (this != &anotherSudokuBoard)
 	{
-		_box_size = another_sudokuboard._box_size;
-		_board_size = another_sudokuboard._board_size;
-		_board_data = another_sudokuboard._board_data;
+		_board_data = anotherSudokuBoard._board_data;
+		_BOX_SIZE = anotherSudokuBoard._BOX_SIZE;
+		_BOARD_SIZE = anotherSudokuBoard._BOARD_SIZE;
+		_MIN_VALUE = anotherSudokuBoard._MIN_VALUE;
+		_MAX_VALUE = anotherSudokuBoard._MAX_VALUE;
+		_NUM_CONSTRAINTS = anotherSudokuBoard._NUM_CONSTRAINTS;
+		_INIT_NUM_EMPTY_CELLS = anotherSudokuBoard._INIT_NUM_EMPTY_CELLS;
+		_EMPTY_CELL_VALUE = anotherSudokuBoard._EMPTY_CELL_VALUE;
+		_EMPTY_CELL_CHARACTER = anotherSudokuBoard._EMPTY_CELL_CHARACTER;
+		_COVER_MATRIX_START_INDEX = anotherSudokuBoard._COVER_MATRIX_START_INDEX;
 	}
 
 	return *this;
@@ -197,23 +167,23 @@ void print_board(const SudokuBoard& board)
 {
 	Board grid = board._board_data;
 
-	for (int i = 0; i < board._board_size; ++i)
+	for (int i = 0; i < board._BOARD_SIZE; ++i)
 	{
-		if (i % board._box_size == 0 && i != 0) {
+		if (i % board._BOX_SIZE == 0 && i != 0) {
 			std::string s1 = "---";
-			std::string s2 = s1 * board._box_size + " + ";
-            std::cout << s2 * (board._box_size - 1) << s1 * board._box_size << "\n";
+			std::string s2 = s1 * board._BOX_SIZE + " + ";
+            std::cout << s2 * (board._BOX_SIZE - 1) << s1 * board._BOX_SIZE << "\n";
 		}
 
-        for (int j = 0; j < board._board_size; ++j)
+        for (int j = 0; j < board._BOARD_SIZE; ++j)
 		{
-			if (j % board._box_size == 0 && j != 0) {
+			if (j % board._BOX_SIZE == 0 && j != 0) {
                 std::cout << "  | ";
 			}	
 
-            if (j == board._board_size - 1) {
+            if (j == board._BOARD_SIZE - 1) {
                 std::cout << std::setfill(' ') << std::setw(2) << grid[i][j] << "\n";
-			} else if (j % board._box_size == board._box_size - 1) {
+			} else if (j % board._BOX_SIZE == board._BOX_SIZE - 1) {
 				std::cout << std::setfill(' ') << std::setw(2) << grid[i][j];
 			} else {
                 std::cout << std::setfill(' ') << std::setw(2) << grid[i][j] << " ";
@@ -257,4 +227,123 @@ std::ostream& operator<< (std::ostream &out, const SudokuBoard& board)
 	}
 
     return out;
+}
+
+int SudokuBoard::indexInCoverMatrix(int row, int col, int num)
+{
+    return (row - 1) * _BOARD_SIZE * _BOARD_SIZE + (col - 1) * _BOARD_SIZE + (num - 1);
+}
+
+int SudokuBoard::createBoxConstraints(CoverMatrix& coverMatrix, int header)
+{
+	for (int row = _COVER_MATRIX_START_INDEX; row <= _BOARD_SIZE; row += _BOX_SIZE)
+    {
+        for (int col = _COVER_MATRIX_START_INDEX; col <= _BOARD_SIZE; col += _BOX_SIZE)
+        {
+            for (int n = _COVER_MATRIX_START_INDEX; n <= _BOARD_SIZE; ++n, ++header)
+            {
+                for (int rowDelta = 0; rowDelta < _BOX_SIZE; ++rowDelta)
+                {
+                    for (int colDelta = 0; colDelta < _BOX_SIZE; ++colDelta)
+                    {
+                        int index = indexInCoverMatrix(row + rowDelta, col + colDelta, n);
+                        coverMatrix[index][header] = 1;
+                    }
+                }
+            }
+        }
+    }
+
+    return header;
+}
+
+int SudokuBoard::createColumnConstraints(CoverMatrix& coverMatrix, int header)
+{
+	for (int col = _COVER_MATRIX_START_INDEX; col <= _BOARD_SIZE; ++col)
+    {
+        for (int n = _COVER_MATRIX_START_INDEX; n <= _BOARD_SIZE; ++n, ++header)
+        {
+            for (int row = _COVER_MATRIX_START_INDEX; row <= _BOARD_SIZE; ++row)
+            {
+                int index = indexInCoverMatrix(row, col, n);
+                coverMatrix[index][header] = 1;
+            }
+        }
+    }
+
+    return header;
+}
+
+int SudokuBoard::createRowConstraints(CoverMatrix& coverMatrix, int header)
+{
+	for (int row = _COVER_MATRIX_START_INDEX; row <= _BOARD_SIZE; ++row)
+    {
+        for (int n = _COVER_MATRIX_START_INDEX; n <= _BOARD_SIZE; ++n, ++header)
+        {
+            for (int col = _COVER_MATRIX_START_INDEX; col <= _BOARD_SIZE; ++col)
+            {
+                int index = indexInCoverMatrix(row, col, n);
+                coverMatrix[index][header] = 1;
+            }
+        }
+    }
+
+    return header;
+}
+
+int SudokuBoard::createCellConstraints(CoverMatrix& coverMatrix, int header)
+{
+	for (int row = _COVER_MATRIX_START_INDEX; row <= _BOARD_SIZE; ++row)
+    {
+        for (int col = _COVER_MATRIX_START_INDEX; col <= _BOARD_SIZE; ++col, ++header)
+        {
+            for (int n = _COVER_MATRIX_START_INDEX; n <= _BOARD_SIZE; ++n)
+            {
+                int index = indexInCoverMatrix(row, col, n);
+                coverMatrix[index][header] = 1;
+            }
+        }
+    }
+
+    return header;
+}
+
+void SudokuBoard::createCoverMatrix(CoverMatrix& coverMatrix)
+{
+	int numberOfRows = _BOARD_SIZE * _BOARD_SIZE * _MAX_VALUE;
+	int numberOfCols = _BOARD_SIZE * _BOARD_SIZE * _NUM_CONSTRAINTS;
+
+	coverMatrix.resize(numberOfRows, std::vector<int>(numberOfCols));
+
+    int header = 0;
+    header = createCellConstraints(coverMatrix, header);
+    header = createRowConstraints(coverMatrix, header);
+    header = createColumnConstraints(coverMatrix, header);
+    createBoxConstraints(coverMatrix, header);
+}
+
+void SudokuBoard::convertToCoverMatrix(CoverMatrix& coverMatrix)
+{	
+    for (int row = _COVER_MATRIX_START_INDEX; row <= _BOARD_SIZE; ++row)
+    {
+        for (int col = _COVER_MATRIX_START_INDEX; col <= _BOARD_SIZE; ++col)
+        {
+            int n = _board_data[row - 1][col - 1];
+
+            if (n != _EMPTY_CELL_VALUE)
+            {
+                for (int num = _MIN_VALUE; num <= _MAX_VALUE; ++num)
+                {
+                    if (num != n)
+                    {
+                        int index = indexInCoverMatrix(row, col, num);
+                        for (int i = 0; i < _BOARD_SIZE * _BOARD_SIZE * _NUM_CONSTRAINTS; ++i)
+                        {
+                            coverMatrix[index][i] = 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

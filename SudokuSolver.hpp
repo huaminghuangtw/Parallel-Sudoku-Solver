@@ -47,8 +47,10 @@ public:
 	// within the neighboring rows and columns in the same box
 	bool isUnique(const SudokuBoard& board, int num, Position pos) const;
 
-	bool get_status() const;
-	SudokuBoard get_solution() const;
+	bool get_status() const { return _solved; }
+	SudokuBoard get_solution() const { return _solution; }
+
+	void show_progress_bar(SudokuBoard& board, int recursionDepth, int interval=5);
 
 	virtual ~SudokuSolver() = default;
 };

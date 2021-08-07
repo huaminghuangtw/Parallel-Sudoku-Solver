@@ -21,7 +21,9 @@ DEPENDENCIES = \
 	SudokuSolver.cpp \
 	SudokuSolver_SequentialBacktracking.cpp \
 	SudokuSolver_SequentialBruteForce.cpp \
-	SudokuSolver_ParallelBruteForce.cpp
+	SudokuSolver_ParallelBruteForce.cpp \
+	Node.cpp \
+	SudokuSolver_SequentialDancingLinks.cpp
 
 all: $(TARGETS)
 

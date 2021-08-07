@@ -1,8 +1,5 @@
 #include "SudokuSolver_SequentialBacktracking.hpp"
-#include "helper.hpp"
 #include <iostream>
-#include <thread>
-#include <chrono>
 
 
 SudokuSolver_SequentialBacktracking::SudokuSolver_SequentialBacktracking(bool print_message /*=true*/)
@@ -16,18 +13,7 @@ bool SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
 {
 	if (_solved) { return _solved; }
 
-	if (_recursionDepth == 0) {
-		_current_num_empty_cells = board.get_init_num_empty_cells();
-		printProgressBar2(double(board.get_init_num_empty_cells() - _current_num_empty_cells) / board.get_init_num_empty_cells());
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	} else {
-		if (board.get_num_empty_cells() < _current_num_empty_cells)
-		{
-			_current_num_empty_cells = board.get_num_empty_cells();
-			printProgressBar2(double(board.get_init_num_empty_cells() - _current_num_empty_cells) / board.get_init_num_empty_cells());
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
-		}
-	}
+	show_progress_bar(board, _recursionDepth);
 
 	if (checkIfAllFilled(board))   // base case
     {
@@ -40,7 +26,7 @@ bool SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
 	int row = empty_cell_pos.first;
 	int col = empty_cell_pos.second;
 
-	for (int num = 1; num <= board.get_board_size(); ++num)
+	for (int num = board.get_min_value(); num <= board.get_max_value(); ++num)
 	{
 		if (isValid(board, num, empty_cell_pos))
 		{

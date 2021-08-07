@@ -4,6 +4,7 @@
 #include "SudokuSolver_SequentialBacktracking.hpp"
 #include "SudokuSolver_SequentialBruteForce.hpp"
 #include "SudokuSolver_ParallelBruteForce.hpp"
+#include "SudokuSolver_SequentialDancingLinks.hpp"
 #include "termcolor.hpp"
 
 #include <iostream>
@@ -17,9 +18,10 @@
 
 enum class MODES
 {
-	SEQUENTIAL_BACKTRACKING,   // Sequential mode using backtracking algorithm
-	SEQUENTIAL_BRUTEFORCE,     // Sequential mode using brute force algorithm
-	PARALLEL_BRUTEFORCE        // OpenMP mode using brute force algorithm
+	SEQUENTIAL_BACKTRACKING,    // Sequential mode using backtracking algorithm
+	SEQUENTIAL_BRUTEFORCE,      // Sequential mode using brute force algorithm
+	PARALLEL_BRUTEFORCE,        // OpenMP mode using brute force algorithm
+	SEQUENTIAL_DANCINGLINKS     // Sequential mode using dancing links algorithm
 };
 
 
@@ -53,7 +55,8 @@ int main(int argc, char** argv)
 	MODES mode = static_cast<MODES>(std::stoi(argv[2]));
 	if (mode != MODES::SEQUENTIAL_BACKTRACKING &&
 		mode != MODES::SEQUENTIAL_BRUTEFORCE &&
-		mode != MODES::PARALLEL_BRUTEFORCE)
+		mode != MODES::PARALLEL_BRUTEFORCE &&
+		mode != MODES::SEQUENTIAL_DANCINGLINKS)
 	{
 		std::cerr << termcolor::red << "Available options for <MODE>: " << "\n";
 		std::cerr << "Please try again." << termcolor::reset << "\n";
@@ -104,12 +107,21 @@ int main(int argc, char** argv)
 			}
 		}
 	}
+	else if (mode == MODES::SEQUENTIAL_DANCINGLINKS)
+	{
+		// Implementation of dancing links algorithm written in C++ is based on the following Java tutorial:
+		// https://medium.com/javarevisited/building-a-sudoku-solver-in-java-with-dancing-links-180274b0b6c1
+		solver = std::make_unique<SudokuSolver_SequentialDancingLinks>(board);
+		SudokuSolver_SequentialDancingLinks* child_solver = dynamic_cast<SudokuSolver_SequentialDancingLinks*>(solver.get());
+		child_solver->solve();
+	}
 
 
 #if PRINT_TIME
 	stop = std::chrono::high_resolution_clock::now();
 	int time_in_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
 #endif
+
 
 	// Assume all input Sudoku boards are solvable
 	std::cout << "\n" << termcolor::green << "SOLVED!" << termcolor::reset << "\n";
@@ -122,8 +134,9 @@ int main(int argc, char** argv)
 
 
 #if PRINT_TIME
-    std::cout << std::dec << "Operations executed in " << (double)time_in_microseconds / 1000000 << " seconds." << "\n";
+    std::cout << std::dec << "Operations executed in " << (double) time_in_microseconds / 1000000 << " seconds." << "\n";
 #endif
+
 
     return 0;
 }
