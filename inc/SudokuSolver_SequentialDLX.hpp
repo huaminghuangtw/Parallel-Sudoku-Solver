@@ -22,10 +22,10 @@ private:
 public:
     SudokuSolver_SequentialDLX(SudokuBoard& board, bool print_message=true);
 
-	// create the quadruple-chained list to represent the cover matrix 
+	// Creates the quadruple-chained list to represent the cover matrix 
 	ColumnNode* createDLXList(CoverMatrix& coverMatrix);
 
-	// convert the quadruple-chained list to the equivalent resolved Sudoku grid
+	// Converts the quadruple-chained list to the equivalent resolved Sudoku grid
 	SudokuBoard convertToSudokuGrid(std::vector<DancingNode*> answer);
 
 	// Solves the given Sudoku board using sequential dancing links algorithm
