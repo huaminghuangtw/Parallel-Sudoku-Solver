@@ -72,6 +72,9 @@ public:
 	// Prints the output Sudoku board
 	friend void print_board(const SudokuBoard& board);
 
+	// Transforms the Sudoku problem into an instance of exact cover problem, i.e.,
+	// models a Sudoku grid in the form of a cover matrix with size:
+	// (_BOARD_SIZE * _BOARD_SIZE * _MAX_VALUE) * (BOARD_SIZE * _BOARD_SIZE * _NUM_CONSTRAINTS)
 	int indexInCoverMatrix(int row, int col, int num);
 	int createBoxConstraints(CoverMatrix& coverMatrix, int header);
 	int createColumnConstraints(CoverMatrix& coverMatrix, int header);

@@ -8,7 +8,8 @@
 #include <vector>
 
 
-class SudokuSolver_ParallelDancingLinks : public SudokuSolver
+// DLX: apply Dancing Links techniques and Algorithm X to solve the exact cover problem. 
+class SudokuSolver_ParallelDLX : public SudokuSolver
 {
 private:
 	SudokuBoard _originalBoard;
@@ -19,7 +20,7 @@ private:
 	int _numberOfRows;      // _BOARD_SIZE * _BOARD_SIZE * _NUM_CONSTRAINTS
 
 public:
-    SudokuSolver_ParallelDancingLinks(SudokuBoard& board, bool print_message=true);
+    SudokuSolver_ParallelDLX(SudokuBoard& board, bool print_message=true);
 
 	ColumnNode* createDLXList(CoverMatrix& coverMatrix);
 

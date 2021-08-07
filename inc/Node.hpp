@@ -7,6 +7,7 @@
 
 class ColumnNode;
 
+// A DancingNode object is used to model a node in the quadruple-chained list for exact cover problem.
 class DancingNode
 {
 public:
@@ -30,6 +31,7 @@ public:
     void reinsertTopBottom();
 };
 
+// A ColumnNode object is used to link the current node to the belonging column in the cover matrix.
 class ColumnNode : public DancingNode
 {
 public:

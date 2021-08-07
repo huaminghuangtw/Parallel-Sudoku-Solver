@@ -4,8 +4,8 @@
 #include "SudokuSolver_SequentialBacktracking.hpp"
 #include "SudokuSolver_SequentialBruteForce.hpp"
 #include "SudokuSolver_ParallelBruteForce.hpp"
-#include "SudokuSolver_SequentialDancingLinks.hpp"
-#include "SudokuSolver_ParallelDancingLinks.hpp"
+#include "SudokuSolver_SequentialDLX.hpp"
+#include "SudokuSolver_ParallelDLX.hpp"
 #include "termcolor.hpp"
 
 #include <iostream>
@@ -114,8 +114,8 @@ int main(int argc, char** argv)
 	{
 		// Implementation of dancing links algorithm written in C++ is based on the following Java tutorial:
 		// https://medium.com/javarevisited/building-a-sudoku-solver-in-java-with-dancing-links-180274b0b6c1
-		solver = std::make_unique<SudokuSolver_SequentialDancingLinks>(board);
-		SudokuSolver_SequentialDancingLinks* child_solver = dynamic_cast<SudokuSolver_SequentialDancingLinks*>(solver.get());
+		solver = std::make_unique<SudokuSolver_SequentialDLX>(board);
+		SudokuSolver_SequentialDLX* child_solver = dynamic_cast<SudokuSolver_SequentialDLX*>(solver.get());
 		child_solver->solve();
 	}
 	else if (mode == MODES::PARALLEL_DANCINGLINKS)
@@ -127,8 +127,8 @@ int main(int argc, char** argv)
 		{
 			#pragma omp single
 			{
-				solver = std::make_unique<SudokuSolver_ParallelDancingLinks>(board);
-				SudokuSolver_ParallelDancingLinks* child_solver = dynamic_cast<SudokuSolver_ParallelDancingLinks*>(solver.get());
+				solver = std::make_unique<SudokuSolver_ParallelDLX>(board);
+				SudokuSolver_ParallelDLX* child_solver = dynamic_cast<SudokuSolver_ParallelDLX*>(solver.get());
 				child_solver->solve();
 			}
 		}

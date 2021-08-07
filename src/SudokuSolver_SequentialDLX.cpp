@@ -1,8 +1,8 @@
-#include "SudokuSolver_SequentialDancingLinks.hpp"
+#include "SudokuSolver_SequentialDLX.hpp"
 #include <iostream>
 
 
-SudokuSolver_SequentialDancingLinks::SudokuSolver_SequentialDancingLinks(SudokuBoard& board, bool print_message /*=true*/)
+SudokuSolver_SequentialDLX::SudokuSolver_SequentialDLX(SudokuBoard& board, bool print_message /*=true*/)
 	: _originalBoard(board)
 {
 	if (print_message) {
@@ -15,7 +15,7 @@ SudokuSolver_SequentialDancingLinks::SudokuSolver_SequentialDancingLinks(SudokuB
 	_header = createDLXList(_coverMatrix);
 }
 
-ColumnNode* SudokuSolver_SequentialDancingLinks::createDLXList(CoverMatrix& coverMatrix)
+ColumnNode* SudokuSolver_SequentialDLX::createDLXList(CoverMatrix& coverMatrix)
 {
 	ColumnNode* headerNode = new ColumnNode("header");
 	std::vector<ColumnNode*> columnNodes;
@@ -57,7 +57,7 @@ ColumnNode* SudokuSolver_SequentialDancingLinks::createDLXList(CoverMatrix& cove
 	return headerNode;
 }
 
-SudokuBoard SudokuSolver_SequentialDancingLinks::convertToSudokuGrid(std::vector<DancingNode*> answer)
+SudokuBoard SudokuSolver_SequentialDLX::convertToSudokuGrid(std::vector<DancingNode*> answer)
 {
 	SudokuBoard tmpBoard = SudokuBoard(_originalBoard);
 
@@ -88,12 +88,12 @@ SudokuBoard SudokuSolver_SequentialDancingLinks::convertToSudokuGrid(std::vector
 	return tmpBoard;
 }
 
-void SudokuSolver_SequentialDancingLinks::solve()
+void SudokuSolver_SequentialDLX::solve()
 {
 	process(0);
 }
 
-void SudokuSolver_SequentialDancingLinks::process(int k)
+void SudokuSolver_SequentialDLX::process(int k)
 {
 	if (_header->right == _header)
 	{
@@ -134,7 +134,7 @@ void SudokuSolver_SequentialDancingLinks::process(int k)
 	}
 }
 
-ColumnNode* SudokuSolver_SequentialDancingLinks::selectColumnNodeHeuristic(ColumnNode* c, int k)
+ColumnNode* SudokuSolver_SequentialDLX::selectColumnNodeHeuristic(ColumnNode* c, int k)
 {
 	if (k == 0)
 	{
