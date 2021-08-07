@@ -762,7 +762,6 @@ namespace termcolor
     }
 
 
-
     //! Since C++ hasn't a way to hide something in the header from
     //! the outer access, I have to introduce this namespace which
     //! is used for internal purpose and should't be access from

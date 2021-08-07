@@ -66,9 +66,11 @@ public:
 	// copy-assignment operator
 	SudokuBoard& operator= (const SudokuBoard& another_sudokuboard);
 	
-	// Prints the Sudoku board
-	friend void print_board(const SudokuBoard& board);
+	// Prints the input Sudoku board
     friend std::ostream& operator<< (std::ostream &out, const SudokuBoard& board);
+	
+	// Prints the output Sudoku board
+	friend void print_board(const SudokuBoard& board);
 
 	int indexInCoverMatrix(int row, int col, int num);
 	int createBoxConstraints(CoverMatrix& coverMatrix, int header);

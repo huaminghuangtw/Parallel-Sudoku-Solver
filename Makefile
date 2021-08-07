@@ -15,20 +15,20 @@ TARGETS = sudoku_main
 OBJECTS = *.o *.out
 
 DEPENDENCIES = \
-	SudokuBoard.cpp \
-	SudokuBoardDeque.cpp \
-	SudokuTest.cpp \
-	SudokuSolver.cpp \
-	SudokuSolver_SequentialBacktracking.cpp \
-	SudokuSolver_SequentialBruteForce.cpp \
-	SudokuSolver_ParallelBruteForce.cpp \
-	Node.cpp \
-	SudokuSolver_SequentialDancingLinks.cpp
+	./src/SudokuBoard.cpp \
+	./src/SudokuBoardDeque.cpp \
+	./src/SudokuTest.cpp \
+	./src/SudokuSolver.cpp \
+	./src/SudokuSolver_SequentialBacktracking.cpp \
+	./src/SudokuSolver_SequentialBruteForce.cpp \
+	./src/SudokuSolver_ParallelBruteForce.cpp \
+	./src/Node.cpp \
+	./src/SudokuSolver_SequentialDancingLinks.cpp
 
 all: $(TARGETS)
 
 sudoku_main: sudoku_main.cpp $(DEPENDENCIES)
-	$(CXX) $(CXX_FLAGS) $(OPENMP) -o $@ $^
+	$(CXX) $(CXX_FLAGS) $(OPENMP) -I ./inc -o $@ $^
 
 clean:
 	rm -f $(TARGETS) $(OBJECTS) solution.txt
