@@ -40,7 +40,9 @@ int main(int argc, char** argv)
 ╚══════╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝ ╚═════╝     ╚══════╝ ╚═════╝ ╚══════╝ ╚═══╝  ╚══════╝╚═╝  ╚═╝
 	)"
 	<< "\n"
-	<< "developed by Hua-Ming Huang"
+	<< "developed by Hua-Ming Huang (version: "
+    << VERSION
+    << ")"
 	<< "\n\n\n";
 	
 	// validate command-line arguments

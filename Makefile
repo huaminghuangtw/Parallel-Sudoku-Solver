@@ -1,11 +1,13 @@
 # the compiler: gcc for C program, g++ for C++ program
 CXX = g++
 
+GIT_VERSION := "$(shell git describe --abbrev=0 --tags)"
+
 # compiler flags:
 #  -g      adds debugging information to the executable file
 #  -Wall   turns on most, but not all, compiler warnings
 #  -Wextra enables some extra warning flags that are not enabled by -Wall
-CXX_FLAGS = --std=c++17 -g -Wall -Wextra -O3
+CXX_FLAGS = --std=c++17 -g -Wall -Wextra -O3 -DVERSION=\"$(GIT_VERSION)\"
 OPENMP = -fopenmp
 
 # All output target executables
