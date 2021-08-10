@@ -12,6 +12,7 @@
 #include <chrono>
 #include <memory>
 #include <omp.h>
+#include <type_traits>
 
 
 #define PRINT_TIME 1
@@ -25,6 +26,37 @@ enum class MODES
 	SEQUENTIAL_DANCINGLINKS,     // Sequential mode using dancing links algorithm
 	PARALLEL_DANCINGLINKS        // OpenMP mode using dancing links algorithm
 };
+
+
+template <typename T>
+void DownCastandSolve(std::unique_ptr<SudokuSolver>& solver, SudokuBoard& board)
+{
+	if constexpr (std::is_same<T, SudokuSolver_SequentialDLX>::value ||
+	              std::is_same<T, SudokuSolver_ParallelDLX>::value)
+	{
+		solver = std::make_unique<T>(board);
+	}
+	else if constexpr (std::is_same<T, SudokuSolver_SequentialBacktracking>::value ||
+	                   std::is_same<T, SudokuSolver_SequentialBruteForce>::value ||
+					   std::is_same<T, SudokuSolver_ParallelBruteForce>::value)
+	{
+		solver = std::make_unique<T>();
+	}
+
+    T* child_solver = dynamic_cast<T*>(solver.get());
+
+	if constexpr (std::is_same<T, SudokuSolver_SequentialDLX>::value ||
+	              std::is_same<T, SudokuSolver_ParallelDLX>::value)
+	{
+		child_solver->solve();
+	}
+	else if constexpr (std::is_same<T, SudokuSolver_SequentialBacktracking>::value ||
+	                   std::is_same<T, SudokuSolver_SequentialBruteForce>::value ||
+					   std::is_same<T, SudokuSolver_ParallelBruteForce>::value)
+	{
+		child_solver->solve(board);
+	}
+}
 
 
 int main(int argc, char** argv)
@@ -87,15 +119,11 @@ int main(int argc, char** argv)
 	std::unique_ptr<SudokuSolver> solver;
 	if (mode == MODES::SEQUENTIAL_BACKTRACKING) 
 	{
-		solver = std::make_unique<SudokuSolver_SequentialBacktracking>();
-		SudokuSolver_SequentialBacktracking* child_solver = dynamic_cast<SudokuSolver_SequentialBacktracking*>(solver.get());
-		child_solver->solve(board);
+		DownCastandSolve<SudokuSolver_SequentialBacktracking>(solver, board);
 	} 
 	else if (mode == MODES::SEQUENTIAL_BRUTEFORCE)
 	{
-		solver = std::make_unique<SudokuSolver_SequentialBruteForce>();
-		SudokuSolver_SequentialBruteForce* child_solver = dynamic_cast<SudokuSolver_SequentialBruteForce*>(solver.get());
-		child_solver->solve(board);
+		DownCastandSolve<SudokuSolver_SequentialBruteForce>(solver, board);
 	}	
 	else if (mode == MODES::PARALLEL_BRUTEFORCE)
 	{
@@ -106,9 +134,7 @@ int main(int argc, char** argv)
 		{
 			#pragma omp single nowait
 			{
-				solver = std::make_unique<SudokuSolver_ParallelBruteForce>();
-				SudokuSolver_ParallelBruteForce* child_solver = dynamic_cast<SudokuSolver_ParallelBruteForce*>(solver.get());
-				child_solver->solve(board);
+				DownCastandSolve<SudokuSolver_ParallelBruteForce>(solver, board);
 			}
 		}
 	}
@@ -116,9 +142,7 @@ int main(int argc, char** argv)
 	{
 		// Implementation of dancing links algorithm written in C++ is based on the following Java tutorial:
 		// https://medium.com/javarevisited/building-a-sudoku-solver-in-java-with-dancing-links-180274b0b6c1
-		solver = std::make_unique<SudokuSolver_SequentialDLX>(board);
-		SudokuSolver_SequentialDLX* child_solver = dynamic_cast<SudokuSolver_SequentialDLX*>(solver.get());
-		child_solver->solve();
+		DownCastandSolve<SudokuSolver_SequentialDLX>(solver, board);
 	}
 	else if (mode == MODES::PARALLEL_DANCINGLINKS)
 	{
@@ -129,9 +153,7 @@ int main(int argc, char** argv)
 		{
 			#pragma omp single
 			{
-				solver = std::make_unique<SudokuSolver_ParallelDLX>(board);
-				SudokuSolver_ParallelDLX* child_solver = dynamic_cast<SudokuSolver_ParallelDLX*>(solver.get());
-				child_solver->solve();
+				DownCastandSolve<SudokuSolver_ParallelDLX>(solver, board);
 			}
 		}
 	}
