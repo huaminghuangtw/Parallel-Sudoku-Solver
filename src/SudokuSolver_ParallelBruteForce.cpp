@@ -6,12 +6,12 @@
 #include <omp.h>
 
 
-SudokuSolver_ParallelBruteForce::SudokuSolver_ParallelBruteForce(bool print_message /*=true*/)
+SudokuSolver_ParallelBruteForce::SudokuSolver_ParallelBruteForce(SudokuBoard& board, bool print_message /*=true*/)
+	: SudokuSolver(board)
 {
+	_mode = MODES::PARALLEL_BRUTEFORCE;
 	if (print_message) {
 		std::cout << "\n" << "Parallel Sudoku solver using brute force algorithm starts, please wait..." << "\n";
-		std::cout << "Using " << termcolor::bright_red << omp_get_num_threads() << termcolor::reset
-		          << " OMP threads" << "\n";
 	}
 }
 
@@ -75,10 +75,10 @@ void SudokuSolver_ParallelBruteForce::bootstrap(SudokuBoardDeque& boardDeque, in
 	}
 }
 
-void SudokuSolver_ParallelBruteForce::solve(SudokuBoard& board)
+void SudokuSolver_ParallelBruteForce::solve_kernel1()
 {
 	// push the board onto the board deque as the first element
-	_board_deque.push_back(board);
+	_board_deque.push_back(_board);
 
 	// ensure some level of bootstrapping
 	int num_bootstraps = omp_get_num_threads();
@@ -99,14 +99,17 @@ void SudokuSolver_ParallelBruteForce::solve(SudokuBoard& board)
 	// 	std::cout << "*****" << "\n";
 	// }
 
-	std::vector<SudokuSolver_SequentialBruteForce> solvers(numberOfBoards, SudokuSolver_SequentialBruteForce(false));
+	std::vector<SudokuSolver_SequentialBruteForce> solvers;
 
 	#pragma omp parallel for schedule(static) default(none) shared(numberOfBoards, solvers)
     for (int indexOfBoard = 0; indexOfBoard < numberOfBoards; ++indexOfBoard)
 	{
+		solvers.push_back(SudokuSolver_SequentialBruteForce(_board_deque[indexOfBoard], false));
+
 		if (_solved) continue;
 
-        solvers[indexOfBoard].solve(_board_deque[indexOfBoard], false);
+		solvers[indexOfBoard].set_mode(MODES::PARALLEL_BRUTEFORCE);
+        solvers[indexOfBoard].solve();
 
 		if (solvers[indexOfBoard].get_status() == true)
 		{
@@ -116,9 +119,9 @@ void SudokuSolver_ParallelBruteForce::solve(SudokuBoard& board)
 	}
 }
 
-void SudokuSolver_ParallelBruteForce::solve2(SudokuBoard& board)
+void SudokuSolver_ParallelBruteForce::solve_kernel2()
 {
-	std::vector<SudokuBoardDeque> groupOfBoardDeques(board.get_board_size(), SudokuBoardDeque(board));
+	std::vector<SudokuBoardDeque> groupOfBoardDeques(_board.get_board_size(), SudokuBoardDeque(_board));
 	#pragma omp parallel default(none) shared(groupOfBoardDeques)
 	{	
 		int SIZE = groupOfBoardDeques.size();
@@ -144,14 +147,16 @@ void SudokuSolver_ParallelBruteForce::solve2(SudokuBoard& board)
 	// 	std::cout << "*****" << "\n";
 	// }
 
-	std::vector<SudokuSolver_SequentialBruteForce> solvers(numberOfBoards, SudokuSolver_SequentialBruteForce(false));
+	std::vector<SudokuSolver_SequentialBruteForce> solvers;
 
 	#pragma omp parallel for schedule(static) default(none) shared(numberOfBoards, solvers)
     for (int indexOfBoard = 0; indexOfBoard < numberOfBoards; ++indexOfBoard)
-	{
+	{	
+		solvers.push_back(SudokuSolver_SequentialBruteForce(_board_deque[indexOfBoard], false));
+
 		if (_solved) continue;
 
-        solvers[indexOfBoard].solve(_board_deque[indexOfBoard], false);
+        solvers[indexOfBoard].solve();
 
 		if (solvers[indexOfBoard].get_status() == true)
 		{
@@ -161,7 +166,7 @@ void SudokuSolver_ParallelBruteForce::solve2(SudokuBoard& board)
 	}
 }
 
-void SudokuSolver_ParallelBruteForce::solve3(SudokuBoard& board, int row /*=0*/, int col /*=0*/)
+void SudokuSolver_ParallelBruteForce::solve_kernel3(SudokuBoard& board, int row, int col)
 {	
 	if (_solved) return;
 
@@ -181,7 +186,7 @@ void SudokuSolver_ParallelBruteForce::solve3(SudokuBoard& board, int row /*=0*/,
 
 	if (!isEmpty(board, row, col))
 	{   
-		solve3(board, row_next, col_next);
+		solve_kernel3(board, row_next, col_next);
     }
 	else
 	{
@@ -203,7 +208,7 @@ void SudokuSolver_ParallelBruteForce::solve3(SudokuBoard& board, int row /*=0*/,
 				// become significant compared to the workload of a task
 				#pragma omp task default(none) firstprivate(local_board, row_next, col_next) \
 				                               final(_recursionDepth > board.get_board_size())
-				solve3(local_board, row_next, col_next);
+				solve_kernel3(local_board, row_next, col_next);
 
 				// board.set_board_data(row, col, board.get_empty_cell_value());
 				// Why don't we need this line? Because we don't modify anything in the original board.

@@ -4,12 +4,11 @@
 
 
 SudokuSolver_ParallelDLX::SudokuSolver_ParallelDLX(SudokuBoard& board, bool print_message /*=true*/)
-	: _originalBoard(board)
+	: SudokuSolver(board)
 {
+	_mode = MODES::PARALLEL_DANCINGLINKS;
 	if (print_message) {
 		std::cout << "\n" << "Parallel Sudoku solver using dancing links algorithm starts, please wait..." << "\n";
-		std::cout << "Using " << termcolor::bright_red << omp_get_num_threads() << termcolor::reset
-		          << " OMP threads" << "\n";
 	}
 	board.createCoverMatrix(_coverMatrix);
 	board.convertToCoverMatrix(_coverMatrix);
@@ -62,7 +61,7 @@ ColumnNode* SudokuSolver_ParallelDLX::createDLXList(CoverMatrix& coverMatrix)
 
 SudokuBoard SudokuSolver_ParallelDLX::convertToSudokuGrid(std::vector<DancingNode*> answer)
 {
-	SudokuBoard tmpBoard = SudokuBoard(_originalBoard);
+	SudokuBoard tmpBoard = SudokuBoard(_board);
 
 	for (DancingNode* n : answer)
 	{
@@ -82,9 +81,9 @@ SudokuBoard SudokuSolver_ParallelDLX::convertToSudokuGrid(std::vector<DancingNod
 
 		int ans1 = std::stoi(rcNode->column->name);
 		int ans2 = std::stoi(rcNode->right->column->name);
-		int r = ans1 / _originalBoard.get_board_size();
-		int c = ans1 % _originalBoard.get_board_size();
-		int num = (ans2 % _originalBoard.get_board_size()) + 1;
+		int r = ans1 / _board.get_board_size();
+		int c = ans1 % _board.get_board_size();
+		int num = (ans2 % _board.get_board_size()) + 1;
 		tmpBoard.set_board_data(r, c, num);
 	}
 

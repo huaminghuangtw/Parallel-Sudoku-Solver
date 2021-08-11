@@ -3,8 +3,9 @@
 
 
 SudokuSolver_SequentialDLX::SudokuSolver_SequentialDLX(SudokuBoard& board, bool print_message /*=true*/)
-	: _originalBoard(board)
+	: SudokuSolver(board)
 {
+	_mode = MODES::SEQUENTIAL_DANCINGLINKS;
 	if (print_message) {
 		std::cout << "\n" << "Sequential Sudoku solver using dancing links algorithm starts, please wait..." << "\n";
 	}
@@ -59,7 +60,7 @@ ColumnNode* SudokuSolver_SequentialDLX::createDLXList(CoverMatrix& coverMatrix)
 
 SudokuBoard SudokuSolver_SequentialDLX::convertToSudokuGrid(std::vector<DancingNode*> answer)
 {
-	SudokuBoard tmpBoard = SudokuBoard(_originalBoard);
+	SudokuBoard tmpBoard = SudokuBoard(_board);
 
 	for (DancingNode* n : answer)
 	{
@@ -79,9 +80,9 @@ SudokuBoard SudokuSolver_SequentialDLX::convertToSudokuGrid(std::vector<DancingN
 
 		int ans1 = std::stoi(rcNode->column->name);
 		int ans2 = std::stoi(rcNode->right->column->name);
-		int r = ans1 / _originalBoard.get_board_size();
-		int c = ans1 % _originalBoard.get_board_size();
-		int num = (ans2 % _originalBoard.get_board_size()) + 1;
+		int r = ans1 / _board.get_board_size();
+		int c = ans1 % _board.get_board_size();
+		int num = (ans2 % _board.get_board_size()) + 1;
 		tmpBoard.set_board_data(r, c, num);
 	}
 

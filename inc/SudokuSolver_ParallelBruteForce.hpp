@@ -14,17 +14,17 @@ private:
 	SudokuBoardDeque _board_deque;
 
 public:
-	SudokuSolver_ParallelBruteForce(bool print_message=true);
+	SudokuSolver_ParallelBruteForce(SudokuBoard& board, bool print_message=true);
 
     // Divides one Sudoku problem into several simpler sub-problems and push them to the end of board deque
 	void bootstrap();
-	void bootstrap(SudokuBoard& board) { _board_deque.push_back(board); bootstrap(); }
 	void bootstrap(SudokuBoardDeque& boardDeque, int indexOfRows);
 
 	// Solves the given Sudoku board using parallel brute force algorithm
-	void solve(SudokuBoard& board);
-	void solve2(SudokuBoard& board);
-	void solve3(SudokuBoard& board, int row=0, int col=0);
+	virtual void solve() override { solve_kernel1(); }
+	void solve_kernel1();
+	void solve_kernel2();
+	void solve_kernel3(SudokuBoard& board, int row, int col);
 };
 
 

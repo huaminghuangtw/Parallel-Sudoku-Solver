@@ -7,6 +7,10 @@
 #include <chrono>
 
 
+SudokuSolver::SudokuSolver(SudokuBoard& board)
+	: _board(board)
+{ }
+
 bool SudokuSolver::checkIfAllFilled(const SudokuBoard& board) const
 {
     for (int i = 0; i < board.get_board_size(); ++i)

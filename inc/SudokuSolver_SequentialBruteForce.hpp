@@ -9,10 +9,11 @@
 class SudokuSolver_SequentialBruteForce : public SudokuSolver
 {
 public:
-	SudokuSolver_SequentialBruteForce(bool print_message=true);
+	SudokuSolver_SequentialBruteForce(SudokuBoard& board, bool print_message=true);
 
 	// Solves the given Sudoku board using sequential brute force algorithm
-	void solve(SudokuBoard& board, bool print_progress=true, int row=0, int col=0);
+    virtual void solve() override { solve_kernel(0, 0); }
+	void solve_kernel(int row, int col);
 };
 
 

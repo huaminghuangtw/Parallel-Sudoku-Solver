@@ -2,41 +2,43 @@
 #include <iostream>
 
 
-SudokuSolver_SequentialBacktracking::SudokuSolver_SequentialBacktracking(bool print_message /*=true*/)
+SudokuSolver_SequentialBacktracking::SudokuSolver_SequentialBacktracking(SudokuBoard& board, bool print_message /*=true*/)
+	: SudokuSolver(board)
 {
+	_mode = MODES::SEQUENTIAL_BACKTRACKING;
 	if (print_message) {
 		std::cout << "\n" << "Sequential Sudoku solver using backtracking algorithm starts, please wait..." << "\n";
 	}
 }
 
-bool SudokuSolver_SequentialBacktracking::solve(SudokuBoard& board)
+bool SudokuSolver_SequentialBacktracking::solve_kernel()
 {
 	if (_solved) { return _solved; }
 
-	show_progress_bar(board, _recursionDepth);
+	if (_mode == MODES::SEQUENTIAL_BACKTRACKING) show_progress_bar(_board, _recursionDepth);
 
-	if (checkIfAllFilled(board))   // base case
+	if (checkIfAllFilled(_board))   // base case
     {
         _solved = true;
-		_solution = board;
+		_solution = _board;
 		return _solved;
     }
     
-	Position empty_cell_pos = find_empty(board);
+	Position empty_cell_pos = find_empty(_board);
 	int row = empty_cell_pos.first;
 	int col = empty_cell_pos.second;
 
-	for (int num = board.get_min_value(); num <= board.get_max_value(); ++num)
+	for (int num = _board.get_min_value(); num <= _board.get_max_value(); ++num)
 	{
-		if (isValid(board, num, empty_cell_pos))
+		if (isValid(_board, num, empty_cell_pos))
 		{
-			board.set_board_data(row, col, num);
+			_board.set_board_data(row, col, num);
 
-			if (isUnique(board, num, empty_cell_pos)) num = board.get_board_size() + 1;
+			if (isUnique(_board, num, empty_cell_pos)) num = _board.get_board_size() + 1;
 
 			// Try the next cell recursively
-			if (solve(board)) { _solved = true; return _solved; }
-			else { board.set_board_data(row, col, board.get_empty_cell_value()); }   // Backtrack to the most recently filled cell
+			if (solve_kernel()) { _solved = true; return _solved; }
+			else { _board.set_board_data(row, col, _board.get_empty_cell_value()); }   // Backtrack to the most recently filled cell
 		}
 	}
     

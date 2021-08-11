@@ -10,52 +10,37 @@
 
 #include <iostream>
 #include <chrono>
-#include <memory>
 #include <omp.h>
-#include <type_traits>
+#include <memory>
 
 
 #define PRINT_TIME 1
 
 
-enum class MODES
+std::unique_ptr<SudokuSolver> CreateSudokuSolver(MODES mode, SudokuBoard& board)
 {
-	SEQUENTIAL_BACKTRACKING,     // Sequential mode using backtracking algorithm
-	SEQUENTIAL_BRUTEFORCE,       // Sequential mode using brute force algorithm
-	PARALLEL_BRUTEFORCE,         // OpenMP mode using brute force algorithm
-	SEQUENTIAL_DANCINGLINKS,     // Sequential mode using dancing links algorithm
-	PARALLEL_DANCINGLINKS        // OpenMP mode using dancing links algorithm
-};
+    switch (mode)
+    {
+        case MODES::SEQUENTIAL_BACKTRACKING:
+            return std::make_unique<SudokuSolver_SequentialBacktracking>(board);
 
+        case MODES::SEQUENTIAL_BRUTEFORCE:
+            return std::make_unique<SudokuSolver_SequentialBruteForce>(board);
 
-template <typename T>
-void DownCastandSolve(std::unique_ptr<SudokuSolver>& solver, SudokuBoard& board)
-{
-	if constexpr (std::is_same<T, SudokuSolver_SequentialDLX>::value ||
-	              std::is_same<T, SudokuSolver_ParallelDLX>::value)
-	{
-		solver = std::make_unique<T>(board);
-	}
-	else if constexpr (std::is_same<T, SudokuSolver_SequentialBacktracking>::value ||
-	                   std::is_same<T, SudokuSolver_SequentialBruteForce>::value ||
-					   std::is_same<T, SudokuSolver_ParallelBruteForce>::value)
-	{
-		solver = std::make_unique<T>();
-	}
+		case MODES::PARALLEL_BRUTEFORCE:
+            return std::make_unique<SudokuSolver_ParallelBruteForce>(board);
 
-    T* child_solver = dynamic_cast<T*>(solver.get());
+		case MODES::SEQUENTIAL_DANCINGLINKS:
+            return std::make_unique<SudokuSolver_SequentialDLX>(board);
 
-	if constexpr (std::is_same<T, SudokuSolver_SequentialDLX>::value ||
-	              std::is_same<T, SudokuSolver_ParallelDLX>::value)
-	{
-		child_solver->solve();
-	}
-	else if constexpr (std::is_same<T, SudokuSolver_SequentialBacktracking>::value ||
-	                   std::is_same<T, SudokuSolver_SequentialBruteForce>::value ||
-					   std::is_same<T, SudokuSolver_ParallelBruteForce>::value)
-	{
-		child_solver->solve(board);
-	}
+		case MODES::PARALLEL_DANCINGLINKS:
+            return std::make_unique<SudokuSolver_ParallelDLX>(board);
+
+		default:
+			std::cerr << termcolor::red << "Available options for <MODE>: " << "\n";
+			std::cerr << "Please try again." << termcolor::reset << "\n";
+			exit(-1);
+    }
 }
 
 
@@ -88,22 +73,15 @@ int main(int argc, char** argv)
 		exit(-1);
     }
 
-	MODES mode = static_cast<MODES>(std::stoi(argv[2]));
-	if (mode != MODES::SEQUENTIAL_BACKTRACKING &&
-		mode != MODES::SEQUENTIAL_BRUTEFORCE &&
-		mode != MODES::PARALLEL_BRUTEFORCE &&
-		mode != MODES::SEQUENTIAL_DANCINGLINKS &&
-		mode != MODES::PARALLEL_DANCINGLINKS)
-	{
-		std::cerr << termcolor::red << "Available options for <MODE>: " << "\n";
-		std::cerr << "Please try again." << termcolor::reset << "\n";
-		exit(-1);
-	}
-
-    auto board = SudokuBoard(std::string(argv[1]));
+	auto board = SudokuBoard(std::string(argv[1]));
 	SudokuTest::testBoard(board);
 
+	MODES mode = static_cast<MODES>(std::stoi(argv[2]));
+
 	int WRITE_TO_SOLUTION_TXT = (argc >= 4) ? std::stoi(argv[3]) : 0;
+
+	int NUM_THREADS = (argc >= 5) ? std::stoi(argv[4]) : 2;
+
 
 	std::cout << "\n" << termcolor::magenta << "************************************* INPUT GRID *************************************" << termcolor::reset << "\n\n";
     std::cout << board;
@@ -115,47 +93,24 @@ int main(int argc, char** argv)
     start = std::chrono::high_resolution_clock::now();
 #endif
 
-
-	std::unique_ptr<SudokuSolver> solver;
-	if (mode == MODES::SEQUENTIAL_BACKTRACKING) 
+	auto solver = CreateSudokuSolver(mode, board);
+	if (mode == MODES::PARALLEL_BRUTEFORCE || mode == MODES::PARALLEL_DANCINGLINKS)
 	{
-		DownCastandSolve<SudokuSolver_SequentialBacktracking>(solver, board);
-	} 
-	else if (mode == MODES::SEQUENTIAL_BRUTEFORCE)
-	{
-		DownCastandSolve<SudokuSolver_SequentialBruteForce>(solver, board);
-	}	
-	else if (mode == MODES::PARALLEL_BRUTEFORCE)
-	{
-		int NUM_THREADS = (argc >= 5) ? std::stoi(argv[4]) : 2;
 		omp_set_num_threads(NUM_THREADS);
 		
 		#pragma omp parallel
 		{
-			#pragma omp single nowait
-			{
-				DownCastandSolve<SudokuSolver_ParallelBruteForce>(solver, board);
-			}
-		}
-	}
-	else if (mode == MODES::SEQUENTIAL_DANCINGLINKS)
-	{
-		// Implementation of dancing links algorithm written in C++ is based on the following Java tutorial:
-		// https://medium.com/javarevisited/building-a-sudoku-solver-in-java-with-dancing-links-180274b0b6c1
-		DownCastandSolve<SudokuSolver_SequentialDLX>(solver, board);
-	}
-	else if (mode == MODES::PARALLEL_DANCINGLINKS)
-	{
-		int NUM_THREADS = (argc >= 5) ? std::stoi(argv[4]) : 2;
-		omp_set_num_threads(NUM_THREADS);
-
-		#pragma omp parallel
-		{
 			#pragma omp single
 			{
-				DownCastandSolve<SudokuSolver_ParallelDLX>(solver, board);
+				std::cout << "Using " << termcolor::bright_red << omp_get_num_threads() << termcolor::reset
+		                  << " OMP threads" << "\n";
+				solver->solve();
 			}
 		}
+	}
+	else
+	{
+		solver->solve();
 	}
 
 

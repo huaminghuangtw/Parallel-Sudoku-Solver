@@ -11,10 +11,11 @@
 class SudokuSolver_SequentialBacktracking : public SudokuSolver
 {
 public:
-	SudokuSolver_SequentialBacktracking(bool print_message=true);
+	SudokuSolver_SequentialBacktracking(SudokuBoard& board, bool print_message=true);
 
 	// Solves the given Sudoku board using sequential backtracking algorithm
-	bool solve(SudokuBoard& board);
+    virtual void solve() { solve_kernel(); }
+	bool solve_kernel();
 };
 
 

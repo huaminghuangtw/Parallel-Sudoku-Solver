@@ -2,54 +2,56 @@
 #include <iostream>
 
 
-SudokuSolver_SequentialBruteForce::SudokuSolver_SequentialBruteForce(bool print_message /*=true*/)
+SudokuSolver_SequentialBruteForce::SudokuSolver_SequentialBruteForce(SudokuBoard& board, bool print_message /*=true*/)
+	: SudokuSolver(board)
 {
+	_mode = MODES::SEQUENTIAL_BRUTEFORCE;
 	if (print_message) {
 		std::cout << "\n" << "Sequential Sudoku solver using brute force algorithm starts, please wait..." << "\n";
 	}
 }
 
-void SudokuSolver_SequentialBruteForce::solve(SudokuBoard& board, bool print_progress /*=true*/, int row /*=0*/, int col /*=0*/)
+void SudokuSolver_SequentialBruteForce::solve_kernel(int row, int col)
 {	
 	if (_solved) return;
 	
-	if (print_progress) show_progress_bar(board, _recursionDepth);
+	if (_mode == MODES::SEQUENTIAL_BRUTEFORCE) show_progress_bar(_board, _recursionDepth);
 
-	int BOARD_SIZE = board.get_board_size();
+	int BOARD_SIZE = _board.get_board_size();
 
 	int abs_index = row * BOARD_SIZE + col;
 
-    if (abs_index >= board.get_num_total_cells())
+    if (abs_index >= _board.get_num_total_cells())
 	{
 		_solved = true;
-		_solution = board;
+		_solution = _board;
 		return;
     }
     
 	int row_next = (abs_index + 1) / BOARD_SIZE;
 	int col_next = (abs_index + 1) % BOARD_SIZE;
 
-	if (!isEmpty(board, row, col))
+	if (!isEmpty(_board, row, col))
 	{   
-		solve(board, print_progress, row_next, col_next);
+		solve_kernel(row_next, col_next);
     }
 	else
 	{
 		// Fill in all possible numbers
-        for (int num = board.get_min_value(); num <= board.get_max_value(); ++num)
+        for (int num = _board.get_min_value(); num <= _board.get_max_value(); ++num)
 		{
 			Position pos = std::make_pair(row, col);
 
-            if (isValid(board, num, pos))
+            if (isValid(_board, num, pos))
 			{
-                board.set_board_data(row, col, num);
+                _board.set_board_data(row, col, num);
 
-				if (isUnique(board, num, pos)) num = BOARD_SIZE + 1;
+				if (isUnique(_board, num, pos)) num = BOARD_SIZE + 1;
 
 				// Try the next cell recursively
-                solve(board, print_progress, row_next, col_next);
+                solve_kernel(row_next, col_next);
 
-				board.set_board_data(row, col, board.get_empty_cell_value());
+				_board.set_board_data(row, col, _board.get_empty_cell_value());
             }
         }
     }

@@ -9,16 +9,28 @@
 using Position = std::pair<int, int>;
 
 
+enum class MODES
+{
+	SEQUENTIAL_BACKTRACKING,     // Sequential mode using backtracking algorithm
+	SEQUENTIAL_BRUTEFORCE,       // Sequential mode using brute force algorithm
+	PARALLEL_BRUTEFORCE,         // OpenMP mode using brute force algorithm
+	SEQUENTIAL_DANCINGLINKS,     // Sequential mode using dancing links algorithm
+	PARALLEL_DANCINGLINKS        // OpenMP mode using dancing links algorithm
+};
+
+
 class SudokuSolver
 {	
 protected:
+	SudokuBoard _board;
 	bool _solved = false;
 	SudokuBoard _solution;
 	int _recursionDepth = 0;
 	int _current_num_empty_cells;
+	MODES _mode;
 
 public:
-	SudokuSolver() = default;
+	SudokuSolver(SudokuBoard& board);
 
 	// Checks if the Sudoku board is ALL filled up
 	bool checkIfAllFilled(const SudokuBoard& board) const;
@@ -47,6 +59,9 @@ public:
 	// within the neighboring rows and columns in the same box
 	bool isUnique(const SudokuBoard& board, int num, Position pos) const;
 
+	virtual void solve() = 0;
+	
+	void set_mode(MODES mode) { _mode = mode; }
 	bool get_status() const { return _solved; }
 	SudokuBoard get_solution() const { return _solution; }
 

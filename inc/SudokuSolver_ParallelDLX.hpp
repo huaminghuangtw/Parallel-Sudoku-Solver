@@ -8,7 +8,9 @@
 #include <vector>
 
 
-// DLX: apply Dancing Links techniques and Algorithm X to solve the exact cover problem. 
+// DLX: apply Dancing Links techniques and Algorithm X to solve the exact cover problem.
+// Implementation of dancing links algorithm written in C++ is based on the following Java tutorial:
+// https://medium.com/javarevisited/building-a-sudoku-solver-in-java-with-dancing-links-180274b0b6c1
 class SudokuSolver_ParallelDLX : public SudokuSolver
 {
 private:
@@ -27,7 +29,7 @@ public:
 	SudokuBoard convertToSudokuGrid(std::vector<DancingNode*> answer);
 
 	// Solves the given Sudoku board using parallel dancing links algorithm
-    void solve();
+    virtual void solve() override;
 
     void process(int k);
 
