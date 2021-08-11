@@ -89,12 +89,7 @@ SudokuBoard SudokuSolver_SequentialDLX::convertToSudokuGrid(std::vector<DancingN
 	return tmpBoard;
 }
 
-void SudokuSolver_SequentialDLX::solve()
-{
-	process(0);
-}
-
-void SudokuSolver_SequentialDLX::process(int k)
+void SudokuSolver_SequentialDLX::solve_kernel(int k)
 {
 	if (_header->right == _header)
 	{
@@ -117,7 +112,7 @@ void SudokuSolver_SequentialDLX::process(int k)
 				j->column->cover();
 			}
 
-			process(k + 1);
+			solve_kernel(k + 1);
 
 			if (_solved) return;
 

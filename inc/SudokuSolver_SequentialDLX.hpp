@@ -30,11 +30,11 @@ public:
 	SudokuBoard convertToSudokuGrid(std::vector<DancingNode*> answer);
 
 	// Solves the given Sudoku board using sequential dancing links algorithm
-    virtual void solve() override;
+    virtual void solve() override { solve_kernel(0); }
 
 	// Implementation of the Algorithm X (https://en.wikipedia.org/wiki/Knuth%27s_Algorithm_X) and
 	// use of Dancing Links on the quadrupled-chained list to solve the exact cover problem
-    void process(int k);
+    void solve_kernel(int k);
 
 	ColumnNode* selectColumnNodeHeuristic(ColumnNode* c, int k);
 };

@@ -90,12 +90,7 @@ SudokuBoard SudokuSolver_ParallelDLX::convertToSudokuGrid(std::vector<DancingNod
 	return tmpBoard;
 }
 
-void SudokuSolver_ParallelDLX::solve()
-{
-	process(0);
-}
-
-void SudokuSolver_ParallelDLX::process(int k)
+void SudokuSolver_ParallelDLX::solve_kernel(int k)
 {
 	if (_header->right == _header)
 	{
@@ -120,7 +115,7 @@ void SudokuSolver_ParallelDLX::process(int k)
 				j->column->cover();
 			}
 
-			process(k + 1);
+			solve_kernel(k + 1);
 
 #pragma omp flush(_solved)
 			if (_solved) return;

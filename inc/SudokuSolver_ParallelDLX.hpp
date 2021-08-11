@@ -29,9 +29,9 @@ public:
 	SudokuBoard convertToSudokuGrid(std::vector<DancingNode*> answer);
 
 	// Solves the given Sudoku board using parallel dancing links algorithm
-    virtual void solve() override;
+    virtual void solve() override { solve_kernel(0); }
 
-    void process(int k);
+    void solve_kernel(int k);
 
 	ColumnNode* selectColumnNodeHeuristic(ColumnNode* c, int k);
 };
