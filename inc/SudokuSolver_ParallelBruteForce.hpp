@@ -24,7 +24,6 @@ public:
 	virtual void solve() override { solve_kernel1(); }
 	void solve_kernel1();
 	void solve_kernel2();
-	void solve_kernel3(SudokuBoard& board, int row, int col);
 };
 
 
