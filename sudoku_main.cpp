@@ -38,6 +38,11 @@ std::unique_ptr<SudokuSolver> CreateSudokuSolver(MODES mode, SudokuBoard& board)
 
 		default:
 			std::cerr << termcolor::red << "Available options for <MODE>: " << "\n";
+			std::cerr << "		- 0: sequential mode with backtracking algorithm" << "\n";
+			std::cerr << "		- 1: sequential mode with brute force algorithm" << "\n";
+			std::cerr << "		- 2: parallel mode with brute force algorithm" << "\n";
+			std::cerr << "		- 3: sequential mode with DLX algorithm" << "\n";
+			std::cerr << "		- 4: parallel mode with DLX algorithm" << "\n";
 			std::cerr << "Please try again." << termcolor::reset << "\n";
 			exit(-1);
     }
@@ -57,18 +62,24 @@ int main(int argc, char** argv)
 ╚══════╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝ ╚═════╝     ╚══════╝ ╚═════╝ ╚══════╝ ╚═══╝  ╚══════╝╚═╝  ╚═╝
 	)"
 	<< "\n"
-	<< "developed by Hua-Ming Huang (version: "
-    << VERSION
-    << ")"
+	<< "developed by Hua-Ming Huang (version: " << VERSION << ")"
 	<< "\n\n\n";
 	
 	// validate command-line arguments
 	if (argc < 3 || argc > 5)
 	{
-		std::cerr << termcolor::red << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE> <MODE> [<WRITE_TO_SOLUTION_TXT>] [<NUM_THREADS>] " << "\n";
-		std::cerr << "		1. <MODE>: 0 for sequential mode, 1 for OpenMP mode." << "\n";
-		std::cerr << "		2. <WRITE_TO_SOLUTION_TXT>: 0 - only write solution to the console (default), 1 - write solution to a text file." << "\n";
-		std::cerr << "		3. <NUM_THREADS>: if you set 1 for <MODE>, you need to also set value to <NUM_THREADS> (default: 2)" << "\n";
+		std::cerr << termcolor::red << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE> <MODE> <NUM_THREADS> [<WRITE_TO_SOLUTION_TXT>]" << "\n";
+		std::cerr << "		1. <MODE>: " << "\n";
+		std::cerr << "			- 0: sequential mode with backtracking algorithm" << "\n";
+		std::cerr << "			- 1: sequential mode with brute force algorithm" << "\n";
+		std::cerr << "			- 2: parallel mode with brute force algorithm" << "\n";
+		std::cerr << "			- 3: sequential mode with DLX algorithm" << "\n";
+		std::cerr << "			- 4: parallel mode with DLX algorithm" << "\n";
+		std::cerr << "		2. <NUM_THREADS>: " << "\n";
+		std::cerr << "			If you set 2 or 4 for <MODE>, you need to also set <NUM_THREADS> (default = 2)" << "\n";
+		std::cerr << "		3. <WRITE_TO_SOLUTION_TXT>: " << "\n";
+		std::cerr << "			- 0: only print solution to the console (default)" << "\n";
+		std::cerr << "			- 1: also write solution to a text file solution.txt" << "\n";
 		std::cerr << "Please try again." << termcolor::reset << "\n";
 		exit(-1);
     }
@@ -78,9 +89,17 @@ int main(int argc, char** argv)
 
 	MODES mode = static_cast<MODES>(std::stoi(argv[2]));
 
-	int WRITE_TO_SOLUTION_TXT = (argc >= 4) ? std::stoi(argv[3]) : 0;
-
-	int NUM_THREADS = (argc >= 5) ? std::stoi(argv[4]) : 2;
+	int NUM_THREADS = 2;
+	int WRITE_TO_SOLUTION_TXT = 0;
+	if (mode == MODES::PARALLEL_BRUTEFORCE || mode == MODES::PARALLEL_DANCINGLINKS)
+	{
+		NUM_THREADS = (argc >= 4) ? std::stoi(argv[3]) : 2;
+		WRITE_TO_SOLUTION_TXT = (argc >= 5) ? std::stoi(argv[4]) : 0;
+	}
+	else
+	{
+		WRITE_TO_SOLUTION_TXT = (argc >= 4) ? std::stoi(argv[3]) : 0;
+	}
 
 
 	std::cout << "\n" << termcolor::magenta << "************************************* INPUT GRID *************************************" << termcolor::reset << "\n\n";
@@ -92,6 +111,7 @@ int main(int argc, char** argv)
     std::chrono::high_resolution_clock::time_point start, stop;
     start = std::chrono::high_resolution_clock::now();
 #endif
+
 
 	auto solver = CreateSudokuSolver(mode, board);
 	if (mode == MODES::PARALLEL_BRUTEFORCE || mode == MODES::PARALLEL_DANCINGLINKS)
@@ -131,7 +151,7 @@ int main(int argc, char** argv)
 
 
 #if PRINT_TIME
-    std::cout << std::dec << "Operations executed in " << (double) time_in_microseconds / 1000000 << " seconds." << "\n";
+    std::cout << std::dec << "Solving this Sudoku puzzle took " << (double) time_in_microseconds / 1000000 << " seconds." << "\n";
 #endif
 
 

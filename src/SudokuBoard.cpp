@@ -13,7 +13,8 @@ const Board SudokuBoard::read_input(const std::string& filename)
 
 	if (!inputFile)
 	{
-		std::cerr << "Error opening file " << filename << "! Please make sure the file specified exists." << "\n";
+		std::cerr << termcolor::red << "Error opening file " << filename
+		          << "! Please make sure the file specified exists." << termcolor::reset << "\n";
 		exit(1);
 	}
 	
