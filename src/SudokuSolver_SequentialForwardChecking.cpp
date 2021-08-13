@@ -8,7 +8,8 @@ SudokuSolver_SequentialForwardChecking::SudokuSolver_SequentialForwardChecking(S
 	: SudokuSolver(board)
 {
 	_mode = MODES::SEQUENTIAL_FORWARDCHECKING;
-	if (print_message) {
+	if (print_message)
+	{
 		std::cout << "\n" << "Sequential Sudoku solver using forward checking algorithm starts, please wait..." << "\n";
 	}
 	board.createStateMatrix(_stateMatrix);

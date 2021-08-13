@@ -17,7 +17,8 @@ bool SudokuSolver::checkIfAllFilled(const SudokuBoard& board) const
 	{
         for (int j = 0; j < board.get_board_size(); ++j)
 		{
-            if (isEmpty(board, i, j)) {
+            if (isEmpty(board, i, j))
+			{
                 return false;
 			}
         }
@@ -29,9 +30,7 @@ bool SudokuSolver::checkIfRowFilled(const SudokuBoard& board, int indexOfRows) c
 {
 	for (int j = 0; j < board.get_board_size(); ++j)
 	{
-		if (isEmpty(board, indexOfRows, j)) {
-			return false;
-		}
+		if (isEmpty(board, indexOfRows, j)) { return false; }
 	}
 
     return true;
@@ -46,13 +45,14 @@ const std::pair<int, int> SudokuSolver::find_empty(const SudokuBoard& board)
 	{
 		for (int j = 0; j < board.get_board_size(); ++j)
 		{
-			if (isEmpty(board, i, j)) {
+			if (isEmpty(board, i, j))
+			{
 				empty_cell = std::make_pair(i, j);
 				stop = true;
 				break;
 			}
 		}
-		if (stop) break;
+		if (stop) { break; }
 	}
 	
 	return empty_cell;  // (row, col)
@@ -64,7 +64,8 @@ int SudokuSolver::find_empty_from_row(const SudokuBoard& board, int indexOfRows)
 
 	for (int j = 0; j < board.get_board_size(); ++j)
 	{
-		if (isEmpty(board, indexOfRows, j)) {
+		if (isEmpty(board, indexOfRows, j))
+		{
 			empty_cell_col_index = j;
 			return empty_cell_col_index;
 		}
@@ -82,9 +83,7 @@ bool SudokuSolver::isValidRow(const SudokuBoard& board, int num, Position pos) c
 {
     for (int i = 0; i < board.get_board_size(); ++i)
 	{
-        if ( (i != pos.second) && (board.at(pos.first, i) == num) ) {
-            return false;
-		}
+        if ( (i != pos.second) && (board.at(pos.first, i) == num) ) { return false; }
 	}
 
 	return true;
@@ -94,9 +93,7 @@ bool SudokuSolver::isValidColumn(const SudokuBoard& board, int num, Position pos
 {
 	for (int i = 0; i < board.get_board_size(); ++i)
 	{
-        if ( (i != pos.first) && (board.at(i, pos.second) == num) ) {
-            return false;
-		}
+        if ( (i != pos.first) && (board.at(i, pos.second) == num) ) { return false; }
 	}
 	
 	return true;
@@ -113,9 +110,7 @@ bool SudokuSolver::isValidBox(const SudokuBoard& board, int num, Position pos) c
 	{
         for (int j = box_y * BOX_SIZE; j < box_y * BOX_SIZE + BOX_SIZE; ++j)
 		{
-            if ( (i != pos.first && j != pos.second) && (board.at(i, j) == num) ) {
-                return false;
-			}
+            if ( (i != pos.first && j != pos.second) && (board.at(i, j) == num) ) { return false; }
         }
     }
 
@@ -137,18 +132,20 @@ bool SudokuSolver::isUnique(const SudokuBoard& board, int num, Position pos) con
 
 	for (int i = ( (local_row == 0) ? 1 : 0 ); i < board.get_box_size(); ++i)
 	{
-		if (i == local_row) continue;
+		if (i == local_row) { continue; }
 		std::vector<int> numbersInRow = board.getNumbersInRow(box_x * board.get_box_size() + i);
-		if (std::find(numbersInRow.begin(), numbersInRow.end(), num) == numbersInRow.end()) {
+		if (std::find(numbersInRow.begin(), numbersInRow.end(), num) == numbersInRow.end())
+		{
 			return false;
 		}
 	}
 
 	for (int j = ( (local_col == 0) ? 1 : 0 ); j < board.get_box_size(); ++j)
 	{
-		if (j == local_col) continue;
+		if (j == local_col) { continue; }
 		std::vector<int> numbersInCol = board.getNumbersInCol(box_y * board.get_box_size() + j);
-		if (std::find(numbersInCol.begin(), numbersInCol.end(), num) == numbersInCol.end()) {
+		if (std::find(numbersInCol.begin(), numbersInCol.end(), num) == numbersInCol.end())
+		{
 			return false;
 		}
 	}

@@ -10,7 +10,8 @@ SudokuSolver_ParallelBruteForce::SudokuSolver_ParallelBruteForce(SudokuBoard& bo
 	: SudokuSolver(board)
 {
 	_mode = MODES::PARALLEL_BRUTEFORCE;
-	if (print_message) {
+	if (print_message)
+	{
 		std::cout << "\n" << "Parallel Sudoku solver using brute force algorithm starts, please wait..." << "\n";
 	}
 }
@@ -18,15 +19,14 @@ SudokuSolver_ParallelBruteForce::SudokuSolver_ParallelBruteForce(SudokuBoard& bo
 void SudokuSolver_ParallelBruteForce::bootstrap()
 {
 	// if no start boards in the board deque, then return
-    if (_board_deque.size() == 0) {
+    if (_board_deque.size() == 0)
+	{
         return;
     }
 
 	SudokuBoard board = _board_deque.front();
 
-	if (checkIfAllFilled(board)) {
-		return;
-	}
+	if (checkIfAllFilled(board)) { return; }
 
 	Position empty_cell_pos = find_empty(board);
 
@@ -50,7 +50,7 @@ void SudokuSolver_ParallelBruteForce::bootstrap()
 void SudokuSolver_ParallelBruteForce::bootstrap(SudokuBoardDeque& boardDeque, int indexOfRows)
 {
 	// if no start boards in the board deque, then return
-    if (boardDeque.size() == 0) return;
+    if (boardDeque.size() == 0) { return; }
 
 	while (!checkIfRowFilled(boardDeque.front(), indexOfRows))
 	{
@@ -154,7 +154,7 @@ void SudokuSolver_ParallelBruteForce::solve_kernel2()
 	{	
 		solvers.push_back(SudokuSolver_SequentialBruteForce(_board_deque[indexOfBoard], false));
 
-		if (_solved) continue;
+		if (_solved) { continue; }
 
         solvers[indexOfBoard].solve();
 

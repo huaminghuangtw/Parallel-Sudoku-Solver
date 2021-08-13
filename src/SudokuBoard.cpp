@@ -57,20 +57,25 @@ void write_output(const SudokuBoard& solutionBoard)
 		{
 			outputFile << std::setw(digit) << solution[r][c];
 
-			if (c != BOARD_SIZE - 1) {
+			if (c != BOARD_SIZE - 1)
+			{
 				outputFile << " ";
 			}
 
-			if (c % BOX_SIZE == (BOX_SIZE - 1)) {
-				if (c != BOARD_SIZE - 1) {
+			if (c % BOX_SIZE == (BOX_SIZE - 1))
+			{
+				if (c != BOARD_SIZE - 1)
+				{
 					outputFile << "  ";
 				}
 			}
 		}
 		
-		if (r != BOARD_SIZE - 1) {
+		if (r != BOARD_SIZE - 1)
+		{
 			outputFile << "\n";
-			if (r % BOX_SIZE == (BOX_SIZE - 1)) {
+			if (r % BOX_SIZE == (BOX_SIZE - 1))
+			{
 				outputFile << "\n";
 			}
 		}
@@ -170,7 +175,8 @@ void print_board(const SudokuBoard& board)
 
 	for (int i = 0; i < board._BOARD_SIZE; ++i)
 	{
-		if (i % board._BOX_SIZE == 0 && i != 0) {
+		if (i % board._BOX_SIZE == 0 && i != 0)
+		{
 			std::string s1 = "---";
 			std::string s2 = s1 * board._BOX_SIZE + " + ";
             std::cout << s2 * (board._BOX_SIZE - 1) << s1 * board._BOX_SIZE << "\n";
@@ -178,15 +184,21 @@ void print_board(const SudokuBoard& board)
 
         for (int j = 0; j < board._BOARD_SIZE; ++j)
 		{
-			if (j % board._BOX_SIZE == 0 && j != 0) {
+			if (j % board._BOX_SIZE == 0 && j != 0)
+			{
                 std::cout << "  | ";
 			}	
 
-            if (j == board._BOARD_SIZE - 1) {
+            if (j == board._BOARD_SIZE - 1)
+			{
                 std::cout << std::setfill(' ') << std::setw(2) << grid[i][j] << "\n";
-			} else if (j % board._BOX_SIZE == board._BOX_SIZE - 1) {
+			}
+			else if (j % board._BOX_SIZE == board._BOX_SIZE - 1)
+			{
 				std::cout << std::setfill(' ') << std::setw(2) << grid[i][j];
-			} else {
+			}
+			else
+			{
                 std::cout << std::setfill(' ') << std::setw(2) << grid[i][j] << " ";
 			}
 		}
@@ -203,7 +215,8 @@ std::ostream& operator<< (std::ostream &out, const SudokuBoard& board)
 
 	for (int i = 0; i < BOARD_SIZE; ++i)
 	{
-		if (i % BOX_SIZE == 0 && i != 0) {
+		if (i % BOX_SIZE == 0 && i != 0)
+		{
 			std::string s1 = "---";
 			std::string s2 = s1 * BOX_SIZE + " + ";
             out << s2 * (BOX_SIZE - 1) << s1 * BOX_SIZE << "\n";
@@ -211,17 +224,23 @@ std::ostream& operator<< (std::ostream &out, const SudokuBoard& board)
 
         for (int j = 0; j < BOARD_SIZE; ++j)
 		{
-			if (j % BOX_SIZE == 0 && j != 0) {
+			if (j % BOX_SIZE == 0 && j != 0)
+			{
                 out << "  | ";
 			}	
 
 			std::string forPrinting = (grid[i][j] == EMPTY_CELL_VALUE) ? EMPTY_CELL_CHARACTER : std::to_string(grid[i][j]);
 
-            if (j == BOARD_SIZE - 1) {
+            if (j == BOARD_SIZE - 1)
+			{
                 out << std::setfill(' ') << std::setw(2) << forPrinting << "\n";
-			} else if (j % BOX_SIZE == BOX_SIZE - 1) {
+			}
+			else if (j % BOX_SIZE == BOX_SIZE - 1)
+			{
 				out << std::setfill(' ') << std::setw(2) << forPrinting;
-			} else {
+			}
+			else
+			{
                 out << std::setfill(' ') << std::setw(2) << forPrinting << " ";
 			}
 		}

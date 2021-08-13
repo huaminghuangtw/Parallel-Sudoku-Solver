@@ -6,7 +6,8 @@ SudokuSolver_SequentialDLX::SudokuSolver_SequentialDLX(SudokuBoard& board, bool 
 	: SudokuSolver(board)
 {
 	_mode = MODES::SEQUENTIAL_DANCINGLINKS;
-	if (print_message) {
+	if (print_message)
+	{
 		std::cout << "\n" << "Sequential Sudoku solver using dancing links algorithm starts, please wait..." << "\n";
 	}
 	board.createCoverMatrix(_coverMatrix);
@@ -41,10 +42,7 @@ ColumnNode* SudokuSolver_SequentialDLX::createDLXList(CoverMatrix& coverMatrix)
 				ColumnNode* col = columnNodes[j];
 				DancingNode* newNode = new DancingNode(col);
 
-				if (prev == NULL)
-				{
-					prev = newNode;
-				}
+				if (prev == NULL) { prev = newNode; }
 
 				col->top->linkDown(newNode);
 				prev = prev->linkRight(newNode);
@@ -114,7 +112,7 @@ void SudokuSolver_SequentialDLX::solve_kernel(int k)
 
 			solve_kernel(k + 1);
 
-			if (_solved) return;
+			if (_solved) { return; }
 
 			r = _answer[_answer.size() - 1];
 			_answer.pop_back();

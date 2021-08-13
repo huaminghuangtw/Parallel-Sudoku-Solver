@@ -8,7 +8,8 @@ bool SudokuTest::checkValidSizes(const SudokuBoard& board)
 	int ROW_SIZE = board._board_data.size();
 	int COL_SIZE = board._board_data[0].size(); 
 
-	if ( (ROW_SIZE != BOARD_SIZE) || (COL_SIZE != BOARD_SIZE)) {
+	if ( (ROW_SIZE != BOARD_SIZE) || (COL_SIZE != BOARD_SIZE))
+	{
 		return false;
 	}
 
@@ -27,11 +28,9 @@ bool SudokuTest::checkValidRows(const SudokuBoard& board)
 		{
 			int val = board._board_data[row][col];
 
-			if (val == board._EMPTY_CELL_VALUE) continue;
+			if (val == board._EMPTY_CELL_VALUE) { continue; }
 
-			if (valuesInRow.find(val) != valuesInRow.end()) {
-				return false;
-			}
+			if (valuesInRow.find(val) != valuesInRow.end()) { return false; }
 
 			valuesInRow.insert(val);
 		}
@@ -52,11 +51,9 @@ bool SudokuTest::checkValidColumns(const SudokuBoard& board)
 		{
 			int val = board._board_data[row][col];
 
-			if (val == board._EMPTY_CELL_VALUE) continue;
+			if (val == board._EMPTY_CELL_VALUE) { continue; }
 
-			if (valuesInCol.find(val) != valuesInCol.end()) {
-				return false;
-			}
+			if (valuesInCol.find(val) != valuesInCol.end()) { return false; }
 
 			valuesInCol.insert(val);
 		}
@@ -83,11 +80,9 @@ bool SudokuTest::checkValidBoxes(const SudokuBoard& board)
 				{
 					int val = board._board_data[box_x * BOX_SIZE + m][box_y * BOX_SIZE + n];
 
-					if (val == board._EMPTY_CELL_VALUE) continue;
+					if (val == board._EMPTY_CELL_VALUE) { continue; }
 
-					if (valuesInBox.find(val) != valuesInBox.end()) {
-						return false;
-					}
+					if (valuesInBox.find(val) != valuesInBox.end()) { return false; }
 
 					valuesInBox.insert(val);
 				}

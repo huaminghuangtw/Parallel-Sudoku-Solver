@@ -6,16 +6,17 @@ SudokuSolver_SequentialBruteForce::SudokuSolver_SequentialBruteForce(SudokuBoard
 	: SudokuSolver(board)
 {
 	_mode = MODES::SEQUENTIAL_BRUTEFORCE;
-	if (print_message) {
+	if (print_message)
+	{
 		std::cout << "\n" << "Sequential Sudoku solver using brute force algorithm starts, please wait..." << "\n";
 	}
 }
 
 void SudokuSolver_SequentialBruteForce::solve_kernel(int row, int col)
 {	
-	if (_solved) return;
+	if (_solved) { return; }
 	
-	if (_mode == MODES::SEQUENTIAL_BRUTEFORCE) show_progress_bar(_board, _recursionDepth);
+	if (_mode == MODES::SEQUENTIAL_BRUTEFORCE) { show_progress_bar(_board, _recursionDepth); }
 
 	int BOARD_SIZE = _board.get_board_size();
 
@@ -46,7 +47,7 @@ void SudokuSolver_SequentialBruteForce::solve_kernel(int row, int col)
 			{
                 _board.set_board_data(row, col, num);
 
-				if (isUnique(_board, num, pos)) num = BOARD_SIZE + 1;
+				if (isUnique(_board, num, pos)) { num = BOARD_SIZE + 1; }
 
 				// Try the next cell recursively
                 solve_kernel(row_next, col_next);

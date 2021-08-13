@@ -6,7 +6,8 @@ SudokuSolver_SequentialBacktracking::SudokuSolver_SequentialBacktracking(SudokuB
 	: SudokuSolver(board)
 {
 	_mode = MODES::SEQUENTIAL_BACKTRACKING;
-	if (print_message) {
+	if (print_message)
+	{
 		std::cout << "\n" << "Sequential Sudoku solver using backtracking algorithm starts, please wait..." << "\n";
 	}
 }
@@ -15,7 +16,7 @@ bool SudokuSolver_SequentialBacktracking::solve_kernel()
 {
 	if (_solved) { return _solved; }
 
-	if (_mode == MODES::SEQUENTIAL_BACKTRACKING) show_progress_bar(_board, _recursionDepth);
+	if (_mode == MODES::SEQUENTIAL_BACKTRACKING) { show_progress_bar(_board, _recursionDepth); }
 
 	if (checkIfAllFilled(_board))   // base case
     {
@@ -34,7 +35,7 @@ bool SudokuSolver_SequentialBacktracking::solve_kernel()
 		{
 			_board.set_board_data(row, col, num);
 
-			if (isUnique(_board, num, empty_cell_pos)) num = _board.get_board_size() + 1;
+			if (isUnique(_board, num, empty_cell_pos)) { num = _board.get_board_size() + 1; }
 
 			// Try the next cell recursively
 			if (solve_kernel()) { _solved = true; return _solved; }

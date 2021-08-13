@@ -6,6 +6,8 @@
 #include "SudokuSolver.hpp"
 
 
+// +++ The implementation of this algorithm is still under construction. +++
+// http://ktiml.mff.cuni.cz/~bartak/constraints/propagation.html
 class SudokuSolver_SequentialForwardChecking : public SudokuSolver
 {
 private:
