@@ -6,6 +6,8 @@
 #include "SudokuSolver_ParallelBruteForce.hpp"
 #include "SudokuSolver_SequentialDLX.hpp"
 #include "SudokuSolver_ParallelDLX.hpp"
+#include "SudokuSolver_SequentialForwardChecking.hpp"
+
 #include "termcolor.hpp"
 
 #include <iostream>
@@ -36,6 +38,9 @@ std::unique_ptr<SudokuSolver> CreateSudokuSolver(MODES mode, SudokuBoard& board)
 		case MODES::PARALLEL_DANCINGLINKS:
             return std::make_unique<SudokuSolver_ParallelDLX>(board);
 
+		case MODES::SEQUENTIAL_FORWARDCHECKING:
+            return std::make_unique<SudokuSolver_SequentialForwardChecking>(board);
+
 		default:
 			std::cerr << termcolor::red << "Available options for <MODE>: " << "\n";
 			std::cerr << "		- 0: sequential mode with backtracking algorithm" << "\n";
@@ -43,6 +48,7 @@ std::unique_ptr<SudokuSolver> CreateSudokuSolver(MODES mode, SudokuBoard& board)
 			std::cerr << "		- 2: parallel mode with brute force algorithm" << "\n";
 			std::cerr << "		- 3: sequential mode with DLX algorithm" << "\n";
 			std::cerr << "		- 4: parallel mode with DLX algorithm" << "\n";
+			std::cerr << "		- 5: sequential mode with forward checking algorithm" << "\n";
 			std::cerr << "Please try again." << termcolor::reset << "\n";
 			exit(-1);
     }
@@ -75,6 +81,7 @@ int main(int argc, char** argv)
 		std::cerr << "			- 2: parallel mode with brute force algorithm" << "\n";
 		std::cerr << "			- 3: sequential mode with DLX algorithm" << "\n";
 		std::cerr << "			- 4: parallel mode with DLX algorithm" << "\n";
+		std::cerr << "			- 5: sequential mode with forward checking algorithm" << "\n";
 		std::cerr << "		2. <NUM_THREADS>: " << "\n";
 		std::cerr << "			If you set 2 or 4 for <MODE>, you need to also set <NUM_THREADS> (default = 2)" << "\n";
 		std::cerr << "		3. <WRITE_TO_SOLUTION_TXT>: " << "\n";
@@ -151,7 +158,7 @@ int main(int argc, char** argv)
 
 
 #if PRINT_TIME
-    std::cout << std::dec << "Solving this Sudoku puzzle took " << (double) time_in_microseconds / 1000000 << " seconds." << "\n";
+    std::cout << std::dec << "[Solved in " << (double) time_in_microseconds / 1000000 << " seconds.]" << "\n";
 #endif
 
 

@@ -348,3 +348,29 @@ void SudokuBoard::convertToCoverMatrix(CoverMatrix& coverMatrix)
         }
     }
 }
+
+void SudokuBoard::createStateMatrix(StateMatrix& stateMatrix)
+{
+	stateMatrix.resize(_BOARD_SIZE, std::vector<MultiType>(_BOARD_SIZE));
+}
+
+void SudokuBoard::convertToStateMatrix(StateMatrix& stateMatrix)
+{
+	std::set<int> setOfPossibleValues;
+	for (int num = _MIN_VALUE; num < _MAX_VALUE; ++num)
+	{
+		setOfPossibleValues.insert(num);
+	}
+
+	for (int i = 0; i < _BOARD_SIZE; ++i)
+	{
+		for (int j = 0; j < _BOARD_SIZE; ++j)
+		{
+			stateMatrix[i][j] = _board_data[i][j];
+			if (std::get<int>(stateMatrix[i][j]) == _EMPTY_CELL_VALUE)
+			{
+				stateMatrix[i][j] = setOfPossibleValues;
+			}
+		}
+	}
+}

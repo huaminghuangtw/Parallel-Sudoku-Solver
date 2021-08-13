@@ -26,7 +26,8 @@ DEPENDENCIES = \
 	./src/SudokuSolver_ParallelBruteForce.cpp \
 	./src/Node.cpp \
 	./src/SudokuSolver_SequentialDLX.cpp \
-	./src/SudokuSolver_ParallelDLX.cpp
+	./src/SudokuSolver_ParallelDLX.cpp \
+	./src/SudokuSolver_SequentialForwardChecking.cpp
 
 all: $(TARGETS)
 

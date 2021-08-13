@@ -5,12 +5,18 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <variant>
+#include <set>
 
+
+using Board = std::vector<std::vector<int>>;
+// Size: _BOARD_SIZE * _BOARD_SIZE
 
 using CoverMatrix = std::vector<std::vector<int>>;
 // Size: (_BOARD_SIZE * _BOARD_SIZE * _MAX_VALUE) * (_BOARD_SIZE * _BOARD_SIZE * _NUM_CONSTRAINTS)
 
-using Board = std::vector<std::vector<int>>;
+using MultiType = std::variant<int, std::set<int>>;
+using StateMatrix = std::vector<std::vector<MultiType>>;
 // Size: _BOARD_SIZE * _BOARD_SIZE
 
 
@@ -82,6 +88,11 @@ public:
 	int createCellConstraints(CoverMatrix& coverMatrix, int header);
 	void createCoverMatrix(CoverMatrix& coverMatrix);
 	void convertToCoverMatrix(CoverMatrix& coverMatrix);
+
+	// Adds state information to the Sudoku board
+	// by replacing empty cell, i.e., 0, with a set of possible values
+	void createStateMatrix(StateMatrix& stateMatrix);
+	void convertToStateMatrix(StateMatrix& stateMatrix);
 };
 
 
