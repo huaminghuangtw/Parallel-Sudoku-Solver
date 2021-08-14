@@ -18,7 +18,10 @@ SudokuSolver_SequentialDLX::SudokuSolver_SequentialDLX(SudokuBoard& board, bool 
 }
 
 ColumnNode* SudokuSolver_SequentialDLX::createDLXList(CoverMatrix& coverMatrix)
-{
+{	
+	// If we declare headerNode as a local variable (at "stack"), it will be cleaned from memory when function call finish
+	// ---> To keep its lifetime, we create headerNode at "heap" such that headerNode will exist all the time
+	//      unless we explicitly free the associated memory
 	ColumnNode* headerNode = new ColumnNode("header");
 	std::vector<ColumnNode*> columnNodes;
 
