@@ -1,6 +1,57 @@
-# Parallelization of a Sudoku Solver
+Parallelization of a Sudoku Solver
+==================================
+
+> A parallelized Sudoku solver implemented with various solving algorithms in C++.
+
+## Introduction
+Sudoku is one of the most popular puzzle games of all time.
+The objective of Sudoku is to fill a n x n grid with digits from 1 to m such that each column, row, and box (or called "subgrid", "region", "block") that compose the grid contains every number in the set {1, ... , n} exactly once.
+
+---
+
+## Motivation
+This project aims to implement a Sudoku solver that could solve **large** Sudoku puzzles as efficiently as possible by means of various parallelization techniques and algorithms. The details of implementation and performance results are explained in detail in the [final report](./Final_Report.pdf).
+
+---
 
 ## How to use the code
+### Compile
+1. Navigate to the project root directory where the `Makefile` is located.
+2. Build the program by running the command:
+	```bash
+	$ make
+	```
+3. An executable named `sudoku_main` will appear in the project root directory. 
+
+### Run
+To run the solver, supply the executable with command-line arguments for test cases, modes, number of threads and flag for writing solution to a text file.
+```bash
+$ ./sudoku_main <PATH_TO_INPUT_FILE> <MODE> <NUM_THREADS> [<WRITE_TO_SOLUTION_TXT>]
+```
+Note:
+- `<PATH_TO_INPUT_FILE>` (string): the path to the test case file (e.g., `Test_Cases/9x9_easy.txt`)
+- `<MODE>` (int): the mode to run the Sudoku solver
+	+ 0: sequential mode with backtracking algorithm
+	+ 1: sequential mode with brute-force algorithm
+	+ 2: parallel mode with brute-force algorithm
+	+ 3: sequential mode with DLX algorithm
+	+ 4: parallel mode with DLX algorithm
+- `<NUM_THREADS>` (int): if you set 2 or 4 for `<MODE>`, you need to also set `<NUM_THREADS>` (default = 2)
+- `<WRITE_TO_SOLUTION_TXT>` (int):
+	+ 0 (default): only print solution to the console 
+	+ 1: also write solution to a text file called solution.txt under the project root directory
+---
+
+## Demonstration
+There are many different mode options available for this software. Two of them are shown as follows for demonstration purpose:
+### Sequential mode for brute-force algorithm
+### Parallel mode for brute-force algorithm
+
+
+---
+
+## Test cases
+A collection of test grids of various sizes and difficulty levels are present in the [`Test_Cases`](./Test_Cases) directory.
 
 brute-force search is going to scale very badly. As an order-of-magnitude estimate, observe that the code calls IsValid() around SIZE times for each cell - that's O(n³), where n is the SIZE.
 
@@ -31,4 +82,7 @@ Use dynamic scheduling to balance work load on all threads: each thread will pop
 
 you must divide the problem early, i.e. thread #1 starts with the first combination for a node in the backtracking graph, and proceeds to search the rest of that subgraph. Thread #2 starts with the second possible combination at the first and so forth. In short, for n threads find the n possible combinations on the top level of the search space (do not "forward-track"), then assign these n starting points to n threads.
 
+---
+
+## Contact
 If you have any question or suggestion, feel free to contact me at huaming.huang.tw@gmail.com or open an issue in this repository.

@@ -74,7 +74,7 @@ int main(int argc, char** argv)
 	// validate command-line arguments
 	if (argc < 3 || argc > 5)
 	{
-		std::cerr << termcolor::red << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE> <MODE> <NUM_THREADS> [<WRITE_TO_SOLUTION_TXT>]" << "\n";
+		std::cerr << termcolor::red << "Usage: " << argv[0] << " <PATH_TO_INPUT_FILE> <MODE> [<NUM_THREADS>] [<WRITE_TO_SOLUTION_TXT>]" << "\n";
 		std::cerr << "		1. <MODE>: " << "\n";
 		std::cerr << "			- 0: sequential mode with backtracking algorithm" << "\n";
 		std::cerr << "			- 1: sequential mode with brute force algorithm" << "\n";
@@ -85,8 +85,8 @@ int main(int argc, char** argv)
 		std::cerr << "		2. <NUM_THREADS>: " << "\n";
 		std::cerr << "			If you set 2 or 4 for <MODE>, you need to also set <NUM_THREADS> (default = 2)" << "\n";
 		std::cerr << "		3. <WRITE_TO_SOLUTION_TXT>: " << "\n";
-		std::cerr << "			- 0: only print solution to the console (default)" << "\n";
-		std::cerr << "			- 1: also write solution to a text file solution.txt" << "\n";
+		std::cerr << "			- 0 (default): only print solution to the console" << "\n";
+		std::cerr << "			- 1: also write solution to a text file called solution.txt under the project root directory" << "\n";
 		std::cerr << "Please try again." << termcolor::reset << "\n";
 		exit(-1);
     }
