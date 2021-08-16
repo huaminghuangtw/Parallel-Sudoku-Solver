@@ -5,7 +5,7 @@ Parallelization of a Sudoku Solver
 
 ## Introduction
 Sudoku is one of the most popular puzzle games of all time.
-The objective of Sudoku is to fill a n x n grid with digits from 1 to m such that each column, row, and box (or called "subgrid", "region", "block") that compose the grid contains every number in the set {1, ... , n} exactly once.
+The objective of Sudoku is to fill a n by n grid with digits from 1 to n such that each column, row, and box (or called "subgrid", "region", "block") that compose the grid contains every number in the set {1, ... , n} exactly once.
 
 ---
 
@@ -40,47 +40,22 @@ Note:
 - `<WRITE_TO_SOLUTION_TXT>` (int):
 	+ 0 (default): only print solution to the console 
 	+ 1: also write solution to a text file called solution.txt under the project root directory
+
 ---
 
 ## Demonstration
 There are many different mode options available for this software. Two of them are shown as follows for demonstration purpose:
-### Sequential mode for brute-force algorithm
-### Parallel mode for brute-force algorithm
 
+#### Sequential mode for brute-force algorithm
+<img width="550" src="https://user-images.githubusercontent.com/43208378/129577050-7502179e-f14d-4665-b918-4d5847a9b0cd.png">
+
+#### Parallel mode for brute-force algorithm
+<img width="550" src="https://user-images.githubusercontent.com/43208378/129577038-01899e14-7227-42d2-aeaa-fe7006400776.png">
 
 ---
 
 ## Test cases
 A collection of test grids of various sizes and difficulty levels are present in the [`Test_Cases`](./Test_Cases) directory.
-
-brute-force search is going to scale very badly. As an order-of-magnitude estimate, observe that the code calls IsValid() around SIZE times for each cell - that's O(n³), where n is the SIZE.
-
-The Forward Checking algorithm consists in verifying, after each assignment of a value
-to a variable, all the constraints in which the variable appears. It helps reducing the
-domain of the free variables that appear in these constraints.
-For example, in Sudoku, each time a value is assigned to a variable, the value is
-removed from the domain of the free variables that are either in the same line, in the
-same column or in the same square as the assigned variable.
-
-
-preventing possible future conflicts is more reasonable than recovering from them.
-
-give each thread a puzzle
-
-$ ./sudoku <thread_count> <grid_file_path>
-
-The parallel approach to backtracking can be broken down into two main steps:
-
-Breadth first search from the beginning board to find all possible boards with the first X empty spaces filled. This will return Y possible starting boards for the next step of the algorithm.
-
-Attempt to solve each of these Y boards separately in different threads on the GPU. If a solution is found, terminate the program and return the solution.
-
-
-Serially generate a list of incomplete solutions through bootstrapping: fill a few empty cells with all possible values, and generate a shared queue of possible board to be solved by each thread
-Each thread solve the boards in parallel with the backtracking algorithm
-Use dynamic scheduling to balance work load on all threads: each thread will pop a new board from the queue to solve when it finished solving the previous board
-
-you must divide the problem early, i.e. thread #1 starts with the first combination for a node in the backtracking graph, and proceeds to search the rest of that subgraph. Thread #2 starts with the second possible combination at the first and so forth. In short, for n threads find the n possible combinations on the top level of the search space (do not "forward-track"), then assign these n starting points to n threads.
 
 ---
 
