@@ -47,9 +47,9 @@ public:
         ASSERT_WITH_MESSAGE(expect(flags, BOXES_VALID) == checkValidBoxes(board), "+++ ERROR: Some boxes in Sudoku board contain duplicate numbers! +++\n");
 
 		std::cout << termcolor::bright_cyan << "This is a valid Sudoku board!" << termcolor::reset << "\n";
-		std::cout << "Size of Sudoku board: " << termcolor::bright_blue
-		          << board.get_board_size() << " x " << board.get_board_size()
-				  << termcolor::reset << "\n";
+		// std::cout << "Size of Sudoku board: " << termcolor::bright_blue
+		//           << board.get_board_size() << " x " << board.get_board_size()
+		// 		  << termcolor::reset << "\n";
 	}
 };
 

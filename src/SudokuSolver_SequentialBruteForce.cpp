@@ -47,7 +47,7 @@ void SudokuSolver_SequentialBruteForce::solve_kernel(int row, int col)
 			{
                 _board.set_board_data(row, col, num);
 
-				if (isUnique(_board, num, pos)) { num = BOARD_SIZE + 1; }
+				if (isUnique(_board, num, pos)) { num = BOARD_SIZE + 1; }   // Force to exit the for-loop
 
 				// Try the next cell recursively
                 solve_kernel(row_next, col_next);

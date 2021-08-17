@@ -35,7 +35,7 @@ bool SudokuSolver_SequentialBacktracking::solve_kernel()
 		{
 			_board.set_board_data(row, col, num);
 
-			if (isUnique(_board, num, empty_cell_pos)) { num = _board.get_board_size() + 1; }
+			if (isUnique(_board, num, empty_cell_pos)) { num = _board.get_board_size() + 1; }  // Force to exit the for-loop
 
 			// Try the next cell recursively
 			if (solve_kernel()) { _solved = true; return _solved; }

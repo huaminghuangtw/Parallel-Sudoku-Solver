@@ -148,6 +148,7 @@ int main(int argc, char** argv)
 
 
 	// Assume all input Sudoku boards are solvable
+	SudokuTest::testBoard(solver->get_solution());
 	std::cout << "\n" << termcolor::green << "SOLVED!" << termcolor::reset << "\n";
 	std::cout << termcolor::magenta << "************************************* OUTPUT GRID ************************************" << termcolor::reset << "\n\n";
 	print_board(solver->get_solution());
@@ -158,7 +159,7 @@ int main(int argc, char** argv)
 
 
 #if PRINT_TIME
-    std::cout << std::dec << "[Solved in " << (double) time_in_microseconds / 1000000 << " seconds.]" << "\n";
+    std::cout << std::dec << "[Solved in " << (double) time_in_microseconds / 1e6 << " seconds.]" << "\n";
 #endif
 
 

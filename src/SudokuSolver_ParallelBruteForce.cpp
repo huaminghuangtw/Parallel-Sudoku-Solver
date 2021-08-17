@@ -19,10 +19,7 @@ SudokuSolver_ParallelBruteForce::SudokuSolver_ParallelBruteForce(SudokuBoard& bo
 void SudokuSolver_ParallelBruteForce::bootstrap()
 {
 	// if no start boards in the board deque, then return
-    if (_board_deque.size() == 0)
-	{
-        return;
-    }
+    if (_board_deque.size() == 0) { return; }
 
 	SudokuBoard board = _board_deque.front();
 
@@ -105,10 +102,13 @@ void SudokuSolver_ParallelBruteForce::solve_kernel1()
     for (int indexOfBoard = 0; indexOfBoard < numberOfBoards; ++indexOfBoard)
 	{
 		solvers.push_back(SudokuSolver_SequentialBruteForce(_board_deque[indexOfBoard], false));
-
-		if (_solved) continue;
+		
+		// Note: break statement is not allowed in OpenMP, all iterations must be processed.
+		// The trick is to set a flag to true when the condition is satisfied, and leave the remaining iterations no longer having any work to do.
+		if (_solved) { continue; }
 
 		solvers[indexOfBoard].set_mode(MODES::PARALLEL_BRUTEFORCE);
+
         solvers[indexOfBoard].solve();
 
 		if (solvers[indexOfBoard].get_status() == true)
@@ -154,6 +154,8 @@ void SudokuSolver_ParallelBruteForce::solve_kernel2()
 	{	
 		solvers.push_back(SudokuSolver_SequentialBruteForce(_board_deque[indexOfBoard], false));
 
+		// Note: break statement is not allowed in OpenMP, all iterations must be processed.
+		// The trick is to set a flag to true when the condition is satisfied, and leave the remaining iterations no longer having any work to do.
 		if (_solved) { continue; }
 
         solvers[indexOfBoard].solve();
