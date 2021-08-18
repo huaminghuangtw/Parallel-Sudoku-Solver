@@ -5,7 +5,6 @@
 #include "SudokuBoard.hpp"
 #include "SudokuSolver.hpp"
 #include "SudokuBoardDeque.hpp"
-#include <deque>
 
 
 class SudokuSolver_ParallelBruteForce : public SudokuSolver
@@ -21,9 +20,18 @@ public:
 	void bootstrap(SudokuBoardDeque& boardDeque, int indexOfRows);
 
 	// Solves the given Sudoku board using parallel brute force algorithm
-	virtual void solve() override { solve_kernel1(); }
+	virtual void solve() override
+	{
+		/* Choose one of the following kernels to execute */
+		solve_kernel1();
+		// solve_kernel2();
+		// solve_bruteforce_par(_board, 0, 0);
+	}
+	
 	void solve_kernel1();
 	void solve_kernel2();
+	void solve_bruteforce_seq(SudokuBoard& board, int row, int col);
+	void solve_bruteforce_par(SudokuBoard& board, int row, int col);
 };
 
 

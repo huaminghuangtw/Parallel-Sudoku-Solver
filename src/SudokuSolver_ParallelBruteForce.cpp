@@ -167,3 +167,115 @@ void SudokuSolver_ParallelBruteForce::solve_kernel2()
 		}
 	}
 }
+
+void SudokuSolver_ParallelBruteForce::solve_bruteforce_seq(SudokuBoard& board, int row, int col)
+{
+	if (_solved) { return; }
+	
+	int BOARD_SIZE = board.get_board_size();
+
+	int abs_index = row * BOARD_SIZE + col;
+
+    if (abs_index >= board.get_num_total_cells())
+	{
+		_solved = true;
+		_solution = board;
+		return;
+    }
+    
+	int row_next = (abs_index + 1) / BOARD_SIZE;
+	int col_next = (abs_index + 1) % BOARD_SIZE;
+
+	if (!isEmpty(board, row, col))
+	{   
+		solve_bruteforce_seq(board, row_next, col_next);
+    }
+	else
+	{
+		// Fill in all possible numbers
+        for (int num = board.get_min_value(); num <= board.get_max_value(); ++num)
+		{
+			Position pos = std::make_pair(row, col);
+
+            if (isValid(board, num, pos))
+			{
+                board.set_board_data(row, col, num);
+
+				if (isUnique(board, num, pos)) { num = BOARD_SIZE + 1; }   // Force to exit the for-loop
+
+				// Try the next cell recursively
+                solve_bruteforce_seq(board, row_next, col_next);
+
+				board.set_board_data(row, col, board.get_empty_cell_value());
+            }
+        }
+    }
+
+	_recursionDepth++;
+}
+
+void SudokuSolver_ParallelBruteForce::solve_bruteforce_par(SudokuBoard& board, int row, int col)
+{
+	if (_solved) { return; }
+	
+	int BOARD_SIZE = board.get_board_size();
+
+	int abs_index = row * BOARD_SIZE + col;
+
+    if (abs_index >= board.get_num_total_cells())
+	{
+		_solved = true;
+		_solution = board;
+		return;
+    }
+    
+	int row_next = (abs_index + 1) / BOARD_SIZE;
+	int col_next = (abs_index + 1) % BOARD_SIZE;
+
+	if (!isEmpty(board, row, col))
+	{   
+		solve_bruteforce_par(board, row_next, col_next);
+    }
+	else
+	{
+		// Fill in all possible numbers
+        for (int num = board.get_min_value(); num <= board.get_max_value(); ++num)
+		{
+			Position pos = std::make_pair(row, col);
+
+            if (isValid(board, num, pos)) 
+			{
+				// Avoid creating new tasks if we are too deep in the recursion.
+				// Alternatively, we can also use the final clause in #pragma omp task directive to reduce the overhead of tasks creation.
+				// If we don't set such a threshold, the workload of a single task is therefore too small and the overhead of task creation
+				// become significant compared to the workload of a task.
+				if (_recursionDepth > BOARD_SIZE)
+				{
+					board.set_board_data(row, col, num);
+
+					if (isUnique(board, num, pos)) { num = BOARD_SIZE + 1; }   // Force to exit the for-loop
+
+					// Try the next cell recursively
+					solve_bruteforce_seq(board, row_next, col_next);
+				}
+				else
+				{
+					// Need to work	on a new copy of the Sudoku	board
+					SudokuBoard local_board(board);
+					local_board.set_board_data(row, col, num);
+
+					if (isUnique(board, num, pos)) { num = BOARD_SIZE + 1; }   // Force to exit the for-loop
+
+					// Try the next cell recursively
+					#pragma omp task default(none) firstprivate(local_board, row_next, col_next) 
+					solve_bruteforce_par(local_board, row_next, col_next);
+
+					// board.set_board_data(row, col, board.get_empty_cell_value());
+					// Why don't we need this line? Because we don't modify anything in the original board.
+				}
+            }
+        }
+    }
+	
+	_recursionDepth++;
+}

@@ -148,8 +148,8 @@ int main(int argc, char** argv)
 
 
 	// Assume all input Sudoku boards are solvable
-	SudokuTest::testBoard(solver->get_solution());
 	std::cout << "\n" << termcolor::green << "SOLVED!" << termcolor::reset << "\n";
+	SudokuTest::testBoard(solver->get_solution());
 	std::cout << termcolor::magenta << "************************************* OUTPUT GRID ************************************" << termcolor::reset << "\n\n";
 	print_board(solver->get_solution());
 	if (WRITE_TO_SOLUTION_TXT) {

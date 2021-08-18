@@ -96,8 +96,6 @@ void SudokuSolver_ParallelDLX::solve_kernel(int k)
 	if (_header->right == _header)
 	{
 		_solved = true;
-#pragma omp flush(_solved)
-
 		_solution = convertToSudokuGrid(_answer);
 		return;
 	}
@@ -118,7 +116,6 @@ void SudokuSolver_ParallelDLX::solve_kernel(int k)
 
 			solve_kernel(k + 1);
 
-#pragma omp flush(_solved)
 			if (_solved) { return; }
 
 			r = _answer[_answer.size() - 1];
