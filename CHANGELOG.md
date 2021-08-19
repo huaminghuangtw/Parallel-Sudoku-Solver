@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://github.com/hmhuang0501/Parallel-Sudoku-Solver/compare/v1.0.1...v1.0.2) (2021-08-19)
+
+
+### Features
+
+* finalize UI and set appropriate error messages ([19f0b9e](https://github.com/hmhuang0501/Parallel-Sudoku-Solver/commit/19f0b9e250bda788ddc77b2397926e546923bb67))
+* make git version information available in the source files ([5886e5c](https://github.com/hmhuang0501/Parallel-Sudoku-Solver/commit/5886e5c8c2fa446c741ac98c78df5b8b61e13b11))
+* use function template to avoid duplicates of code in sudoku_main.cpp ([79287b7](https://github.com/hmhuang0501/Parallel-Sudoku-Solver/commit/79287b7583f726e6053faf84a5b8b34ff281314f))
+
 ### 1.0.1 (2021-08-08)
 
 
