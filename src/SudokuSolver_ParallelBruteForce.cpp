@@ -72,7 +72,7 @@ void SudokuSolver_ParallelBruteForce::bootstrap(SudokuBoardDeque& boardDeque, in
 	}
 }
 
-void SudokuSolver_ParallelBruteForce::solve_kernel1()
+void SudokuSolver_ParallelBruteForce::solve_kernel_1()
 {
 	// push the board onto the board deque as the first element
 	_board_deque.push_back(_board);
@@ -119,7 +119,7 @@ void SudokuSolver_ParallelBruteForce::solve_kernel1()
 	}
 }
 
-void SudokuSolver_ParallelBruteForce::solve_kernel2()
+void SudokuSolver_ParallelBruteForce::solve_kernel_2()
 {
 	std::vector<SudokuBoardDeque> groupOfBoardDeques(_board.get_board_size(), SudokuBoardDeque(_board));
 	#pragma omp parallel default(none) shared(groupOfBoardDeques)

@@ -23,13 +23,13 @@ public:
 	virtual void solve() override
 	{
 		/* Choose one of the following kernels to execute */
-		solve_kernel1();
-		// solve_kernel2();
+		solve_kernel_1();
+		// solve_kernel_2();
 		// solve_bruteforce_par(_board, 0, 0);
 	}
 	
-	void solve_kernel1();
-	void solve_kernel2();
+	void solve_kernel_1();
+	void solve_kernel_2();
 	void solve_bruteforce_seq(SudokuBoard& board, int row, int col);
 	void solve_bruteforce_par(SudokuBoard& board, int row, int col);
 };
