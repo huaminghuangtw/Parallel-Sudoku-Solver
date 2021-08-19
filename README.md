@@ -10,7 +10,7 @@ The objective of Sudoku is to fill a n by n grid with digits from 1 to n such th
 ---
 
 ## Motivation
-This project aims to implement a Sudoku solver that could solve **large** Sudoku puzzles as efficiently as possible by means of various parallelization techniques and algorithms. The details of implementation and performance results are explained in detail in the [final report](./Final_Report.pdf).
+This project aims to implement a Sudoku solver that could solve **large** Sudoku puzzles as efficiently as possible by means of various parallelization techniques and algorithms. The details of implementation and performance results are explained in depth in the [project report](./Project_Report.pdf).
 
 ---
 
@@ -47,10 +47,10 @@ Note:
 There are many different mode options available for this software. Two of them are shown as follows for demonstration purpose:
 
 #### Sequential mode for brute-force algorithm
-<img width="550" src="https://user-images.githubusercontent.com/43208378/129577050-7502179e-f14d-4665-b918-4d5847a9b0cd.png">
+<img width="550" src="https://user-images.githubusercontent.com/43208378/130022178-134a3fd0-ce45-4f8c-b47a-276b759686e2.png">
 
 #### Parallel mode for brute-force algorithm
-<img width="550" src="https://user-images.githubusercontent.com/43208378/129577038-01899e14-7227-42d2-aeaa-fe7006400776.png">
+<img width="550" src="https://user-images.githubusercontent.com/43208378/130022182-b1feaf52-36dc-4ae7-81fe-2466ea752575.png">
 
 ---
 
