@@ -5,7 +5,7 @@ Parallelization of a Sudoku Solver
 
 ## Introduction
 Sudoku is one of the most popular puzzle games of all time.
-The objective of Sudoku is to fill a n by n grid with digits from 1 to n such that each column, row, and box (or called "subgrid", "region", "block") that compose the grid contains every number in the set {1, ... , n} exactly once.
+The objective of Sudoku is to fill a _n_-by-_n_ grid with digits from 1 to _n_ such that each column, row, and box (or called "subgrid", "region", "block") that compose the grid contains every number in the set {1, ... , _n_} exactly once.
 
 ---
 
@@ -39,7 +39,7 @@ Note:
 - `<NUM_THREADS>` (int): if you set 2 or 4 for `<MODE>`, you need to also set `<NUM_THREADS>` (default = 2)
 - `<WRITE_TO_SOLUTION_TXT>` (int):
 	+ 0 (default): only print solution to the console 
-	+ 1: also write solution to a text file called solution.txt under the project root directory
+	+ 1: also write solution to a text file called `solution.txt` under the project root directory
 
 ---
 
