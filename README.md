@@ -58,6 +58,5 @@ There are many different mode options available for this software. Two of them a
 A collection of test grids of various sizes and difficulty levels are present in the [`Test_Cases`](./Test_Cases) directory.
 
 ---
-
 ## Contact
-If you have any question or suggestion, feel free to contact me at huaming.huang.tw@gmail.com or open an issue in this repository.
+If you have any question or suggestion, feel free to contact me at huaming.huang.tw@gmail.com. Contributions are also welcomed. Please open a pull-request or an issue in this repository.

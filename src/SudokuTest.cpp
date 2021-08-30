@@ -8,7 +8,7 @@ bool SudokuTest::checkValidSizes(const SudokuBoard& board)
 	int ROW_SIZE = board._board_data.size();
 	int COL_SIZE = board._board_data[0].size(); 
 
-	if ( (ROW_SIZE != BOARD_SIZE) || (COL_SIZE != BOARD_SIZE))
+	if ((ROW_SIZE != BOARD_SIZE) || (COL_SIZE != BOARD_SIZE))
 	{
 		return false;
 	}
