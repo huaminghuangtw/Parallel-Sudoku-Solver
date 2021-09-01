@@ -59,4 +59,4 @@ A collection of test grids of various sizes and difficulty levels are present in
 
 ---
 ## Contact
-If you have any question or suggestion, feel free to contact me at huaming.huang.tw@gmail.com. Contributions are also welcomed. Please open a pull-request or an issue in this repository.
+If you have any question or suggestion, feel free to contact me at huaming.huang.tw@gmail.com. Contributions are also welcomed. Please open a [pull-request](https://github.com/hmhuang0501/Parallel-Sudoku-Solver/compare) or an [issue](https://github.com/hmhuang0501/Parallel-Sudoku-Solver/issues/new) in this repository.
