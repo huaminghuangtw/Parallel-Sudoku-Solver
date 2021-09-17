@@ -58,5 +58,12 @@ There are many different mode options available for this software. Two of them a
 A collection of test grids of various sizes and difficulty levels are present in the [`Test_Cases`](./Test_Cases) directory.
 
 ---
+
+## Buy me a coffee
+Whether you use this project, have learned something from it, or just like it, please consider supporting it by buying me a coffee, so I can dedicate more time on open-source projects like this :)
+
+<a href="https://www.buymeacoffee.com/huaming.huang" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+
+---
 ## Contact
 If you have any question or suggestion, feel free to contact me at huaming.huang.tw@gmail.com. Contributions are also welcomed. Please open a [pull-request](https://github.com/hmhuang0501/Parallel-Sudoku-Solver/compare) or an [issue](https://github.com/hmhuang0501/Parallel-Sudoku-Solver/issues/new) in this repository.
