@@ -59,10 +59,17 @@ A collection of test grids of various sizes and difficulty levels are present in
 
 ---
 
-### Buy me a coffee
-Whether you use this project, have learned something from it, or just like it, please consider supporting it by buying me a coffee, so I can dedicate more time on open-source projects like this.💪🙃
+### Support the project
+Whether you use this project, have learned something from it, or just like it, please consider supporting it by buying me a coffee or making one-time donations via PayPal, so I can dedicate more time on open-source projects like this. 💪🙃
 
-<a href="https://www.buymeacoffee.com/huaming.huang" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+<a href="https://www.buymeacoffee.com/huaming.huang" target="_blank">
+    <img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="30" width="127" />
+</a>
+<a href="https://www.paypal.me/huaminghuang" target="_blank">
+    <img src="https://ionicabizau.github.io/badges/paypal.svg" alt="paypal.me/huaminghuang" height="30" width="127" />
+</a>
+
+Thanks!:heart: and Cheers!:beers:
 
 ---
 
