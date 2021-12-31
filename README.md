@@ -5,12 +5,13 @@ Parallelization of a Sudoku Solver
 
 ### Introduction
 Sudoku is one of the most popular puzzle games of all time.
-The objective of Sudoku is to fill a _n_-by-_n_ grid with digits from 1 to _n_ such that each column, row, and box (or called "subgrid", "region", "block") that compose the grid contains every number in the set {1, ... , _n_} exactly once.
+The objective of Sudoku is to fill a _n_-by-_n_ grid with digits from 1 to _n_ such that each column, row, and box (or called "subgrid", "region", "block") contain every number in the set {1, ... , _n_} exactly once.
 
 ---
 
 ### Motivation
-This project aims to implement a Sudoku solver that could solve **large** Sudoku puzzles as efficiently as possible by means of various parallelization techniques and algorithms. The details of implementation and performance results are explained in depth in the [project report](./Project_Report.pdf).
+This project aims to implement a Sudoku solver that could solve **large** Sudoku puzzles as efficiently as possible by means of various parallelization techniques and solving algorithms.
+The details of implementation and performance results are explained in depth in the [project report](./Project_Report.pdf).
 
 ---
 
