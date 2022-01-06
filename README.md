@@ -30,7 +30,7 @@ The details of implementation and performance results are explained in depth in 
 
 ---
 
-### How to use the code
+### How to use the code?
 * #### Compile
     1. Navigate to the project root directory where the `Makefile` is located.
     2. Build the program by running the command:
